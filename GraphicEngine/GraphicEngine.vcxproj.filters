@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="D3D11">
+      <UniqueIdentifier>{f8a8a474-31a5-44cc-a8e7-f74d0b3dde86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\D3D11Resources">
+      <UniqueIdentifier>{05a2c3f1-7277-4709-9eb5-5e591fdb5059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\D3D11Resources\ConstantBuffer">
+      <UniqueIdentifier>{23462b8e-e66b-425a-9948-8e4fb521a86e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{0d8dbb14-cf76-4132-8702-0e295f682a13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities\Headers">
+      <UniqueIdentifier>{94228ffc-41dd-4c88-9a72-9fc286cad107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities\ErrorChecking">
+      <UniqueIdentifier>{137ceaed-8f5c-4cac-9a10-3a770c3bbaee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\D3D11Globals">
+      <UniqueIdentifier>{233ea4b8-7932-4e68-a834-d4659335bb46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\D3D11Resources\IndexBuffer">
+      <UniqueIdentifier>{f7bed07a-badd-4c94-b509-d9cd015cfc7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\D3D11Resources\VertexShader">
+      <UniqueIdentifier>{b2f6b515-ba0d-4607-a1dc-c60200f3f960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\D3D11Resources\PixelShader">
+      <UniqueIdentifier>{c8a88cec-7166-4d2b-b7fa-05c5b1995e94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\D3D11Resources\VertexBuffer">
+      <UniqueIdentifier>{44204170-1487-43c9-b322-d505ea6af526}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\MeshAndTextureResources">
+      <UniqueIdentifier>{aeee6f59-408b-407b-91a0-59c82845ebcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\MeshAndTextureResources\Mesh">
+      <UniqueIdentifier>{cf7d8d23-ec1e-470d-8d1c-32374f9ab2b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities\Math">
+      <UniqueIdentifier>{f129876b-93c1-4480-8b33-7fd694bd38a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities\UtilityFuncs">
+      <UniqueIdentifier>{5a70c8eb-b856-43c0-a491-9a2669a61643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\MeshAndTextureResources\Texture">
+      <UniqueIdentifier>{18210d91-e6e2-4cb2-8be4-24eb4c4cb6d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\D3D11Resources\D3D11Manager">
+      <UniqueIdentifier>{3148455d-555c-4c67-ab2a-fc6f69e7d9c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\MeshAndTextureResources\ResourceManager">
+      <UniqueIdentifier>{b785e912-f8fd-4cb4-b3a5-cd711a722afb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\D3D11Core">
+      <UniqueIdentifier>{4a0020af-5b0d-479f-8b69-64c40f8b5e80}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h">
+      <Filter>D3D11\D3D11Resources\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Resources\ConstantBufferManager.h">
+      <Filter>D3D11\D3D11Resources\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Headers\Headers.h">
+      <Filter>Utilities\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Headers\HeadersD3D.h">
+      <Filter>Utilities\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ErrorChecking\CustomException.h">
+      <Filter>Utilities\ErrorChecking</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ErrorChecking\DxgiInfoManager.h">
+      <Filter>Utilities\ErrorChecking</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Globals\D3D11Globals.h">
+      <Filter>D3D11\D3D11Globals</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Resources\IndexBuffer.h">
+      <Filter>D3D11\D3D11Resources\IndexBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Resources\IndexBufferManager.h">
+      <Filter>D3D11\D3D11Resources\IndexBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Resources\VertexShader.h">
+      <Filter>D3D11\D3D11Resources\VertexShader</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Resources\VertexShaderManager.h">
+      <Filter>D3D11\D3D11Resources\VertexShader</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Resources\PixelShader.h">
+      <Filter>D3D11\D3D11Resources\PixelShader</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Resources\PixelShaderManager.h">
+      <Filter>D3D11\D3D11Resources\PixelShader</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Resources\VertexBuffer.h">
+      <Filter>D3D11\D3D11Resources\VertexBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Resources\VertexBufferManager.h">
+      <Filter>D3D11\D3D11Resources\VertexBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\MeshAndTextureResources\Mesh.h">
+      <Filter>D3D11\MeshAndTextureResources\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\MeshAndTextureResources\MeshManager.h">
+      <Filter>D3D11\MeshAndTextureResources\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Headers\VertexMesh.h">
+      <Filter>Utilities\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Math\Matrix4x4.h">
+      <Filter>Utilities\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Math\Vector2D.h">
+      <Filter>Utilities\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Math\Vector3D.h">
+      <Filter>Utilities\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Math\Vector4D.h">
+      <Filter>Utilities\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\MeshAndTextureResources\MeshManagerHelpers.h">
+      <Filter>D3D11\MeshAndTextureResources\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\UtilitiyFuncs\utilityFunctions.h">
+      <Filter>Utilities\UtilityFuncs</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\MeshAndTextureResources\Texture.h">
+      <Filter>D3D11\MeshAndTextureResources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\MeshAndTextureResources\TextureManager.h">
+      <Filter>D3D11\MeshAndTextureResources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Resources\D3DManager.h">
+      <Filter>D3D11\D3D11Resources\D3D11Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\MeshAndTextureResources\ResourceManager.h">
+      <Filter>D3D11\MeshAndTextureResources\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\D3D11Core\D3D11Core.h">
+      <Filter>D3D11\D3D11Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="D3D11\D3D11Resources\ConstantBuffer.cpp">
+      <Filter>D3D11\D3D11Resources\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Resources\ConstantBufferManager.cpp">
+      <Filter>D3D11\D3D11Resources\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\ErrorChecking\CustomException.cpp">
+      <Filter>Utilities\ErrorChecking</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\ErrorChecking\DxgiInfoManager.cpp">
+      <Filter>Utilities\ErrorChecking</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Globals\D3D11Globals.cpp">
+      <Filter>D3D11\D3D11Globals</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Resources\IndexBuffer.cpp">
+      <Filter>D3D11\D3D11Resources\IndexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Resources\IndexBufferManager.cpp">
+      <Filter>D3D11\D3D11Resources\IndexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Resources\VertexShader.cpp">
+      <Filter>D3D11\D3D11Resources\VertexShader</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Resources\VertexShaderManager.cpp">
+      <Filter>D3D11\D3D11Resources\VertexShader</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Resources\PixelShader.cpp">
+      <Filter>D3D11\D3D11Resources\PixelShader</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Resources\PixelShaderManager.cpp">
+      <Filter>D3D11\D3D11Resources\PixelShader</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Resources\VertexBuffer.cpp">
+      <Filter>D3D11\D3D11Resources\VertexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Resources\VertexBufferManager.cpp">
+      <Filter>D3D11\D3D11Resources\VertexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\MeshAndTextureResources\Mesh.cpp">
+      <Filter>D3D11\MeshAndTextureResources\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\MeshAndTextureResources\MeshManager.cpp">
+      <Filter>D3D11\MeshAndTextureResources\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\UtilitiyFuncs\utilityFunctions.cpp">
+      <Filter>Utilities\UtilityFuncs</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\MeshAndTextureResources\Texture.cpp">
+      <Filter>D3D11\MeshAndTextureResources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\MeshAndTextureResources\TextureManager.cpp">
+      <Filter>D3D11\MeshAndTextureResources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Resources\D3DManager.cpp">
+      <Filter>D3D11\D3D11Resources\D3D11Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\MeshAndTextureResources\ResourceManager.cpp">
+      <Filter>D3D11\MeshAndTextureResources\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\D3D11Core\D3D11Core.cpp">
+      <Filter>D3D11\D3D11Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

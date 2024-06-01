@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{77dbaff4-231d-4bdb-80a1-ee86e07c3a7e}</ProjectGuid>
+    <RootNamespace>GraphicEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)\;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)\;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;GRAPHICENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;GRAPHICENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;GRAPHICENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Dependencies\DirectXTex\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;GRAPHICENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Dependencies\DirectXTex\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="D3D11\D3D11Core\D3D11Core.h" />
+    <ClInclude Include="D3D11\D3D11Globals\D3D11Globals.h" />
+    <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h" />
+    <ClInclude Include="D3D11\D3D11Resources\ConstantBufferManager.h" />
+    <ClInclude Include="D3D11\D3D11Resources\D3DManager.h" />
+    <ClInclude Include="D3D11\D3D11Resources\IndexBuffer.h" />
+    <ClInclude Include="D3D11\D3D11Resources\IndexBufferManager.h" />
+    <ClInclude Include="D3D11\D3D11Resources\PixelShader.h" />
+    <ClInclude Include="D3D11\D3D11Resources\PixelShaderManager.h" />
+    <ClInclude Include="D3D11\D3D11Resources\VertexBuffer.h" />
+    <ClInclude Include="D3D11\D3D11Resources\VertexBufferManager.h" />
+    <ClInclude Include="D3D11\D3D11Resources\VertexShader.h" />
+    <ClInclude Include="D3D11\D3D11Resources\VertexShaderManager.h" />
+    <ClInclude Include="D3D11\MeshAndTextureResources\Mesh.h" />
+    <ClInclude Include="D3D11\MeshAndTextureResources\MeshManager.h" />
+    <ClInclude Include="D3D11\MeshAndTextureResources\MeshManagerHelpers.h" />
+    <ClInclude Include="D3D11\MeshAndTextureResources\ResourceManager.h" />
+    <ClInclude Include="D3D11\MeshAndTextureResources\Texture.h" />
+    <ClInclude Include="D3D11\MeshAndTextureResources\TextureManager.h" />
+    <ClInclude Include="Utilities\ErrorChecking\CustomException.h" />
+    <ClInclude Include="Utilities\ErrorChecking\DxgiInfoManager.h" />
+    <ClInclude Include="Utilities\Headers\Headers.h" />
+    <ClInclude Include="Utilities\Headers\HeadersD3D.h" />
+    <ClInclude Include="Utilities\Headers\VertexMesh.h" />
+    <ClInclude Include="Utilities\Math\Matrix4x4.h" />
+    <ClInclude Include="Utilities\Math\Vector2D.h" />
+    <ClInclude Include="Utilities\Math\Vector3D.h" />
+    <ClInclude Include="Utilities\Math\Vector4D.h" />
+    <ClInclude Include="Utilities\UtilitiyFuncs\utilityFunctions.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="D3D11\D3D11Core\D3D11Core.cpp" />
+    <ClCompile Include="D3D11\D3D11Globals\D3D11Globals.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\ConstantBuffer.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\ConstantBufferManager.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\D3DManager.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\IndexBuffer.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\IndexBufferManager.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\PixelShader.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\PixelShaderManager.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\VertexBuffer.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\VertexBufferManager.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\VertexShader.cpp" />
+    <ClCompile Include="D3D11\D3D11Resources\VertexShaderManager.cpp" />
+    <ClCompile Include="D3D11\MeshAndTextureResources\Mesh.cpp" />
+    <ClCompile Include="D3D11\MeshAndTextureResources\MeshManager.cpp" />
+    <ClCompile Include="D3D11\MeshAndTextureResources\ResourceManager.cpp" />
+    <ClCompile Include="D3D11\MeshAndTextureResources\Texture.cpp" />
+    <ClCompile Include="D3D11\MeshAndTextureResources\TextureManager.cpp" />
+    <ClCompile Include="Utilities\ErrorChecking\CustomException.cpp" />
+    <ClCompile Include="Utilities\ErrorChecking\DxgiInfoManager.cpp" />
+    <ClCompile Include="Utilities\UtilitiyFuncs\utilityFunctions.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
