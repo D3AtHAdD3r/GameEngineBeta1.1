@@ -1,6 +1,5 @@
 #include "RendererDX11.h"
 #include<GraphicEngine/D3D11/D3D11Core/D3D11Core.h>
-#include<GraphicEngine/IApplication/IApplication.h>
 
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
 
@@ -12,6 +11,7 @@ RendererDX11::RendererDX11()
 
 RendererDX11::~RendererDX11()
 {
+	if (pD3D11Core) delete pD3D11Core;
 }
 
 bool RendererDX11::Initialize(RenderData* pRenderData)
@@ -22,14 +22,57 @@ bool RendererDX11::Initialize(RenderData* pRenderData)
 	return true;
 }
 
-bool RendererDX11::BeginFrame()
+bool RendererDX11::Init_Pre_Bind(Renderer_PreBindData* pData)
 {
+	if (!CheckPreBindData(pData)) return false;
+	if (!SetPreBinds(pData)) return false;
 	
 	return true;
 }
 
+bool RendererDX11::Init_Main_Bind(Renderer_BindingData* pData)
+{
+	if (!CheckMainBindData(pData)) return false;
+	if (!BindToPipeLine(pData)) return false;
+
+	return true;
+}
+
+void RendererDX11::PresentFrame(bool Vsync)
+{
+	Present(Vsync);
+}
+
 bool RendererDX11::CheckRenderData(RenderData* pRenderData)
 {
+	if (!pRenderData->d3dInitData.Window_Height || !pRenderData->d3dInitData.Window_Width || !pRenderData->d3dInitData.hWnd || !pRenderData->d3dInitData.BufferCount) 
+		return false;
+
+	return true;
+}
+
+bool RendererDX11::CheckPreBindData(Renderer_PreBindData* pData)
+{
+	if (!pData->pRTV || !pData->scene_width || !pData->scene_height)
+		return false;
+	if (pData->UseDepthStencil && !pData->pDSV)
+		return false;
+
+
+	return true;
+}
+
+bool RendererDX11::CheckMainBindData(Renderer_BindingData* pData)
+{
+	if (!pData->vBuffer || !pData->cbuffer || !pData->iLayout || 
+		!pData->pShader || !pData->size_vertex || !pData->vShader || 
+		!pData->indexbuffer || !pData->pCBuffer_data || 
+		pData->TexBindType == TEXTURE_BINDING_TYPE::unknown || 
+		!pData->MaterialCount)
+		return false;
+
+	if (pData->Material_Draw_Details.size() != pData->MaterialCount) return false;
+
 	return true;
 }
 
@@ -61,6 +104,79 @@ bool RendererDX11::SetPreBinds(Renderer_PreBindData* pData)
 
 	return true;
 }
+
+bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
+{
+	setRasterizerState(pData->FrontFaceCull);
+
+	pD3D11Core->pContext->UpdateSubresource(pData->cbuffer, NULL, NULL, pData->pCBuffer_data, NULL, NULL);
+
+	if (binded_cb != pData->cbuffer)
+	{
+		setConstantBuffer(pData->cbuffer); 
+		binded_cb = pData->cbuffer;
+	}
+
+	if (binded_vs != pData->vShader)
+	{
+		setVertexShader(pData->vShader);
+		binded_vs = pData->vShader;
+	}
+
+	if (binded_ps != pData->pShader)
+	{
+		setPixelShader(pData->pShader);
+		binded_ps = pData->pShader;
+	}
+
+	setVertexBufferandLayout(pData->size_vertex, pData->vBuffer, pData->iLayout);
+	setIndexBuffer(pData->indexbuffer);
+
+	//Textures
+	switch (pData->TexBindType)
+	{
+	case TEXTURE_BINDING_TYPE::oneTexMap_OneNormalMap_perDrawCall:
+	{
+		for (size_t m = 0; m < pData->MaterialCount; ++m)
+		{
+			setTextureResourceVertexShader_normal_included(pData->list_textures[m], pData->list_textures_normal[m]);
+			setTextureResourcePixelShader_normal_included(pData->list_textures[m], pData->list_textures_normal[m]);
+
+			UINT start_index_location = (UINT)(pData->Material_Draw_Details[m].first);
+			UINT index_count = (UINT)(pData->Material_Draw_Details[m].second);
+			drawIndexedTriangleList(index_count, 0, start_index_location);
+		}
+		break;
+	}
+
+	case TEXTURE_BINDING_TYPE::oneTexMap_perDrawCall:
+	{
+		for (size_t m = 0; m < pData->MaterialCount; ++m)
+		{
+			setTextureResourceVertexShader(pData->list_textures[m]);
+			setTextureResourcePixelShader(pData->list_textures[m]);
+
+			UINT start_index_location = (UINT)(pData->Material_Draw_Details[m].first);
+			UINT index_count = (UINT)(pData->Material_Draw_Details[m].second);
+			drawIndexedTriangleList(index_count, 0, start_index_location);
+		}
+		break;
+	}
+
+	case TEXTURE_BINDING_TYPE::allTexMaps_perDrawCall:
+	{
+		setTextureResourceVertexShader(pData->list_textures);
+		setTextureResourcePixelShader(pData->list_textures);
+		UINT start_index_location = (UINT)(pData->Material_Draw_Details[0].first);
+		UINT index_count = (UINT)(pData->Material_Draw_Details[0].second);
+		drawIndexedTriangleList(index_count, 0, start_index_location);
+	}
+	break;
+	}
+
+	return true;
+}
+
 
 void RendererDX11::setViewport(UINT width, UINT height)
 {
@@ -137,36 +253,36 @@ void RendererDX11::setConstantBuffer(ID3D11Buffer* cbuffer)
 	pD3D11Core->pContext->PSSetConstantBuffers(0, 1, &cbuffer);
 }
 
-void RendererDX11::setTextureResourceVertexShader(Texture* TextureList[32], unsigned int numberOfTex)
+void RendererDX11::setTextureResourceVertexShader(std::vector<Texture*> TextureList)
 {
 	UINT startslot = 0;
-	UINT numviews = numberOfTex;
+	UINT numviews = (UINT)(TextureList.size());
 	ID3D11ShaderResourceView* list_res[32];
 	ID3D11SamplerState* list_sampler[32];
 
-	for (UINT i = 0; i < numberOfTex; ++i)
+	for (UINT i = 0; i < numviews; ++i)
 	{
 		list_res[i] = *(TextureList[i]->GetShaderResourceViewPP());
 		list_sampler[i] = *(TextureList[i]->GetSamplerStatePP());
 	}
 	pD3D11Core->pContext->VSSetShaderResources(startslot, numviews, list_res);
-	pD3D11Core->pContext->VSSetSamplers(0, numberOfTex, list_sampler);
+	pD3D11Core->pContext->VSSetSamplers(0, numviews, list_sampler);
 }
 
-void RendererDX11::setTextureResourcePixelShader(Texture* TextureList[32], unsigned int numberOfTex)
+void RendererDX11::setTextureResourcePixelShader(std::vector<Texture*> TextureList)
 {
 	UINT startslot = 0;
-	UINT numviews = numberOfTex;
+	UINT numviews = (UINT)(TextureList.size());
 	ID3D11ShaderResourceView* list_res[32];
 	ID3D11SamplerState* list_sampler[32];
 
-	for (UINT i = 0; i < numberOfTex; ++i)
+	for (UINT i = 0; i < numviews; ++i)
 	{
 		list_res[i] = *(TextureList[i]->GetShaderResourceViewPP());
 		list_sampler[i] = *(TextureList[i]->GetSamplerStatePP());
 	}
 	pD3D11Core->pContext->PSSetShaderResources(startslot, numviews, list_res);
-	pD3D11Core->pContext->PSSetSamplers(0, numberOfTex, list_sampler);
+	pD3D11Core->pContext->PSSetSamplers(0, numviews, list_sampler);
 }
 
 void RendererDX11::setTextureResourceVertexShader(Texture* pTexture)

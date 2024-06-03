@@ -7,22 +7,24 @@ class Texture;
 class RendererDX11
 {
 private:
-	RendererDX11(); //undeclared
-	~RendererDX11();	//undeclared
+	RendererDX11(); 
+	~RendererDX11();	
 
 public:
 	bool Initialize(RenderData* pRenderData);
-	bool BeginFrame(); //prebind
+	bool Init_Pre_Bind(Renderer_PreBindData* pData); 
+	bool Init_Main_Bind(Renderer_BindingData* pData);
+	void PresentFrame(bool Vsync = false);
 
 private:
 	bool CheckRenderData(RenderData* pRenderData); //undeclared
+	bool CheckPreBindData(Renderer_PreBindData* pData);
+	bool CheckMainBindData(Renderer_BindingData* pData);
 
 private:
 	bool SetPreBinds(Renderer_PreBindData* pData);
-	bool BindToPipeLine(); //undeclared
-	bool PresentFrame();	//undeclared
-
-
+	bool BindToPipeLine(Renderer_BindingData* pData); //undeclared
+	
 private:
 	//setter functions
 	void setViewport(UINT width, UINT height);
@@ -44,12 +46,15 @@ private:
 
 private:
 	//binder functions Textures
-	void setTextureResourceVertexShader(Texture* TextureList[32], unsigned int numberOfTex);
-	void setTextureResourcePixelShader(Texture* TextureList[32], unsigned int numberOfTex);
+	//allTexMaps_perDrawCall,
+	void setTextureResourceVertexShader(std::vector<Texture*> TextureList);
+	void setTextureResourcePixelShader(std::vector<Texture*> TextureList);
 
+	//oneTexMap_perDrawCall
 	void setTextureResourceVertexShader(Texture* pTexture);
 	void setTextureResourcePixelShader(Texture* pTexture);
 
+	//oneTexMap_OneNormalMap_perDrawCall
 	void setTextureResourceVertexShader_normal_included(Texture* pTextureMap, Texture* pTextureNormalMap);
 	void setTextureResourcePixelShader_normal_included(Texture* pTextureMap, Texture* pTextureNormalMap);
 
@@ -63,4 +68,9 @@ private:
 private:
 	ID3D11RasterizerState* cull_front_state = nullptr;
 	ID3D11RasterizerState* cull_back_state = nullptr;
+
+private:
+	ID3D11Buffer* binded_cb = nullptr;
+	ID3D11PixelShader* binded_ps = nullptr;
+	ID3D11VertexShader* binded_vs = nullptr;
 };
