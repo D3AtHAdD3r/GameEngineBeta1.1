@@ -89,9 +89,6 @@ D3D11Core::D3D11Core(D3D11_INIT_DATA* pInitData)
 	pD3D11Globals->pAdaptor						= this->pAdaptor;
 	pD3D11Globals->pfactory						= this->pfactory;
 
-	//CreateRasterizerState
-
-
 	//Initialize Managers
 	pD3D11Manager = new D3D11Manager();
 	pResourceManager = new ResourceManager();

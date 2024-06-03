@@ -17,13 +17,13 @@ public:
 	void PresentFrame(bool Vsync = false);
 
 private:
-	bool CheckRenderData(RenderData* pRenderData); //undeclared
+	bool CheckRenderData(RenderData* pRenderData); 
 	bool CheckPreBindData(Renderer_PreBindData* pData);
 	bool CheckMainBindData(Renderer_BindingData* pData);
 
 private:
 	bool SetPreBinds(Renderer_PreBindData* pData);
-	bool BindToPipeLine(Renderer_BindingData* pData); //undeclared
+	bool BindToPipeLine(Renderer_BindingData* pData);
 	
 private:
 	//setter functions
@@ -61,6 +61,7 @@ private:
 private:
 	void initRasterizerState();
 	void setRasterizerState(bool cull_front);
+	void SetFullScreenMode(bool fullscreen);
 
 private:
 	D3D11Core* pD3D11Core = nullptr;

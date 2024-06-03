@@ -177,6 +177,12 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 	return true;
 }
 
+void RendererDX11::SetFullScreenMode(bool fullscreen)
+{
+	HRESULT hr;
+	GFX_THROW_INFO(pD3D11Core->pSwapChain->SetFullscreenState(fullscreen, nullptr));
+}
+
 
 void RendererDX11::setViewport(UINT width, UINT height)
 {
