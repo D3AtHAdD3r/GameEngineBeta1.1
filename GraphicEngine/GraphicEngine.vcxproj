@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="D3D11\D3D11Core\D3D11Core.h" />
     <ClInclude Include="D3D11\D3D11Globals\D3D11Globals.h" />
+    <ClInclude Include="D3D11\D3D11Headers\D3D11Structs.h" />
     <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h" />
     <ClInclude Include="D3D11\D3D11Resources\ConstantBufferManager.h" />
     <ClInclude Include="D3D11\D3D11Resources\D3DManager.h" />
@@ -168,6 +169,13 @@
     <ClInclude Include="D3D11\MeshAndTextureResources\ResourceManager.h" />
     <ClInclude Include="D3D11\MeshAndTextureResources\Texture.h" />
     <ClInclude Include="D3D11\MeshAndTextureResources\TextureManager.h" />
+    <ClInclude Include="ECS\Entity\Entity.h" />
+    <ClInclude Include="ECS\Entity\EntityManager.h" />
+    <ClInclude Include="ECS\Scene\Scene.h" />
+    <ClInclude Include="ECS\Scene\SceneManager.h" />
+    <ClInclude Include="IApplication\IApplication.h" />
+    <ClInclude Include="Renderer\RendererDX11\RendererDX11.h" />
+    <ClInclude Include="Renderer\RendererHeaders\RendererStructs.h" />
     <ClInclude Include="Utilities\ErrorChecking\CustomException.h" />
     <ClInclude Include="Utilities\ErrorChecking\DxgiInfoManager.h" />
     <ClInclude Include="Utilities\Headers\Headers.h" />
@@ -198,6 +206,11 @@
     <ClCompile Include="D3D11\MeshAndTextureResources\ResourceManager.cpp" />
     <ClCompile Include="D3D11\MeshAndTextureResources\Texture.cpp" />
     <ClCompile Include="D3D11\MeshAndTextureResources\TextureManager.cpp" />
+    <ClCompile Include="ECS\Entity\Entity.cpp" />
+    <ClCompile Include="ECS\Entity\EntityManager.cpp" />
+    <ClCompile Include="ECS\Scene\Scene.cpp" />
+    <ClCompile Include="ECS\Scene\SceneManager.cpp" />
+    <ClCompile Include="Renderer\RendererDX11\RendererDX11.cpp" />
     <ClCompile Include="Utilities\ErrorChecking\CustomException.cpp" />
     <ClCompile Include="Utilities\ErrorChecking\DxgiInfoManager.cpp" />
     <ClCompile Include="Utilities\UtilitiyFuncs\utilityFunctions.cpp" />

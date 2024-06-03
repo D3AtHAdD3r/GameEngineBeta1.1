@@ -66,6 +66,30 @@
     <Filter Include="D3D11\D3D11Core">
       <UniqueIdentifier>{4a0020af-5b0d-479f-8b69-64c40f8b5e80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{a1b7d5f0-ae5a-4b79-a674-a9fee2eb7048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D11\D3D11Headers">
+      <UniqueIdentifier>{7f313935-8c25-42e3-afbd-d4c4f55f93ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\RendererDX11">
+      <UniqueIdentifier>{11ab69ed-47a4-44cb-babb-9f2bd2aaef78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\RendererHeaders">
+      <UniqueIdentifier>{b60459ef-969a-4994-a9c0-a028596fa3fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IApplication">
+      <UniqueIdentifier>{4df03e09-ce70-4bb7-9ca3-4ca932888ce0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS">
+      <UniqueIdentifier>{95f129a9-3f9d-42a8-8825-e7f7d9e29fbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Entity">
+      <UniqueIdentifier>{4e0e3cab-c861-4e30-bc8e-80cf74b1b3fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Scene">
+      <UniqueIdentifier>{b8c8ef22-158f-434e-8250-d179a697adf1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h">
@@ -155,6 +179,30 @@
     <ClInclude Include="D3D11\D3D11Core\D3D11Core.h">
       <Filter>D3D11\D3D11Core</Filter>
     </ClInclude>
+    <ClInclude Include="D3D11\D3D11Headers\D3D11Structs.h">
+      <Filter>D3D11\D3D11Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\RendererDX11\RendererDX11.h">
+      <Filter>Renderer\RendererDX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\RendererHeaders\RendererStructs.h">
+      <Filter>Renderer\RendererHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="IApplication\IApplication.h">
+      <Filter>IApplication</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Entity\Entity.h">
+      <Filter>ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Entity\EntityManager.h">
+      <Filter>ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Scene\Scene.h">
+      <Filter>ECS\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Scene\SceneManager.h">
+      <Filter>ECS\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D11\D3D11Resources\ConstantBuffer.cpp">
@@ -219,6 +267,21 @@
     </ClCompile>
     <ClCompile Include="D3D11\D3D11Core\D3D11Core.cpp">
       <Filter>D3D11\D3D11Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\RendererDX11\RendererDX11.cpp">
+      <Filter>Renderer\RendererDX11</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Entity\Entity.cpp">
+      <Filter>ECS\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Entity\EntityManager.cpp">
+      <Filter>ECS\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Scene\Scene.cpp">
+      <Filter>ECS\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Scene\SceneManager.cpp">
+      <Filter>ECS\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

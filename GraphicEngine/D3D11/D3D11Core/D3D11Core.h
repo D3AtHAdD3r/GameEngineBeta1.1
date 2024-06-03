@@ -4,21 +4,14 @@
 class D3D11Manager;
 class ResourceManager;
 class D3D11Globals;
-
-//limited features for now
-struct D3D11_INIT_DATA
-{
-	unsigned int Window_Width = 0;
-	unsigned int Window_Height = 0;
-	HWND hWnd = NULL;
-	unsigned int BufferCount = 1;
-	bool Windowed = true;
-};
-
+struct D3D11_INIT_DATA;
 
 class D3D11Core
 {
-public:
+private:
+	friend class RendererDX11;
+
+private:
 	D3D11Core(D3D11_INIT_DATA* pInitData);
 	~D3D11Core();
 private:

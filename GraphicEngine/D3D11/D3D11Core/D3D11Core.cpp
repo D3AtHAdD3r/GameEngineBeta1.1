@@ -2,6 +2,7 @@
 #include<GraphicEngine/D3D11/D3D11Resources/D3DManager.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/ResourceManager.h>
 #include<GraphicEngine/D3D11/D3D11Globals/D3D11Globals.h>
+#include<GraphicEngine/D3D11/D3D11Headers/D3D11Structs.h>
 
 
 D3D11Core::D3D11Core(D3D11_INIT_DATA* pInitData)
@@ -75,11 +76,6 @@ D3D11Core::D3D11Core(D3D11_INIT_DATA* pInitData)
 	if (FAILED(hr))
 		throw GFX_EXCEPT_NOINFO(hr);
 
-	//Initialize Managers
-	pD3D11Manager = new D3D11Manager();
-	pResourceManager = new ResourceManager();
-
-
 	//Create D3dGlobals and Initilize it
 	D3D11Globals::CreateD3DGlobals();
 	pD3D11Globals = D3D11Globals::Get();
@@ -92,6 +88,13 @@ D3D11Core::D3D11Core(D3D11_INIT_DATA* pInitData)
 	pD3D11Globals->pDXGIDevice					= this->pDXGIDevice;
 	pD3D11Globals->pAdaptor						= this->pAdaptor;
 	pD3D11Globals->pfactory						= this->pfactory;
+
+	//CreateRasterizerState
+
+
+	//Initialize Managers
+	pD3D11Manager = new D3D11Manager();
+	pResourceManager = new ResourceManager();
 }
 
 D3D11Core::~D3D11Core()

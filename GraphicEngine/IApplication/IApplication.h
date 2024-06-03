@@ -1,0 +1,21 @@
+
+
+
+
+class /*__declspec(dllexport)*/IApplication
+{
+
+public:
+	virtual void OnInit() = 0;
+	virtual void OnUpdate(float delta_time) = 0;
+	virtual void OnRender() = 0;
+	virtual void OnShutdown() = 0;
+	virtual ~IApplication() = default;
+	/**
+	* Application config data
+	*/
+protected:
+	/*std::string ApplicationName = "";
+	int width = -1;
+	int height = -1;*/
+};
