@@ -2,7 +2,9 @@
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Mesh.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/MeshManagerHelpers.h>
 
-MeshManager::MeshManager()
+MeshManager::MeshManager(const std::unordered_map<int, std::wstring>& File_Map)
+	:
+	FileMap(File_Map)
 {
 }
 
@@ -15,7 +17,7 @@ MeshManager::~MeshManager()
 	}
 }
 
-Mesh* MeshManager::CreateMesh(std::wstring filePath, const int& u_id)
+Mesh* MeshManager::CreateMesh(const int& u_id)
 {
 	if (u_id < 0) return nullptr;
 
@@ -26,7 +28,9 @@ Mesh* MeshManager::CreateMesh(std::wstring filePath, const int& u_id)
 	}
 	else
 	{
-		if (filePath.empty()) return nullptr;
+		std::wstring filePath = GetFileName(u_id);
+		if (filePath.empty())
+			return nullptr;
 
 		bool flag = false;
 		//getfilename(only)
@@ -113,7 +117,7 @@ bool MeshManager::freeMesh(Mesh* pMesh)
 
 bool MeshManager::check_Exist(const int& u_id)
 {
-	if (u_id == 0) return false;
+	if (u_id < 0) return false;
 
 	auto itr = MeshContainer.find(u_id);
 	if (itr != MeshContainer.end())
@@ -151,4 +155,15 @@ void MeshManager::deleteMesh_direct(Mesh* pMesh)
 {
 	MeshContainer.erase(pMesh->uID);
 	delete pMesh;
+}
+
+std::wstring MeshManager::GetFileName(const int& uID)
+{
+	if (uID < 0) return std::wstring();
+
+	auto itr = FileMap.find(uID);
+	if (itr != FileMap.end())
+		return itr->second;
+	else
+		return std::wstring();
 }

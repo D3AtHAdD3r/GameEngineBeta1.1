@@ -17,7 +17,7 @@ RendererDX11::~RendererDX11()
 bool RendererDX11::Initialize(RenderData* pRenderData)
 {
 	if (!CheckRenderData(pRenderData)) return false;
-	pD3D11Core = new D3D11Core(&(pRenderData->d3dInitData));
+	pD3D11Core = new D3D11Core(&(pRenderData->d3dInitData), &(pRenderData->file_maps));
 	initRasterizerState();
 	return true;
 }
@@ -66,8 +66,8 @@ bool RendererDX11::CheckMainBindData(Renderer_BindingData* pData)
 {
 	if (!pData->vBuffer || !pData->cbuffer || !pData->iLayout || 
 		!pData->pShader || !pData->size_vertex || !pData->vShader || 
-		!pData->indexbuffer || !pData->pCBuffer_data || 
-		pData->TexBindType == TEXTURE_BINDING_TYPE::unknown || 
+		!pData->pIndexbuffer || !pData->pCBuffer_data ||
+		pData->TexBindType == Primitive_texture_type::unknown ||
 		!pData->MaterialCount)
 		return false;
 
@@ -130,12 +130,12 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 	}
 
 	setVertexBufferandLayout(pData->size_vertex, pData->vBuffer, pData->iLayout);
-	setIndexBuffer(pData->indexbuffer);
+	setIndexBuffer(pData->pIndexbuffer);
 
 	//Textures
 	switch (pData->TexBindType)
 	{
-	case TEXTURE_BINDING_TYPE::oneTexMap_OneNormalMap_perDrawCall:
+	case Primitive_texture_type::oneTexMap_OneNormalMap_perDrawCall:
 	{
 		for (size_t m = 0; m < pData->MaterialCount; ++m)
 		{
@@ -149,7 +149,7 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 		break;
 	}
 
-	case TEXTURE_BINDING_TYPE::oneTexMap_perDrawCall:
+	case Primitive_texture_type::oneTexMap_perDrawCall:
 	{
 		for (size_t m = 0; m < pData->MaterialCount; ++m)
 		{
@@ -163,7 +163,7 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 		break;
 	}
 
-	case TEXTURE_BINDING_TYPE::allTexMaps_perDrawCall:
+	case Primitive_texture_type::allTexMaps_perDrawCall:
 	{
 		setTextureResourceVertexShader(pData->list_textures);
 		setTextureResourcePixelShader(pData->list_textures);

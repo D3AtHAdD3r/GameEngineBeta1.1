@@ -4,15 +4,14 @@
 
 class Texture;
 
-
 class TextureManager
 {
 public:
-	TextureManager();
+	TextureManager(const std::unordered_map<int, std::wstring>& File_Map);
 	~TextureManager();
 
 public:
-	Texture* CreateTextureFromFile(std::wstring filePath, const int& u_ID);
+	Texture* CreateTexture(const int& u_ID);
 	Texture* CreateTextureFromResourceViews(std::wstring tex_name, unsigned int width, unsigned int height, const int& u_ID);
 	Texture* CreateTextureFromBackBuffer(std::wstring tex_name, unsigned short buffer_index, const int& u_ID);
 
@@ -44,7 +43,13 @@ private:
 	bool CreateShaderResourceViewFromTexture(ID3D11Texture2D* ptexture, ID3D11ShaderResourceView** pShader_res_view);
 	bool CreateSamplerState(ID3D11SamplerState** m_sampler_state);
 	bool CreateRenderTargetView_BackBuffer(ID3D11RenderTargetView** pRenderTargetView, const unsigned short& buffer_index);
+
+private:
+	std::wstring GetFileName(const int& uID);
+
 private:
 	std::unordered_map<int, Texture*> TextureContainer;
 	unsigned int ResourceCount = 0;
+private:
+	std::unordered_map<int, std::wstring> FileMap;
 };

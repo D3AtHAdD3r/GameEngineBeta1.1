@@ -1,14 +1,14 @@
 #include "ResourceManager.h"
 #include<GraphicEngine/D3D11/MeshAndTextureResources/MeshManager.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/TextureManager.h>
+#include<GraphicEngine/Engine/Headers/EngineStructs.h>
 
 
 
-
-ResourceManager::ResourceManager()
+ResourceManager::ResourceManager(FILEMAPS* file_maps)
 {
-	pMeshManager = new MeshManager();
-	pTextureManager = new TextureManager();
+	pMeshManager = new MeshManager(file_maps->File_Map_Meshes);
+	pTextureManager = new TextureManager(file_maps->File_Map_Textures);
 }
 
 ResourceManager::~ResourceManager()

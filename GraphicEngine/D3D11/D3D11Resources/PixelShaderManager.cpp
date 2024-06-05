@@ -3,7 +3,9 @@
 
 
 
-PixelShaderManager::PixelShaderManager()
+PixelShaderManager::PixelShaderManager(const std::unordered_map<int, std::wstring>& File_Map)
+	:
+	FileMap(File_Map)
 {
 }
 
@@ -16,9 +18,9 @@ PixelShaderManager::~PixelShaderManager()
 	}
 }
 
-PixelShader* PixelShaderManager::CreatePixelShader(std::wstring shaderfilename, std::string entryPointName, std::string shader_model, const int& u_id)
+PixelShader* PixelShaderManager::CreatePixelShader(std::string entryPointName, std::string shader_model, const int& u_id)
 {
-	if (shaderfilename.empty() || entryPointName.empty() || shader_model.empty() || u_id < 0)
+	if (entryPointName.empty() || shader_model.empty() || u_id < 0)
 		return nullptr;
 
 	if (check_Exist(u_id))
@@ -28,6 +30,9 @@ PixelShader* PixelShaderManager::CreatePixelShader(std::wstring shaderfilename, 
 	}
 	else
 	{
+		std::wstring shaderfilename = GetFileName(u_id);
+		if (shaderfilename.empty())
+			return nullptr;
 		PixelShader* currPixelShader = new PixelShader(shaderfilename, entryPointName, shader_model, u_id);
 		currPixelShader->incrementCounter();
 		PixelShaderContainer.emplace(u_id, currPixelShader);
@@ -35,8 +40,6 @@ PixelShader* PixelShaderManager::CreatePixelShader(std::wstring shaderfilename, 
 
 		return currPixelShader;
 	}
-
-
 }
 
 bool PixelShaderManager::freePixelShader(PixelShader* pPShader)
@@ -66,9 +69,22 @@ void PixelShaderManager::releaseAll()
 	PixelShaderContainer.clear();
 }
 
+bool PixelShaderManager::CreateAll(std::string entryPointName, std::string shader_model)
+{
+	for (auto itr = FileMap.begin(); itr != FileMap.end(); ++itr)
+	{
+		int uid = itr->first;
+		PixelShader* pshader = CreatePixelShader(entryPointName, shader_model, uid);
+		if (!pshader)
+			return false;
+	}
+
+	return true;
+}
+
 bool PixelShaderManager::check_Exist(const int& u_id)
 {
-	if (u_id == 0) return false;
+	if (u_id < 0) return false;
 
 	auto itr = PixelShaderContainer.find(u_id);
 	if (itr != PixelShaderContainer.end())
@@ -106,5 +122,16 @@ void PixelShaderManager::DeletePixelShader_direct(PixelShader* pPShader)
 {
 	PixelShaderContainer.erase(pPShader->uID);
 	delete pPShader;
+}
+
+std::wstring PixelShaderManager::GetFileName(const int& uID)
+{
+	if (uID < 0) return std::wstring();
+
+	auto itr = FileMap.find(uID);
+	if (itr != FileMap.end())
+		return itr->second;
+	else
+		return std::wstring();
 }
 

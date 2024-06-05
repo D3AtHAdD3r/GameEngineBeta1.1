@@ -5,7 +5,7 @@
 #include<GraphicEngine/D3D11/D3D11Headers/D3D11Structs.h>
 
 
-D3D11Core::D3D11Core(D3D11_INIT_DATA* pInitData)
+D3D11Core::D3D11Core(D3D11_INIT_DATA* pInitData, FILEMAPS* file_maps)
 {
 	HRESULT hr = 0;
 
@@ -90,8 +90,8 @@ D3D11Core::D3D11Core(D3D11_INIT_DATA* pInitData)
 	pD3D11Globals->pfactory						= this->pfactory;
 
 	//Initialize Managers
-	pD3D11Manager = new D3D11Manager();
-	pResourceManager = new ResourceManager();
+	pD3D11Manager = new D3D11Manager(file_maps);
+	pResourceManager = new ResourceManager(file_maps);
 }
 
 D3D11Core::~D3D11Core()

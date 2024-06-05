@@ -51,7 +51,7 @@ void IndexBufferManager::releaseAll()
 
 bool IndexBufferManager::check_Exist(const int& u_id)
 {
-	if (u_id == 0) return false;
+	if (u_id < 0) return false;
 
 	auto itr = IndexBufferContainer.find(u_id);
 	if (itr != IndexBufferContainer.end())

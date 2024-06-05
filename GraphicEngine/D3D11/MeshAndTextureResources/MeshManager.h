@@ -8,11 +8,11 @@ struct MaterialSlot;
 class MeshManager
 {
 public:
-	MeshManager();
+	MeshManager(const std::unordered_map<int, std::wstring>& File_Map);
 	~MeshManager();
 
 public:
-	Mesh* CreateMesh(std::wstring filePath, const int& u_id);
+	Mesh* CreateMesh(const int& u_id);
 	Mesh* CreateMesh(
 		VertexMesh* vertex_list_data, unsigned int vertex_list_size,
 		unsigned int* index_list_data, unsigned int index_list_size,
@@ -32,6 +32,12 @@ private:
 	void deleteMesh_direct(Mesh* pMesh);
 
 private:
+	std::wstring GetFileName(const int& uID);
+
+private:
 	std::unordered_map<int, Mesh*> MeshContainer;
 	unsigned int ResourceCount = 0;  //number of meshes
+
+private:
+	std::unordered_map<int, std::wstring> FileMap;
 };

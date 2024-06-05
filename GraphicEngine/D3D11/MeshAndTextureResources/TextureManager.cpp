@@ -1,11 +1,14 @@
 #include "TextureManager.h"
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
 #include<GraphicEngine/D3D11/D3D11Globals/D3D11Globals.h>
+#include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 
 #include<Dependencies/DirectXTex/include/DirectXTex.h>
 #pragma comment(lib,"DirectXTexD.lib")
 
-TextureManager::TextureManager()
+TextureManager::TextureManager(const std::unordered_map<int, std::wstring>& File_Map)
+	:
+	FileMap(File_Map)
 {
 }
 
@@ -18,9 +21,9 @@ TextureManager::~TextureManager()
 	}
 }
 
-Texture* TextureManager::CreateTextureFromFile(std::wstring filePath, const int& u_ID)
+Texture* TextureManager::CreateTexture(const int& u_ID)
 {
-	if (u_ID < 0 || filePath.empty()) return nullptr;
+	if (u_ID < 0 ) return nullptr;
 
 	if (check_Exist(u_ID))
 	{
@@ -30,6 +33,19 @@ Texture* TextureManager::CreateTextureFromFile(std::wstring filePath, const int&
 	else
 	{
 		bool flag = false;
+
+		std::wstring filePath = GetFileName(u_ID);
+		if (filePath.empty())
+			return nullptr;
+
+		//Check if RTV texture
+		std::wstring firstThree = filePath.substr(0, 3);
+		if (firstThree == HARDCODINGS::RTV_NAME_START)
+		{
+			//rtv texture, should already be created
+			return nullptr;
+		}
+
 		//getfilename(only)
 		wchar_t fileName[FILENAME_MAX];
 		wchar_t extensionName[FILENAME_MAX];
@@ -299,7 +315,7 @@ void TextureManager::releaseAll()
 
 bool TextureManager::check_Exist(const int& u_id)
 {
-	if (u_id == 0) return false;
+	if (u_id < 0) return false;
 
 	auto itr = TextureContainer.find(u_id);
 	if (itr != TextureContainer.end())
@@ -522,4 +538,15 @@ bool TextureManager::CreateRenderTargetView_BackBuffer(ID3D11RenderTargetView** 
 	GFX_THROW_INFO(D3D11Globals::Get()->GetDevice()->CreateRenderTargetView(buffer, NULL, pRenderTargetView));
 	buffer->Release();
 	return true;
+}
+
+std::wstring TextureManager::GetFileName(const int& uID)
+{
+	if (uID < 0) return std::wstring();
+
+	auto itr = FileMap.find(uID);
+	if (itr != FileMap.end())
+		return itr->second;
+	else
+		return std::wstring();
 }

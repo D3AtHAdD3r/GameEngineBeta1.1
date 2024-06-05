@@ -5,6 +5,7 @@ class D3D11Manager;
 class ResourceManager;
 class D3D11Globals;
 struct D3D11_INIT_DATA;
+struct FILEMAPS;
 
 class D3D11Core
 {
@@ -12,7 +13,7 @@ private:
 	friend class RendererDX11;
 
 private:
-	D3D11Core(D3D11_INIT_DATA* pInitData);
+	D3D11Core(D3D11_INIT_DATA* pInitData, FILEMAPS* file_maps);
 	~D3D11Core();
 private:
 	D3D11Manager* pD3D11Manager = nullptr;

@@ -90,6 +90,30 @@
     <Filter Include="ECS\Scene">
       <UniqueIdentifier>{b8c8ef22-158f-434e-8250-d179a697adf1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{0802dd1f-b6c2-4e3e-9493-9386d55b7624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{ffafa153-0cf2-443d-a5a8-a44e129732c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\EngineHelpers">
+      <UniqueIdentifier>{688e9a84-cf52-46a7-9494-b8074a5ca35b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\EngineHelpers\ECSToRendererdata">
+      <UniqueIdentifier>{6537c9db-196a-4f4d-ba58-cb8c0ae413a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Primitive">
+      <UniqueIdentifier>{9ac66eff-7637-4ff5-b8fb-867f99d62014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\ECSHeaders">
+      <UniqueIdentifier>{d526f631-6fc5-4d7d-b6d4-1b0f24e6f6e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Components">
+      <UniqueIdentifier>{aa652fb5-937a-45ad-b47d-a0ab7ae6f16b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Headers">
+      <UniqueIdentifier>{ed79160f-acc1-4133-ba1a-1f2ef60092b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h">
@@ -194,14 +218,26 @@
     <ClInclude Include="ECS\Entity\Entity.h">
       <Filter>ECS\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Entity\EntityManager.h">
-      <Filter>ECS\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Scene\Scene.h">
       <Filter>ECS\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Scene\SceneManager.h">
-      <Filter>ECS\Scene</Filter>
+    <ClInclude Include="Engine\EngineCore\GraphicEngine.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineHelper\ECSToRendererData.h">
+      <Filter>Engine\EngineHelpers\ECSToRendererdata</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Entity\Primitive\Primitive.h">
+      <Filter>ECS\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\ECSHeaders\EntityStructs.h">
+      <Filter>ECS\ECSHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Entity\Primitive\PrimitiveManager.h">
+      <Filter>ECS\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Headers\EngineStructs.h">
+      <Filter>Engine\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -274,14 +310,20 @@
     <ClCompile Include="ECS\Entity\Entity.cpp">
       <Filter>ECS\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\Entity\EntityManager.cpp">
-      <Filter>ECS\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\Scene\Scene.cpp">
       <Filter>ECS\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\Scene\SceneManager.cpp">
-      <Filter>ECS\Scene</Filter>
+    <ClCompile Include="Engine\EngineCore\GraphicEngine.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EngineHelper\ECSToRendererData.cpp">
+      <Filter>Engine\EngineHelpers\ECSToRendererdata</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Entity\Primitive\Primitive.cpp">
+      <Filter>ECS\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Entity\Primitive\PrimitiveManager.cpp">
+      <Filter>ECS\Primitive</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

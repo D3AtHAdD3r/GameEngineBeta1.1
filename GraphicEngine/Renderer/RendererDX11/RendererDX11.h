@@ -6,6 +6,7 @@ class Texture;
 
 class RendererDX11
 {
+	friend class GraphicEngine;
 private:
 	RendererDX11(); 
 	~RendererDX11();	

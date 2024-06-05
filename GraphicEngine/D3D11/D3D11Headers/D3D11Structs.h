@@ -1,4 +1,4 @@
-//#include<GraphicEngine/Utilities/Headers/Headers.h>
+#pragma once
 #include<GraphicEngine/Utilities/Headers/HeadersD3D.h>
 //limited features for now
 struct D3D11_INIT_DATA

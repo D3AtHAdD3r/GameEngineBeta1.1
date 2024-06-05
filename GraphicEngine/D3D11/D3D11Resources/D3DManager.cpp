@@ -4,13 +4,14 @@
 #include<GraphicEngine/D3D11/D3D11Resources/PixelShaderManager.h>
 #include<GraphicEngine/D3D11/D3D11Resources/VertexBufferManager.h>
 #include<GraphicEngine/D3D11/D3D11Resources/IndexBufferManager.h>
+#include<GraphicEngine/Engine/Headers/EngineStructs.h>
 
-D3D11Manager::D3D11Manager()
+D3D11Manager::D3D11Manager(FILEMAPS* file_maps)
 {
 	pVertexBufferManager = new VertexBufferManager();
 	pIndexBufferManager = new IndexBufferManager();
-	pVShaderManager = new VertexShaderManager();
-	pPShaderManager = new PixelShaderManager();
+	pVShaderManager = new VertexShaderManager(file_maps->File_Map_VertexShader);
+	pPShaderManager = new PixelShaderManager(file_maps->File_Map_PixelShader);
 	pConstantBufferManager = new ConstantBufferManager();
 }
 

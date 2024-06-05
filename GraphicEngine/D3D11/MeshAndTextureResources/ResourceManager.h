@@ -2,14 +2,14 @@
 
 class MeshManager;
 class TextureManager;
-
+struct FILEMAPS;
 
 class ResourceManager
 {
 private:
 	friend class D3D11Core;
 private:
-	ResourceManager();
+	ResourceManager(FILEMAPS* file_maps);
 	~ResourceManager();
 
 public:

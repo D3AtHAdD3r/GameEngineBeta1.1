@@ -64,7 +64,7 @@ bool ConstantBufferManager::freeConstantBuffer(ConstantBuffer* pCbuff)
 
 bool ConstantBufferManager::check_Exist(const unsigned short& u_id)
 {
-	if (u_id == 0) return false;
+	if (u_id < 0) return false;
 
 	auto itr = ConstantBufferContainer.find(u_id);
 	if (itr != ConstantBufferContainer.end())

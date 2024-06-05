@@ -69,7 +69,7 @@ void VertexBufferManager::releaseAll()
 
 bool VertexBufferManager::check_Exist(const int& u_id)
 {
-	if (u_id == 0) return false;
+	if (u_id < 0) return false;
 
 	auto itr = VertexBufferContainer.find(u_id);
 	if (itr != VertexBufferContainer.end())
