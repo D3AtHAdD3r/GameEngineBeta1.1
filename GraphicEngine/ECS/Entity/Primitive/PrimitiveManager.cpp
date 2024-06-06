@@ -34,7 +34,7 @@ PrimitiveManager::~PrimitiveManager()
 {
 }
 
-Primitive* PrimitiveManager::CreatePrimitive(Primitive_Desc* prim_desc)
+Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 {
 	Mesh* mesh_Data = nullptr;
 	int mesh_uid, vBuffer_uid, iBuffer_uid;

@@ -1,11 +1,13 @@
 #pragma once
-#include<GraphicEngine/Utilities/Math/Vector3D.h>
 
+#include<GraphicEngine/Utilities/Math/Vector3D.h>
+#include<string>
+#include<vector>
 
 class VertexMesh;
 struct MaterialSlot;
 struct D3D11_INPUT_ELEMENT_DESC;
-
+class Camera;
 
 namespace HARDCODINGS
 {
@@ -13,9 +15,6 @@ namespace HARDCODINGS
 	static std::string World_config_loc = "..\\GameDataConfigs\\WorldData";
 	static std::string world_name = "world_spaceship";
 }
-
-
-
 
 enum ENTITY_TYPE
 {
@@ -43,7 +42,7 @@ struct MeshCreationData
 	std::wstring MeshName;
 };
 
-struct Primitive_Desc
+struct EntityDesc
 {
 public:
 	int mesh_uid = -1;
@@ -71,7 +70,7 @@ public:
 	int pixel_Shader_uid = -1;
 	
 	//Constant Buffer requirements
-	void* constant_buffer;
+	void* constant_buffer = nullptr;
 	unsigned int size_constant_buffer = 0;
 	int constant_buffer_uid = -1;
 
@@ -79,12 +78,72 @@ public:
 public:
 	std::wstring primitive_name;
 	int primitive_uid = -1;
-	unsigned short Scene_Id = 0;
+	short Scene_Id = 0;
 
 public:
 	std::string vshader_entry_point = "vsmain";
 	std::string pshader_entry_point = "psmain";
 	std::string vshader_version = "vs_5_0";
 	std::string pshader_version = "ps_5_0";
+
 };
-using EntityDesc = Primitive_Desc;
+//using EntityDesc = Primitive_Desc;
+
+
+struct ModelPositionData
+{
+public:
+	float delta_rotation_x = 0;
+	float delta_rotation_y = 0;
+	float delta_rotation_z = 0;
+public:
+	float delta_translation_x = 0;
+	float delta_translation_y = 0;
+	float delta_translation_z = 0;
+public:
+	float delta_scale_x = 1;
+	float delta_scale_y = 1;
+	float delta_scale_z = 1;
+public:
+	float delta_time = 0;
+};
+
+
+struct CameraTranslationData
+{
+public:
+	float delta_rotation_x = 0;
+	float delta_rotation_y = 0;
+	float delta_rotation_z = 0;
+public:
+	float delta_translation_x = 0;
+	float delta_translation_y = 0;
+	float delta_translation_z = 0;
+public:
+	float delta_scale_x = 1;
+	float delta_scale_y = 1;
+	float delta_scale_z = 1;
+public:
+	float delta_time = 0;
+};
+
+
+struct Scene_descriptor
+{
+public:
+	std::wstring scene_name;
+	short scene_id = 0;
+	int scene_texture_uid = -1;
+	bool connect_backbuffer = true;
+	short BackBuffer_Index = 0;
+	unsigned int window_client_width = 0;
+	unsigned int window_client_height = 0;
+	float width_ratio = 0;
+	float height_ratio = 0;
+	bool clearRenderTargetView = true;
+	bool useDepthStencil = true;
+	bool clearDepthStencil = true;
+	bool getInputEvents = false;
+	bool isTPC = false;
+	Camera* pcam = nullptr;
+};

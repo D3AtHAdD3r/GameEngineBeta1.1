@@ -114,6 +114,27 @@
     <Filter Include="Engine\Headers">
       <UniqueIdentifier>{ed79160f-acc1-4133-ba1a-1f2ef60092b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ECS\Components\ModelData">
+      <UniqueIdentifier>{4a9130a1-6e72-4452-8387-18178cdf7896}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Components\Camera">
+      <UniqueIdentifier>{0f5cde76-1dad-4a76-a678-3e1dffedd8ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Entity\EntityChilds">
+      <UniqueIdentifier>{58939422-59dc-4edc-af81-ad48f58d6fe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Entity\EntityChilds\LocalPlayer">
+      <UniqueIdentifier>{1e1b0abb-86f6-4b9d-bbdb-7eda8b780516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Entity\EntityChilds\NormalEntity">
+      <UniqueIdentifier>{8a1db49b-6d2d-4ee5-a2dd-ad160f3dfd32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{83c28869-e817-486d-8914-36df0d7f146b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window\WindowGlobals">
+      <UniqueIdentifier>{e260829f-a318-4e76-9c48-1ecd69fc6499}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h">
@@ -239,6 +260,27 @@
     <ClInclude Include="Engine\Headers\EngineStructs.h">
       <Filter>Engine\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Components\ModelData.h">
+      <Filter>ECS\Components\ModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Camera.h">
+      <Filter>ECS\Components\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Entity\EntityManager.h">
+      <Filter>ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Entity\EntityChilds\LocalPlayer.h">
+      <Filter>ECS\Entity\EntityChilds\LocalPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Entity\EntityChilds\NormalEntity.h">
+      <Filter>ECS\Entity\EntityChilds\NormalEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Scene\SceneManager.h">
+      <Filter>ECS\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\WindowGlobals.h">
+      <Filter>Window\WindowGlobals</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D11\D3D11Resources\ConstantBuffer.cpp">
@@ -324,6 +366,27 @@
     </ClCompile>
     <ClCompile Include="ECS\Entity\Primitive\PrimitiveManager.cpp">
       <Filter>ECS\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Components\ModelData.cpp">
+      <Filter>ECS\Components\ModelData</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Components\Camera.cpp">
+      <Filter>ECS\Components\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Entity\EntityManager.cpp">
+      <Filter>ECS\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Entity\EntityChilds\LocalPlayer.cpp">
+      <Filter>ECS\Entity\EntityChilds\LocalPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Entity\EntityChilds\NormalEntity.cpp">
+      <Filter>ECS\Entity\EntityChilds\NormalEntity</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Scene\SceneManager.cpp">
+      <Filter>ECS\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\WindowGlobals.cpp">
+      <Filter>Window\WindowGlobals</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

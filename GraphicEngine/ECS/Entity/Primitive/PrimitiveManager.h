@@ -5,7 +5,7 @@
 class D3D11Manager;
 class ResourceManager;
 class Primitive;
-struct Primitive_Desc;
+struct EntityDesc;
 class Texture;
 
 class PrimitiveManager
@@ -18,7 +18,7 @@ private:
 	~PrimitiveManager();
 
 public:
-	Primitive* CreatePrimitive(Primitive_Desc* prim_desc);
+	Primitive* CreatePrimitive(EntityDesc* prim_desc);
 	void releaseAll();
 
 public:
