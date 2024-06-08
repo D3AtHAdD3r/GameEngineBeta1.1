@@ -96,12 +96,6 @@
     <Filter Include="Engine\Core">
       <UniqueIdentifier>{ffafa153-0cf2-443d-a5a8-a44e129732c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\EngineHelpers">
-      <UniqueIdentifier>{688e9a84-cf52-46a7-9494-b8074a5ca35b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\EngineHelpers\ECSToRendererdata">
-      <UniqueIdentifier>{6537c9db-196a-4f4d-ba58-cb8c0ae413a0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ECS\Primitive">
       <UniqueIdentifier>{9ac66eff-7637-4ff5-b8fb-867f99d62014}</UniqueIdentifier>
     </Filter>
@@ -134,6 +128,15 @@
     </Filter>
     <Filter Include="Window\WindowGlobals">
       <UniqueIdentifier>{e260829f-a318-4e76-9c48-1ecd69fc6499}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\ECSCore">
+      <UniqueIdentifier>{178d362c-9296-467c-8b32-4b0441685b86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\RendererHelpers">
+      <UniqueIdentifier>{89578de4-3aa6-4d56-ac55-b7c30a990f50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\RendererHelpers\ECSToRenderData">
+      <UniqueIdentifier>{8fee1bff-5add-49f4-807e-86e3a93ba318}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -245,9 +248,6 @@
     <ClInclude Include="Engine\EngineCore\GraphicEngine.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EngineHelper\ECSToRendererData.h">
-      <Filter>Engine\EngineHelpers\ECSToRendererdata</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Entity\Primitive\Primitive.h">
       <Filter>ECS\Primitive</Filter>
     </ClInclude>
@@ -280,6 +280,12 @@
     </ClInclude>
     <ClInclude Include="Window\WindowGlobals.h">
       <Filter>Window\WindowGlobals</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\ECSCore.h">
+      <Filter>ECS\ECSCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\RendererHelpers\ECSToRendererData.h">
+      <Filter>Renderer\RendererHelpers\ECSToRenderData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -358,9 +364,6 @@
     <ClCompile Include="Engine\EngineCore\GraphicEngine.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\EngineHelper\ECSToRendererData.cpp">
-      <Filter>Engine\EngineHelpers\ECSToRendererdata</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\Entity\Primitive\Primitive.cpp">
       <Filter>ECS\Primitive</Filter>
     </ClCompile>
@@ -387,6 +390,12 @@
     </ClCompile>
     <ClCompile Include="Window\WindowGlobals.cpp">
       <Filter>Window\WindowGlobals</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\ECSCore.cpp">
+      <Filter>ECS\ECSCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\RendererHelpers\ECSToRendererData.cpp">
+      <Filter>Renderer\RendererHelpers\ECSToRenderData</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

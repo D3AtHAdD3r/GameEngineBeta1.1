@@ -9,11 +9,12 @@ class Primitive;
 //no need to be singleton
 class ECSToRendererData
 {
+	friend class RendererDX11;
 private:
 	ECSToRendererData() {};
-	~ECSToRendererData() { delete this; }
+	~ECSToRendererData() { /*delete this;*/ }
 
-public:
+private:
 	static void Create();
 	static ECSToRendererData* Get();
 

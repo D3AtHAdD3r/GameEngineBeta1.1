@@ -1,8 +1,11 @@
 #include "RendererDX11.h"
 #include<GraphicEngine/D3D11/D3D11Core/D3D11Core.h>
-
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
-
+#include<GraphicEngine/ECS/ECSCore.h>
+#include<GraphicEngine/ECS/Scene/SceneManager.h>
+#include<GraphicEngine/ECS/Scene/Scene.h>
+#include<GraphicEngine/ECS/Entity/Entity.h>
+#include<GraphicEngine/Renderer/RendererHelpers/ECSToRendererData.h>
 
 
 RendererDX11::RendererDX11()
@@ -12,6 +15,51 @@ RendererDX11::RendererDX11()
 RendererDX11::~RendererDX11()
 {
 	if (pD3D11Core) delete pD3D11Core;
+	if (pECSCore) delete pECSCore;
+	if (pRenderer_PreBindData) delete pRenderer_PreBindData;
+	if (pRenderer_BindingData) delete pRenderer_BindingData;
+}
+
+bool RendererDX11::DrawFrame()
+{
+	for (auto& [uid, currentScene] : pECSCore->pSceneManager->GetSceneContainer())
+	{
+		if (!ECSToRendererData::fill_Renderer_PreBindData(currentScene, pRenderer_PreBindData))
+			return false;
+		if (!Init_Pre_Bind(pRenderer_PreBindData))
+			return false;
+
+		for (auto& currentEntity : currentScene->GetEntityContainer())
+		{
+			if (!ECSToRendererData::fill_Renderer_MainBindData(currentEntity->GetPrimitive(), pRenderer_BindingData))
+				return false;
+			if (!Init_Main_Bind(pRenderer_BindingData))
+				return false;
+		}
+	}
+
+	PresentFrame();
+	return true;
+}
+
+bool RendererDX11::CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list)
+{
+	return pECSCore->pSceneManager->CreateSceneAndEntity(sd_list, ed_list);
+}
+
+Entity* RendererDX11::CreateEntity(EntityDesc* pED, bool check_ent_desc)
+{
+	return pECSCore->pSceneManager->CreateEntity(pED, check_ent_desc);
+}
+
+bool RendererDX11::DeleteEntity(Entity* pEnt, Scene* pScene)
+{
+	return pECSCore->pSceneManager->DeleteEntity(pEnt, pScene);
+}
+
+const std::unordered_map<unsigned short, Scene*>& RendererDX11::GetSceneContainer()
+{
+	return pECSCore->pSceneManager->GetSceneContainer();
 }
 
 bool RendererDX11::Initialize(RenderData* pRenderData)
@@ -19,7 +67,11 @@ bool RendererDX11::Initialize(RenderData* pRenderData)
 	if (!CheckRenderData(pRenderData)) return false;
 	pD3D11Core = new D3D11Core(&(pRenderData->d3dInitData), &(pRenderData->file_maps));
 	initRasterizerState();
+	pECSCore = new ECSCore(pD3D11Core->pD3D11Manager, pD3D11Core->pResourceManager);
 	return true;
+
+	pRenderer_PreBindData = new Renderer_PreBindData();
+	pRenderer_BindingData = new Renderer_BindingData();
 }
 
 bool RendererDX11::Init_Pre_Bind(Renderer_PreBindData* pData)

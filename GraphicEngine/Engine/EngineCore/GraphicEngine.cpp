@@ -26,7 +26,7 @@ void GraphicEngine::Run()
 				fill renderdataprebind from scenedata 
 				renderer-setprebinds
 
-				usercallback -> onrender()
+				usercallback -> onrender() //not needed
 
 				for(auto entity : entitycontainer of current scene)
 				{

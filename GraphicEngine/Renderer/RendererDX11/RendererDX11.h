@@ -1,18 +1,35 @@
 #include<GraphicEngine/Renderer/RendererHeaders/RendererStructs.h>
-
+#include<unordered_map>
 
 class D3D11Core;
 class Texture;
+class ECSCore;
+struct Scene_descriptor;
+struct EntityDesc;
+class Entity;
+class Scene;
+struct Renderer_PreBindData;
+struct Renderer_BindingData;
+class ECSToRendererData;
 
 class RendererDX11
 {
 	friend class GraphicEngine;
 private:
 	RendererDX11(); 
-	~RendererDX11();	
+	~RendererDX11();
+public:
+	bool DrawFrame();
+
+public:
+	bool CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list);
+	Entity* CreateEntity(EntityDesc* pED, bool check_ent_desc = true);
+	bool DeleteEntity(Entity* pEnt, Scene* pScene = nullptr);
+	const std::unordered_map<unsigned short, Scene*>& GetSceneContainer();
 
 public:
 	bool Initialize(RenderData* pRenderData);
+private:
 	bool Init_Pre_Bind(Renderer_PreBindData* pData); 
 	bool Init_Main_Bind(Renderer_BindingData* pData);
 	void PresentFrame(bool Vsync = false);
@@ -65,8 +82,13 @@ private:
 	void SetFullScreenMode(bool fullscreen);
 
 private:
+	Renderer_PreBindData* pRenderer_PreBindData = nullptr;
+	Renderer_BindingData* pRenderer_BindingData = nullptr;
+	
+private:
 	D3D11Core* pD3D11Core = nullptr;
-
+	ECSCore* pECSCore = nullptr;
+	
 private:
 	ID3D11RasterizerState* cull_front_state = nullptr;
 	ID3D11RasterizerState* cull_back_state = nullptr;

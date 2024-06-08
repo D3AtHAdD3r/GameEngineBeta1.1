@@ -11,11 +11,12 @@ class Scene;
 
 class SceneManager
 {
+	friend class ECSCore;
 private:
 	SceneManager(D3D11Manager* p_d3dManager, ResourceManager* p_resManager);
 	~SceneManager();
 
-private:
+public:
 	bool CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list);
 	Entity* CreateEntity(EntityDesc* pED, bool check_ent_desc = true);
 	bool DeleteEntity(Entity* pEnt, Scene* pScene = nullptr);

@@ -171,6 +171,7 @@
     <ClInclude Include="D3D11\MeshAndTextureResources\TextureManager.h" />
     <ClInclude Include="ECS\Components\Camera.h" />
     <ClInclude Include="ECS\Components\ModelData.h" />
+    <ClInclude Include="ECS\ECSCore.h" />
     <ClInclude Include="ECS\ECSHeaders\EntityStructs.h" />
     <ClInclude Include="ECS\Entity\Entity.h" />
     <ClInclude Include="ECS\Entity\EntityChilds\LocalPlayer.h" />
@@ -181,11 +182,11 @@
     <ClInclude Include="ECS\Scene\Scene.h" />
     <ClInclude Include="ECS\Scene\SceneManager.h" />
     <ClInclude Include="Engine\EngineCore\GraphicEngine.h" />
-    <ClInclude Include="Engine\EngineHelper\ECSToRendererData.h" />
     <ClInclude Include="Engine\Headers\EngineStructs.h" />
     <ClInclude Include="IApplication\IApplication.h" />
     <ClInclude Include="Renderer\RendererDX11\RendererDX11.h" />
     <ClInclude Include="Renderer\RendererHeaders\RendererStructs.h" />
+    <ClInclude Include="Renderer\RendererHelpers\ECSToRendererData.h" />
     <ClInclude Include="Utilities\ErrorChecking\CustomException.h" />
     <ClInclude Include="Utilities\ErrorChecking\DxgiInfoManager.h" />
     <ClInclude Include="Utilities\Headers\Headers.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="D3D11\MeshAndTextureResources\TextureManager.cpp" />
     <ClCompile Include="ECS\Components\Camera.cpp" />
     <ClCompile Include="ECS\Components\ModelData.cpp" />
+    <ClCompile Include="ECS\ECSCore.cpp" />
     <ClCompile Include="ECS\Entity\Entity.cpp" />
     <ClCompile Include="ECS\Entity\EntityChilds\LocalPlayer.cpp" />
     <ClCompile Include="ECS\Entity\EntityChilds\NormalEntity.cpp" />
@@ -228,8 +230,8 @@
     <ClCompile Include="ECS\Scene\Scene.cpp" />
     <ClCompile Include="ECS\Scene\SceneManager.cpp" />
     <ClCompile Include="Engine\EngineCore\GraphicEngine.cpp" />
-    <ClCompile Include="Engine\EngineHelper\ECSToRendererData.cpp" />
     <ClCompile Include="Renderer\RendererDX11\RendererDX11.cpp" />
+    <ClCompile Include="Renderer\RendererHelpers\ECSToRendererData.cpp" />
     <ClCompile Include="Utilities\ErrorChecking\CustomException.cpp" />
     <ClCompile Include="Utilities\ErrorChecking\DxgiInfoManager.cpp" />
     <ClCompile Include="Utilities\UtilitiyFuncs\utilityFunctions.cpp" />
