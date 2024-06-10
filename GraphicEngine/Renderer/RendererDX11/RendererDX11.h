@@ -20,15 +20,14 @@ private:
 	RendererDX11(); 
 	~RendererDX11();
 public:
-	bool DrawFrame();
+	virtual bool DrawFrame() override;
+	virtual void OnResize() override;
 
 public:
 	virtual bool CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list) override;
 	virtual Entity* CreateEntity(EntityDesc* pED, bool check_ent_desc = true) override;
 	virtual bool DeleteEntity(Entity* pEnt, Scene* pScene = nullptr) override;
 	virtual const std::unordered_map<unsigned short, Scene*>& GetSceneContainer() override;
-private:
-	virtual bool Resize() override; //not defined
 
 private:
 	static bool Create(RenderData* pRenderData);

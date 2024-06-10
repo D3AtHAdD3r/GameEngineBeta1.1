@@ -43,6 +43,11 @@ bool RendererDX11::DrawFrame()
 	return true;
 }
 
+void RendererDX11::OnResize()
+{
+	pECSCore->OnResize();
+}
+
 bool RendererDX11::CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list)
 {
 	return pECSCore->pSceneManager->CreateSceneAndEntity(sd_list, ed_list);
@@ -63,11 +68,6 @@ const std::unordered_map<unsigned short, Scene*>& RendererDX11::GetSceneContaine
 	return pECSCore->pSceneManager->GetSceneContainer();
 }
 
-bool RendererDX11::Resize()
-{
-
-	return true;
-}
 
 bool RendererDX11::Create(RenderData* pRenderData)
 {

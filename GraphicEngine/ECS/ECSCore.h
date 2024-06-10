@@ -15,5 +15,8 @@ private:
 	~ECSCore();
 
 private:
+	void OnResize(); 
+
+private:
 	SceneManager* pSceneManager = nullptr;
 };

@@ -33,6 +33,7 @@ private:
 
 private:
 	bool checkSceneExist(short SceneID);
+	void ReloadAllResourceBuffers();
 
 private:
 	D3D11Manager* pD3DManager = nullptr;

@@ -6,6 +6,7 @@
 #include<GraphicEngine/Window/WindowGlobals.h>
 #include<GraphicEngine/InputHandling/InputSystem.h>
 #include<GraphicEngine/Renderer/RendererDX11/RendererDX11.h>
+#include<GraphicEngine/Interface/IApplication.h>
 
 
 GraphicEngine* GraphicEngine::pGraphicEngine = nullptr;
@@ -13,7 +14,7 @@ GraphicEngine* GraphicEngine::pGraphicEngine = nullptr;
 
 GraphicEngine::GraphicEngine(IApplication* inst_App, RenderData* p_RenderData)
 	:
-	instApp(inst_App)
+	iApp(inst_App)
 {
 	if (!inst_App || !p_RenderData)
 		throw NORMAL_EXCEPT("GraphicEngine Creation failed. Invalid input in constructor");
@@ -35,7 +36,9 @@ GraphicEngine::GraphicEngine(IApplication* inst_App, RenderData* p_RenderData)
 	if (!InitializeRenderer(p_RenderData))
 		throw NORMAL_EXCEPT("GraphicEngine::InitializeRenderer() failed.");
 
-	
+	//pWindow->addListner(this);
+	Window::get()->addListner(this);
+	InputSystem::get()->addListener(this);
 }
 
 GraphicEngine::~GraphicEngine()
@@ -52,19 +55,6 @@ bool GraphicEngine::Create(IApplication* instApp, RenderData* p_RenderData)
 GraphicEngine* GraphicEngine::Get()
 {
 	return pGraphicEngine;
-}
-
-void GraphicEngine::onSize()
-{
-	pRenderer->Resize();
-}
-
-void GraphicEngine::onFocus()
-{
-}
-
-void GraphicEngine::onKillFocus()
-{
 }
 
 bool GraphicEngine::InitializeWindows()
@@ -103,41 +93,81 @@ bool GraphicEngine::InitializeRenderer(RenderData* p_RenderData)
 	return true;
 }
 
+bool GraphicEngine::MessagePump()
+{
+	MSG msg;
+	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) > 0)
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+	Sleep(1);
+	return true;
+}
+
 void GraphicEngine::Run()
 {
+	iApp->onInit();
+
 	while (true)
 	{
-
-	}
-
-/*
-	for(mainloop)
-	{
-		while(drawflag == false) {resize()};
-
-		Inputsystemupdate()
-		msgpump()
-		usercallback -> onBeginFrame()
+		InputSystem::get()->update();
+		MessagePump();
 		
-		BeginFrame->	
-			for(auto scene : scenemanager)
-			{
-				fill renderdataprebind from scenedata 
-				renderer-setprebinds
+		iApp->onBeginFrame();
 
-				usercallback -> onrender() //not needed
+		while (!RenderFlag)
+		{
+			RenderFlag = true;
+			pRenderer->OnResize();
+		}
+			
+		pRenderer->DrawFrame();
 
-				for(auto entity : entitycontainer of current scene)
-				{
-					fill renderdatabinding from entity
-					renderer - bind to pipeline
-				}
-			}
-
-			EndFrame-> present()
-			usercallback -> onEndFrame()
+		iApp->onEndFrame();
 	}
-*/
+
+	iApp->onShutdown();
+}
 
 
+void GraphicEngine::onSize()
+{
+	RenderFlag = false;
+}
+
+void GraphicEngine::onFocus()
+{
+}
+
+void GraphicEngine::onKillFocus()
+{
+}
+
+void GraphicEngine::onKeyDown(int key)
+{
+}
+
+void GraphicEngine::onKeyUp(int key)
+{
+}
+
+void GraphicEngine::onMouseMove(const Point& mouse_pos)
+{
+}
+
+void GraphicEngine::onLeftMouseDown(const Point& mouse_pos)
+{
+}
+
+void GraphicEngine::onLeftMouseUp(const Point& mouse_pos)
+{
+}
+
+void GraphicEngine::onRightMouseDown(const Point& mouse_pos)
+{
+}
+
+void GraphicEngine::onRightMouseUp(const Point& mouse_pos)
+{
 }

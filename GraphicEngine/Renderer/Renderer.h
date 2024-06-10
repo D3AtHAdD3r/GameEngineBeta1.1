@@ -19,5 +19,6 @@ public:
 	virtual const std::unordered_map<unsigned short, Scene*>& GetSceneContainer() = 0;
 
 public:
-	virtual bool Resize() = 0;
+	virtual bool DrawFrame() = 0;
+	virtual void OnResize() = 0;
 };

@@ -18,3 +18,9 @@ ECSCore::~ECSCore()
 	if (pSceneManager)
 		delete pSceneManager;
 }
+
+void ECSCore::OnResize()
+{
+	pSceneManager->ReloadAllResourceBuffers();
+}
+
