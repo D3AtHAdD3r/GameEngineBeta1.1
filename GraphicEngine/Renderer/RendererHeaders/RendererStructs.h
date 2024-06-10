@@ -6,11 +6,19 @@
 class IApplication;
 class Texture;
 
-class RenderData
+struct RenderData
 {
 public:
+	enum GRAPHIC_API
+	{
+		dx11 = 0,
+		dx12,
+		vulkan,
+		unknown
+	};
 	D3D11_INIT_DATA d3dInitData;
 	FILEMAPS file_maps;
+	GRAPHIC_API graphi_API = GRAPHIC_API::dx11;
 };
 
 struct Renderer_PreBindData

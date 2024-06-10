@@ -170,6 +170,7 @@
     <ClInclude Include="D3D11\MeshAndTextureResources\Texture.h" />
     <ClInclude Include="D3D11\MeshAndTextureResources\TextureManager.h" />
     <ClInclude Include="ECS\Components\Camera.h" />
+    <ClInclude Include="ECS\Components\Light.h" />
     <ClInclude Include="ECS\Components\ModelData.h" />
     <ClInclude Include="ECS\ECSCore.h" />
     <ClInclude Include="ECS\ECSHeaders\EntityStructs.h" />
@@ -184,20 +185,28 @@
     <ClInclude Include="Engine\EngineCore\GraphicEngine.h" />
     <ClInclude Include="Engine\Headers\EngineStructs.h" />
     <ClInclude Include="IApplication\IApplication.h" />
+    <ClInclude Include="InputHandling\InputListener.h" />
+    <ClInclude Include="InputHandling\InputSystem.h" />
+    <ClInclude Include="Interface\IApplication.h" />
+    <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Renderer\RendererDX11\RendererDX11.h" />
     <ClInclude Include="Renderer\RendererHeaders\RendererStructs.h" />
     <ClInclude Include="Renderer\RendererHelpers\ECSToRendererData.h" />
     <ClInclude Include="Utilities\ErrorChecking\CustomException.h" />
     <ClInclude Include="Utilities\ErrorChecking\DxgiInfoManager.h" />
+    <ClInclude Include="Utilities\Headers\GlobalStructs.h" />
     <ClInclude Include="Utilities\Headers\Headers.h" />
     <ClInclude Include="Utilities\Headers\HeadersD3D.h" />
     <ClInclude Include="Utilities\Headers\VertexMesh.h" />
+    <ClInclude Include="Utilities\Math\MathUtils.h" />
     <ClInclude Include="Utilities\Math\Matrix4x4.h" />
     <ClInclude Include="Utilities\Math\Vector2D.h" />
     <ClInclude Include="Utilities\Math\Vector3D.h" />
     <ClInclude Include="Utilities\Math\Vector4D.h" />
     <ClInclude Include="Utilities\UtilitiyFuncs\utilityFunctions.h" />
+    <ClInclude Include="Window\Window.h" />
     <ClInclude Include="Window\WindowGlobals.h" />
+    <ClInclude Include="Window\WindowListener.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D11\D3D11Core\D3D11Core.cpp" />
@@ -219,6 +228,7 @@
     <ClCompile Include="D3D11\MeshAndTextureResources\Texture.cpp" />
     <ClCompile Include="D3D11\MeshAndTextureResources\TextureManager.cpp" />
     <ClCompile Include="ECS\Components\Camera.cpp" />
+    <ClCompile Include="ECS\Components\Light.cpp" />
     <ClCompile Include="ECS\Components\ModelData.cpp" />
     <ClCompile Include="ECS\ECSCore.cpp" />
     <ClCompile Include="ECS\Entity\Entity.cpp" />
@@ -230,11 +240,15 @@
     <ClCompile Include="ECS\Scene\Scene.cpp" />
     <ClCompile Include="ECS\Scene\SceneManager.cpp" />
     <ClCompile Include="Engine\EngineCore\GraphicEngine.cpp" />
+    <ClCompile Include="InputHandling\InputSystem.cpp" />
+    <ClCompile Include="Interface\IApplication.cpp" />
+    <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\RendererDX11\RendererDX11.cpp" />
     <ClCompile Include="Renderer\RendererHelpers\ECSToRendererData.cpp" />
     <ClCompile Include="Utilities\ErrorChecking\CustomException.cpp" />
     <ClCompile Include="Utilities\ErrorChecking\DxgiInfoManager.cpp" />
     <ClCompile Include="Utilities\UtilitiyFuncs\utilityFunctions.cpp" />
+    <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Window\WindowGlobals.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

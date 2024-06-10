@@ -14,12 +14,14 @@ WindowGlobals::~WindowGlobals()
 {
 }
 
-void WindowGlobals::Create()
+void WindowGlobals::Create(unsigned int wind_width, unsigned int wind_height)
 {
     if (pWindowGlobals)
         throw NORMAL_EXCEPT("pWindowGlobals already exist");
 
     pWindowGlobals = new WindowGlobals();
+    pWindowGlobals->WindowWidth = wind_width;
+    pWindowGlobals->WindowHeight = wind_height;
 }
 
 WindowGlobals* WindowGlobals::Get()
@@ -35,4 +37,10 @@ const unsigned int& WindowGlobals::Get_WindowWidth() const
 const unsigned int& WindowGlobals::Get_WindowHeight() const
 {
     return WindowHeight;
+}
+
+void WindowGlobals::Set_Window_Coords(const unsigned int& width, const unsigned int& height)
+{
+    WindowWidth = width;
+    WindowHeight = height;
 }

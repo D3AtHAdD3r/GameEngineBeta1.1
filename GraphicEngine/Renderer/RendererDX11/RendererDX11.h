@@ -1,5 +1,6 @@
 #include<GraphicEngine/Renderer/RendererHeaders/RendererStructs.h>
 #include<unordered_map>
+#include<GraphicEngine/Renderer/Renderer.h>
 
 class D3D11Core;
 class Texture;
@@ -12,7 +13,7 @@ struct Renderer_PreBindData;
 struct Renderer_BindingData;
 class ECSToRendererData;
 
-class RendererDX11
+class RendererDX11 : public Renderer
 {
 	friend class GraphicEngine;
 private:
@@ -22,12 +23,18 @@ public:
 	bool DrawFrame();
 
 public:
-	bool CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list);
-	Entity* CreateEntity(EntityDesc* pED, bool check_ent_desc = true);
-	bool DeleteEntity(Entity* pEnt, Scene* pScene = nullptr);
-	const std::unordered_map<unsigned short, Scene*>& GetSceneContainer();
+	virtual bool CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list) override;
+	virtual Entity* CreateEntity(EntityDesc* pED, bool check_ent_desc = true) override;
+	virtual bool DeleteEntity(Entity* pEnt, Scene* pScene = nullptr) override;
+	virtual const std::unordered_map<unsigned short, Scene*>& GetSceneContainer() override;
+private:
+	virtual bool Resize() override; //not defined
 
-public:
+private:
+	static bool Create(RenderData* pRenderData);
+	static RendererDX11* Get();
+
+private:
 	bool Initialize(RenderData* pRenderData);
 private:
 	bool Init_Pre_Bind(Renderer_PreBindData* pData); 
@@ -97,4 +104,8 @@ private:
 	ID3D11Buffer* binded_cb = nullptr;
 	ID3D11PixelShader* binded_ps = nullptr;
 	ID3D11VertexShader* binded_vs = nullptr;
+
+
+private:
+	static RendererDX11* pRenderer;
 };

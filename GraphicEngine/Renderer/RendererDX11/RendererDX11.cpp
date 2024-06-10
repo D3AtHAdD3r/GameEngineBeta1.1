@@ -7,6 +7,7 @@
 #include<GraphicEngine/ECS/Entity/Entity.h>
 #include<GraphicEngine/Renderer/RendererHelpers/ECSToRendererData.h>
 
+RendererDX11* RendererDX11::pRenderer = nullptr;
 
 RendererDX11::RendererDX11()
 {
@@ -62,16 +63,37 @@ const std::unordered_map<unsigned short, Scene*>& RendererDX11::GetSceneContaine
 	return pECSCore->pSceneManager->GetSceneContainer();
 }
 
+bool RendererDX11::Resize()
+{
+
+	return true;
+}
+
+bool RendererDX11::Create(RenderData* pRenderData)
+{
+	if (pRenderer) return false;
+	pRenderer = new RendererDX11();
+
+	if (!pRenderer->Initialize(pRenderData)) return false;
+	return true;
+}
+
+RendererDX11* RendererDX11::Get()
+{
+	return pRenderer;
+}
+
 bool RendererDX11::Initialize(RenderData* pRenderData)
 {
 	if (!CheckRenderData(pRenderData)) return false;
 	pD3D11Core = new D3D11Core(&(pRenderData->d3dInitData), &(pRenderData->file_maps));
 	initRasterizerState();
 	pECSCore = new ECSCore(pD3D11Core->pD3D11Manager, pD3D11Core->pResourceManager);
-	return true;
-
+	
 	pRenderer_PreBindData = new Renderer_PreBindData();
 	pRenderer_BindingData = new Renderer_BindingData();
+
+	return true;
 }
 
 bool RendererDX11::Init_Pre_Bind(Renderer_PreBindData* pData)

@@ -138,6 +138,24 @@
     <Filter Include="Renderer\RendererHelpers\ECSToRenderData">
       <UniqueIdentifier>{8fee1bff-5add-49f4-807e-86e3a93ba318}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Window\WindowListener">
+      <UniqueIdentifier>{fb16dc03-d5df-4995-b61e-d4228c4da3ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InputHandling">
+      <UniqueIdentifier>{b4192c7a-4346-47dd-bad4-a4419cc7f7f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window\Window">
+      <UniqueIdentifier>{8810ec82-2b7a-4b48-bb86-598f0509f90f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Components\Light">
+      <UniqueIdentifier>{77c64db3-b2a8-4791-9530-269d934e3aa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\RendererBaseClass">
+      <UniqueIdentifier>{1daedb61-59ee-4d10-9efa-00ca43b483e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{252b8d6b-8f22-4c40-88be-7b9c4338fffa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h">
@@ -287,6 +305,33 @@
     <ClInclude Include="Renderer\RendererHelpers\ECSToRendererData.h">
       <Filter>Renderer\RendererHelpers\ECSToRenderData</Filter>
     </ClInclude>
+    <ClInclude Include="Window\WindowListener.h">
+      <Filter>Window\WindowListener</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandling\InputListener.h">
+      <Filter>InputHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Headers\GlobalStructs.h">
+      <Filter>Utilities\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandling\InputSystem.h">
+      <Filter>InputHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\Window.h">
+      <Filter>Window\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Math\MathUtils.h">
+      <Filter>Utilities\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Light.h">
+      <Filter>ECS\Components\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Renderer.h">
+      <Filter>Renderer\RendererBaseClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IApplication.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D11\D3D11Resources\ConstantBuffer.cpp">
@@ -396,6 +441,21 @@
     </ClCompile>
     <ClCompile Include="Renderer\RendererHelpers\ECSToRendererData.cpp">
       <Filter>Renderer\RendererHelpers\ECSToRenderData</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandling\InputSystem.cpp">
+      <Filter>InputHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\Window.cpp">
+      <Filter>Window\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Components\Light.cpp">
+      <Filter>ECS\Components\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Renderer.cpp">
+      <Filter>Renderer\RendererBaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\IApplication.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
