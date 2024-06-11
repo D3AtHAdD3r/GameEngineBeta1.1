@@ -14,4 +14,9 @@ public:
 	virtual void onBeginFrame() override;
 	virtual void onEndFrame() override;
 	virtual void onShutdown()override;
+
+
+	//custom stuff
+public:
+
 };
