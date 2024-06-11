@@ -6,11 +6,11 @@
 #include<GraphicEngine/Window/WindowGlobals.h>
 #include<GraphicEngine/InputHandling/InputSystem.h>
 #include<GraphicEngine/Renderer/RendererDX11/RendererDX11.h>
-#include<GraphicEngine/Interface/IApplication.h>
+#include<GraphicEngine/Interface/IApplication/IApplication.h>
 
 
 GraphicEngine* GraphicEngine::pGraphicEngine = nullptr;
-
+//IApplication* GraphicEngine::iApp = nullptr;
 
 GraphicEngine::GraphicEngine(IApplication* inst_App, RenderData* p_RenderData)
 	:
@@ -24,17 +24,25 @@ GraphicEngine::GraphicEngine(IApplication* inst_App, RenderData* p_RenderData)
 	if (!Window_Width || !Window_Height)
 		throw NORMAL_EXCEPT("GraphicEngine Creation failed. Invalid input in constructor");
 
+
+	//Init Window Globals
+	WindowGlobals::Create();
+
 	//Init Windows
 	if (!InitializeWindows())
 		throw NORMAL_EXCEPT("GraphicEngine::InitializeWindows() failed.");
 
-	//Init WindowGlobals and Input Sysytem
-	WindowGlobals::Create(Window_Width, Window_Height);
+	p_RenderData->d3dInitData.hWnd = pWindow->getHwnd();
+
+	//Init Input Sysytem
 	InputSystem::Create();
+
 
 	//Init Renderer
 	if (!InitializeRenderer(p_RenderData))
 		throw NORMAL_EXCEPT("GraphicEngine::InitializeRenderer() failed.");
+
+	inst_App->Init_IApp();
 
 	//pWindow->addListner(this);
 	Window::get()->addListner(this);
@@ -47,14 +55,29 @@ GraphicEngine::~GraphicEngine()
 
 bool GraphicEngine::Create(IApplication* instApp, RenderData* p_RenderData)
 {
-	if (pGraphicEngine) return false;
-	pGraphicEngine = new GraphicEngine(instApp, p_RenderData);
-	return true;
+	try
+	{
+		if (pGraphicEngine) return false;
+		pGraphicEngine = new GraphicEngine(instApp, p_RenderData);
+		pGraphicEngine->Run();
+		return true;
+	}
+	catch (const CustomException& e)
+	{
+		MessageBoxA(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST);
+		return false; //lol no warnings
+	}
+	
 }
 
 GraphicEngine* GraphicEngine::Get()
 {
 	return pGraphicEngine;
+}
+
+Renderer* GraphicEngine::GetRenderer() const
+{
+	return pRenderer;
 }
 
 bool GraphicEngine::InitializeWindows()
@@ -73,7 +96,7 @@ bool GraphicEngine::InitializeRenderer(RenderData* p_RenderData)
 	case RenderData::GRAPHIC_API::dx11:
 	{
 		if (!RendererDX11::Create(p_RenderData)) return false;
-		pRenderer = RendererDX11::Get();
+		WindowGlobals::Get()->pRenderer = pRenderer = RendererDX11::Get();
 		break;
 	}
 	case RenderData::GRAPHIC_API::dx12:
@@ -111,6 +134,8 @@ void GraphicEngine::Run()
 
 	while (true)
 	{
+		if (!pWindow->isAlive()) break;
+
 		InputSystem::get()->update();
 		MessagePump();
 		

@@ -29,6 +29,7 @@
 #define NORMAL_EXCEPT(str) NormalException(__LINE__,__FILE__, str);
 
 
+
 //DxgiInfoManager - gets error string from output window
 static DxgiInfoManager infoManager;
 

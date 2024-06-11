@@ -145,5 +145,4 @@ public:
 	bool clearDepthStencil = true;
 	bool getInputEvents = false;
 	bool isTPC = false;
-	Camera* pcam = nullptr;
 };

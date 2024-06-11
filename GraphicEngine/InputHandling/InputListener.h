@@ -20,8 +20,13 @@ public:
 	int m_x = 0, m_y = 0;
 };
 
+#ifdef PROJ_EXPORT
+#define ATT_InputListener __declspec(dllexport)
+#else
+#define ATT_InputListener __declspec(dllimport)
+#endif
 
-class InputListener
+class ATT_InputListener InputListener
 {
 public:
 	InputListener()

@@ -78,9 +78,6 @@
     <Filter Include="Renderer\RendererHeaders">
       <UniqueIdentifier>{b60459ef-969a-4994-a9c0-a028596fa3fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="IApplication">
-      <UniqueIdentifier>{4df03e09-ce70-4bb7-9ca3-4ca932888ce0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ECS">
       <UniqueIdentifier>{95f129a9-3f9d-42a8-8825-e7f7d9e29fbc}</UniqueIdentifier>
     </Filter>
@@ -155,6 +152,9 @@
     </Filter>
     <Filter Include="Interface">
       <UniqueIdentifier>{252b8d6b-8f22-4c40-88be-7b9c4338fffa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface\IApplication">
+      <UniqueIdentifier>{a39acf2b-4a5e-4de1-b121-9de636436fe2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -254,9 +254,6 @@
     <ClInclude Include="Renderer\RendererHeaders\RendererStructs.h">
       <Filter>Renderer\RendererHeaders</Filter>
     </ClInclude>
-    <ClInclude Include="IApplication\IApplication.h">
-      <Filter>IApplication</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Entity\Entity.h">
       <Filter>ECS\Entity</Filter>
     </ClInclude>
@@ -329,8 +326,8 @@
     <ClInclude Include="Renderer\Renderer.h">
       <Filter>Renderer\RendererBaseClass</Filter>
     </ClInclude>
-    <ClInclude Include="Interface\IApplication.h">
-      <Filter>Interface</Filter>
+    <ClInclude Include="Interface\IApplication\IApplication.h">
+      <Filter>Interface\IApplication</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -454,8 +451,8 @@
     <ClCompile Include="Renderer\Renderer.cpp">
       <Filter>Renderer\RendererBaseClass</Filter>
     </ClCompile>
-    <ClCompile Include="Interface\IApplication.cpp">
-      <Filter>Interface</Filter>
+    <ClCompile Include="Interface\IApplication\IApplication.cpp">
+      <Filter>Interface\IApplication</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

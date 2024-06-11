@@ -5,6 +5,7 @@
 #include<GraphicEngine/D3D11/MeshAndTextureResources/TextureManager.h>
 #include<GraphicEngine/ECS/Entity/EntityManager.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
+#include<GraphicEngine/ECS/Components/Camera.h>
 
 
 Scene::Scene(D3D11Manager* p_D3DManager, ResourceManager* p_ResourceManager, Scene_descriptor* sd)
@@ -16,14 +17,18 @@ Scene::Scene(D3D11Manager* p_D3DManager, ResourceManager* p_ResourceManager, Sce
 	clearRenderTargetView(sd->clearRenderTargetView),
 	clearDepthStencil(sd->clearDepthStencil),
 	getInputEvents(sd->getInputEvents),
-	pcam(sd->pcam),
 	useDepthStencil(sd->useDepthStencil),
 	scene_id(sd->scene_id),
 	BackBuffer_Index(sd->BackBuffer_Index),
 	scene_texture_uid(sd->scene_texture_uid)
 {
-	if (!p_D3DManager || !p_ResourceManager || !sd->window_client_width || !sd->window_client_height || sd->scene_name.empty() || !sd->pcam || sd->height_ratio < 1 || sd->width_ratio < 1 || sd->scene_id < 0)
+	if (!p_D3DManager || !p_ResourceManager || !sd->window_client_width || !sd->window_client_height || sd->scene_name.empty() || sd->height_ratio < 1 || sd->width_ratio < 1 || sd->scene_id < 0)
 		throw NORMAL_EXCEPT("Scene constructor failed...");
+
+	//Create Camera
+	pcam = CreateCamera(sd);
+	if (!pcam)
+		throw NORMAL_EXCEPT("Scene constructor failed. Camera creation failed.");
 	
 	//set width , height , relative to main  client window
 	this->width_ratio = sd->width_ratio;
@@ -164,4 +169,10 @@ bool Scene::DeleteEntity(Entity* pEnt)
 bool Scene::UpdateTextureOnResize(unsigned int width, unsigned int height)
 {
 	return presManager->pTextureManager->UpdateTextureOnResize(scene_texture_uid, width, height, scene_texture);
+}
+
+Camera* Scene::CreateCamera(Scene_descriptor* pSD)
+{
+	Camera* p_Cam = new Camera(pSD->getInputEvents, pSD->isTPC);
+	return p_Cam;
 }

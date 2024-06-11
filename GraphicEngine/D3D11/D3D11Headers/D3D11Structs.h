@@ -1,6 +1,8 @@
 #pragma once
-#include<GraphicEngine/Utilities/Headers/HeadersD3D.h>
-//limited features for now
+#include<Windows.h>
+
+
+
 struct D3D11_INIT_DATA
 {
 	unsigned int Window_Width = 0;

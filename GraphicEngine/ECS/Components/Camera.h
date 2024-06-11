@@ -12,6 +12,7 @@ struct CameraTranslationData;
 
 class Camera : public InputListener, public WindowListener
 {
+	friend class Scene;
 private:
 	Camera(bool get_Input, bool isTPC);
 	~Camera();

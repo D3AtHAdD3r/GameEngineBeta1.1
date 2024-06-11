@@ -55,6 +55,9 @@ private:
 	bool UpdateTextureOnResize(unsigned int width, unsigned int height);
 
 private:
+	Camera* CreateCamera(Scene_descriptor* pSD);
+
+private:
 	bool drawOnBackBuffer = true;
 	short BackBuffer_Index = 0;
 private:

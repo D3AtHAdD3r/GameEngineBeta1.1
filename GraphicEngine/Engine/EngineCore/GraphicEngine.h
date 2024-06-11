@@ -1,4 +1,4 @@
-#include<GraphicEngine/Utilities/Headers/Headers.h>
+#pragma once
 #include<GraphicEngine/Window/WindowListener.h>
 #include<GraphicEngine/InputHandling/InputListener.h>
 
@@ -7,9 +7,15 @@ struct RenderData;
 class IApplication;
 class Window;
 
-class GraphicEngine : public InputListener, public WindowListener
+#ifdef PROJ_EXPORT
+#define ATT_GraphicEngine __declspec(dllexport)
+#else
+#define ATT_GraphicEngine __declspec(dllimport)
+#endif
+
+class ATT_GraphicEngine GraphicEngine : public InputListener, public WindowListener
 {
-public:
+private:
 	GraphicEngine(IApplication* instApp, RenderData* p_RenderData);
 	~GraphicEngine();
 
@@ -18,11 +24,13 @@ public:
 	static GraphicEngine* Get();
 
 private:
+	Renderer* GetRenderer() const;
+	void Run();
+
+private:
 	bool InitializeWindows();
 	bool InitializeRenderer(RenderData* p_RenderData);
 	bool MessagePump();
-private:
-	void Run();
 
 public:
 	//Inherited from window listener
@@ -45,7 +53,7 @@ public:
 private:
 	Renderer* pRenderer = nullptr;
 	Window* pWindow = nullptr;
-	IApplication* iApp = nullptr;
+	IApplication* iApp;
 
 private:
 	unsigned int Window_Width = 0;

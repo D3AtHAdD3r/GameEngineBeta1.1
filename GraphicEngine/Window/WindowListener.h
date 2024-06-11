@@ -1,10 +1,14 @@
 #pragma once
 
 
+#ifdef PROJ_EXPORT
+#define ATT_WindowListener __declspec(dllexport)
+#else
+#define ATT_WindowListener __declspec(dllimport)
+#endif
 
 
-
-class WindowListener
+class ATT_WindowListener WindowListener
 {
 public:
 	WindowListener()

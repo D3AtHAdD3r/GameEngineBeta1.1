@@ -114,7 +114,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;GRAPHICENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;GRAPHICENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);PROJ_EXPORT</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -133,7 +133,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;GRAPHICENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;GRAPHICENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);PROJ_EXPORT</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -184,10 +184,9 @@
     <ClInclude Include="ECS\Scene\SceneManager.h" />
     <ClInclude Include="Engine\EngineCore\GraphicEngine.h" />
     <ClInclude Include="Engine\Headers\EngineStructs.h" />
-    <ClInclude Include="IApplication\IApplication.h" />
     <ClInclude Include="InputHandling\InputListener.h" />
     <ClInclude Include="InputHandling\InputSystem.h" />
-    <ClInclude Include="Interface\IApplication.h" />
+    <ClInclude Include="Interface\IApplication\IApplication.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Renderer\RendererDX11\RendererDX11.h" />
     <ClInclude Include="Renderer\RendererHeaders\RendererStructs.h" />
@@ -241,7 +240,7 @@
     <ClCompile Include="ECS\Scene\SceneManager.cpp" />
     <ClCompile Include="Engine\EngineCore\GraphicEngine.cpp" />
     <ClCompile Include="InputHandling\InputSystem.cpp" />
-    <ClCompile Include="Interface\IApplication.cpp" />
+    <ClCompile Include="Interface\IApplication\IApplication.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\RendererDX11\RendererDX11.cpp" />
     <ClCompile Include="Renderer\RendererHelpers\ECSToRendererData.cpp" />

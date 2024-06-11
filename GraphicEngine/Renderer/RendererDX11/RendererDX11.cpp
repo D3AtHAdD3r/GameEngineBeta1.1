@@ -119,7 +119,7 @@ void RendererDX11::PresentFrame(bool Vsync)
 
 bool RendererDX11::CheckRenderData(RenderData* pRenderData)
 {
-	if (!pRenderData->d3dInitData.Window_Height || !pRenderData->d3dInitData.Window_Width || !pRenderData->d3dInitData.hWnd || !pRenderData->d3dInitData.BufferCount) 
+	if (!pRenderData->d3dInitData.Window_Height || !pRenderData->d3dInitData.Window_Width || !pRenderData->d3dInitData.BufferCount) 
 		return false;
 
 	return true;

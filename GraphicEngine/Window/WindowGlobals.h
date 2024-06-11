@@ -1,6 +1,6 @@
 
 
-
+class Renderer;
 
 class WindowGlobals
 {
@@ -10,16 +10,20 @@ private:
 	~WindowGlobals();
 
 private:
-	static void Create(unsigned int wind_width, unsigned int wind_height);
+	static void Create();
 public:
 	static WindowGlobals* Get();
 
 public:
 	const unsigned int& Get_WindowWidth() const;
 	const unsigned int& Get_WindowHeight() const;
+	Renderer* Get_Renderer() const;
 
 public:
 	void Set_Window_Coords(const unsigned int& width, const unsigned int& height);
+
+private:
+	Renderer* pRenderer = nullptr;
 
 private:
 	static WindowGlobals* pWindowGlobals;

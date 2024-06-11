@@ -4,10 +4,7 @@
 #include<GraphicEngine/ECS/Scene/Scene.h>
 #include<GraphicEngine/ECS/Entity/Entity.h>
 #include<GraphicEngine/Window/WindowGlobals.h>
-//#include<GraphicEngine/D3D11/MeshAndTextureResources/ResourceManager.h>
-//#include<GraphicEngine/D3D11/MeshAndTextureResources/TextureManager.h>
-//#include<GraphicEngine/ECS/Entity/EntityManager.h>
-//#include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
+
 
 SceneManager::SceneManager(D3D11Manager* p_d3dManager, ResourceManager* p_resManager)
 	:
@@ -110,6 +107,7 @@ bool SceneManager::CreateSceneOnly(Scene_descriptor* pSD, bool check_scene_desc)
 
     return true;
 }
+
 
 bool SceneManager::check_scene_descriptor(Scene_descriptor* sd)
 {
