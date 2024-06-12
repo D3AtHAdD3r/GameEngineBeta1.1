@@ -22,10 +22,6 @@ public:
 	IDXGISwapChain* GetSwapChain();
 
 public:
-	const unsigned int& Get_Client_Width();
-	const unsigned int& Get_Client_Height();
-
-public:
 	static D3D11Globals* pD3D11Globals;
 
 private:
@@ -36,8 +32,4 @@ private:
 	IDXGIDevice* pDXGIDevice = nullptr;
 	IDXGIAdapter* pAdaptor = nullptr;
 	IDXGIFactory* pfactory = nullptr;
-
-private:
-	unsigned int client_Window_Width = 0;
-	unsigned int client_Window_Height = 0;
 };

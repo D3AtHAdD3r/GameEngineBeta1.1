@@ -13,10 +13,25 @@ Camera::Camera(bool get_Input, bool is_TPC) :
 {
 	pCamData = new CameraTranslationData();
 
+	//set world matrix
+	Matrix4x4 temp;
+	temp.setIdentity();
+
 	m_world_matrix.setIdentity();
 	m_world_matrix.setTranslation(m_world_pos_camera);
 
-	//dt = new DeltaTime(delta_rotate_seed_camera);
+	//set view matrix
+	temp = m_world_matrix;
+	temp.inverse();
+	m_view_matrix = temp;
+
+	//set projection matrix
+	float width = (float)(WindowGlobals::Get()->Get_WindowWidth());
+	float height = (float)(WindowGlobals::Get()->Get_WindowHeight());
+	float aspectRatio = width / height;
+
+	Projection_Matrix.setPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
+	
 	InputSystem::get()->addListener(this);
 	Window::get()->addListner(this);
 
@@ -49,6 +64,18 @@ Vector3D Camera::getCamWorldPos()
 CameraTranslationData* Camera::getCamTranslationData()
 {
 	return pCamData;
+}
+
+Matrix4x4 Camera::Get_Projection_Matrix()
+{
+	//set projection matrix
+	float width = (float)(WindowGlobals::Get()->Get_WindowWidth());
+	float height = (float)(WindowGlobals::Get()->Get_WindowHeight());
+	float aspectRatio = width / height;
+
+	Projection_Matrix.setPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
+
+	return Projection_Matrix;
 }
 
 void Camera::updateCamera()

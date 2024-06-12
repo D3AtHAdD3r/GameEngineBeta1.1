@@ -80,8 +80,6 @@ D3D11Core::D3D11Core(D3D11_INIT_DATA* pInitData, FILEMAPS* file_maps)
 	D3D11Globals::CreateD3DGlobals();
 	pD3D11Globals = D3D11Globals::Get();
 
-	pD3D11Globals->client_Window_Width			= pInitData->Window_Width;
-	pD3D11Globals->client_Window_Height			= pInitData->Window_Height;
 	pD3D11Globals->pDevice						= this->pDevice;
 	pD3D11Globals->pContext						= this->pContext;
 	pD3D11Globals->pSwap						= this->pSwapChain;

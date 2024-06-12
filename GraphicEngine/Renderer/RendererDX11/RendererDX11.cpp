@@ -34,10 +34,12 @@ void RendererDX11::UpdateConstantBuffer(Entity* currEntity, Camera* pcam)
 	float aspectRatio = width / height;
 
 	cBuff.m_camera_position = pcam->getCamWorldPos();
-	cBuff.m_time = 1.0f / 60.0f;
 	cBuff.m_world = currEntity->Get_Entity_WorldMatrix();
 	cBuff.m_view = pcam->getViewMatrix();
-	cBuff.m_proj.setPerspectiveFovLH(pcam->fov, aspectRatio, pcam->zNear, pcam->zFar);
+	//cBuff.m_proj = pcam->Get_Projection_Matrix();
+	cBuff.m_proj.setPerspectiveFovLH(0.785398f, aspectRatio, 0.1f, 5000.0f);
+
+	//get from light component
 	cBuff.m_light_position = { 0,0,0,0 };
 	cBuff.m_light_direction = { 0.0f, 0.0f, -1.0f, 0.0f };
 	cBuff.distortion_level = 0.9f;

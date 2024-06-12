@@ -2,6 +2,7 @@
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
 #include<GraphicEngine/D3D11/D3D11Globals/D3D11Globals.h>
 #include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
+#include<GraphicEngine/Window/WindowGlobals.h>
 
 #include<Dependencies/DirectXTex/include/DirectXTex.h>
 #pragma comment(lib,"DirectXTexD.lib")
@@ -143,7 +144,7 @@ Texture* TextureManager::CreateTextureFromBackBuffer(std::wstring tex_name, unsi
 		if (!CreateRenderTargetView_BackBuffer(&pRenderTargetView, buffer_index))
 			return nullptr;
 
-		if (!CreatedepthStensilView(&pDepthStencilView,D3D11Globals::Get()->Get_Client_Width(), D3D11Globals::Get()->Get_Client_Height()))
+		if (!CreatedepthStensilView(&pDepthStencilView, WindowGlobals::Get()->Get_WindowWidth(), WindowGlobals::Get()->Get_WindowHeight()))
 		{
 			if (pRenderTargetView)
 			{
@@ -204,7 +205,7 @@ bool TextureManager::UpdateTextureOnResize(const int& u_ID, unsigned int width, 
 			pTexture->pDSV = nullptr;
 		}
 
-		GFX_THROW_INFO(D3D11Globals::Get()->GetSwapChain()->ResizeBuffers(1, D3D11Globals::Get()->Get_Client_Width(), D3D11Globals::Get()->Get_Client_Height(), DXGI_FORMAT_R8G8B8A8_UNORM, 0));
+		GFX_THROW_INFO(D3D11Globals::Get()->GetSwapChain()->ResizeBuffers(1, WindowGlobals::Get()->Get_WindowWidth(), WindowGlobals::Get()->Get_WindowHeight(), DXGI_FORMAT_R8G8B8A8_UNORM, 0));
 
 		ID3D11RenderTargetView* pRenderTargetView = nullptr;
 		ID3D11DepthStencilView* p_DepthStencilView = nullptr;
@@ -212,7 +213,7 @@ bool TextureManager::UpdateTextureOnResize(const int& u_ID, unsigned int width, 
 		if (!CreateRenderTargetView_BackBuffer(&pRenderTargetView, pTexture->BackBufferIndex))
 			return false;
 
-		if (!CreatedepthStensilView(&p_DepthStencilView, D3D11Globals::Get()->Get_Client_Width(), D3D11Globals::Get()->Get_Client_Height()))
+		if (!CreatedepthStensilView(&p_DepthStencilView, WindowGlobals::Get()->Get_WindowWidth(), WindowGlobals::Get()->Get_WindowHeight()))
 		{
 			if (pRenderTargetView)
 			{

@@ -22,11 +22,16 @@ public:
 	 Matrix4x4 getViewMatrix();
 	 Vector3D getCamWorldPos();
 	 CameraTranslationData* getCamTranslationData();
+	 Matrix4x4 Get_Projection_Matrix();
+
+public:
+	void CreateTPC(Vector3D player_pos, float cam_distance = 30.0f);
+	void updateTPC(Vector3D player_pos, float delta_time_lerp);
+	bool isTPP();
+	void set_cam_distance(float distance);
 
 public:
 	void updateCamera();
-
-public:
 	void setTranslation(Vector3D new_pos);
 
 private:
@@ -38,13 +43,12 @@ private:
 	Vector3D m_world_pos_new;
 	Matrix4x4 m_world_matrix;
 	Matrix4x4 m_view_matrix;
-	float move_speed = 0.25f;
-
+	Matrix4x4 Projection_Matrix;
+	
 private:
-	//DeltaTime* dt = nullptr;
-	//float delta_time = 0;
 	float delta_rotate_seed_camera = 0.85f;
 	bool first_time_rotate_camera = true;
+	float move_speed = 0.25f;
 	float delta_time = 0;
 private:
 	CameraTranslationData* pCamData = nullptr;
@@ -73,20 +77,12 @@ private:
 	float fix_cam_distance = 0;
 	bool isTPC = false;
 
-public:
-	void CreateTPC(Vector3D player_pos, float cam_distance = 30.0f);
-	void updateTPC(Vector3D player_pos, float delta_time_lerp);
-	bool isTPP();
-	void set_cam_distance(float distance);
-
-private:
-	bool play_state = true;
-
 private:
 	Vector3D old_rotation;
 	Vector3D current_rotation;
 
 private:
+	bool play_state = true;
 	bool getInputControl = false;
 
 public:
@@ -104,5 +100,5 @@ private:
 public:
 	float fov = 0.785398f;
 	float zNear = 0.1f;
-	float zFar = 5000.0;
+	float zFar = 5000.0f;
 };

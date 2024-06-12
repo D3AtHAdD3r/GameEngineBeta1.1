@@ -41,12 +41,3 @@ IDXGISwapChain* D3D11Globals::GetSwapChain()
 	return pSwap;
 }
 
-const unsigned int& D3D11Globals::Get_Client_Width()
-{
-	return client_Window_Width;
-}
-
-const unsigned int& D3D11Globals::Get_Client_Height()
-{
-	return client_Window_Height;
-}
