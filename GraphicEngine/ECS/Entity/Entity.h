@@ -8,6 +8,7 @@ class ModelData;
 struct EntityDesc;
 struct ModelPositionData;
 class Camera;
+struct constant;
 
 class Entity
 {
@@ -23,11 +24,13 @@ public:
 	const bool& Get_LocalPlayer() const;
 	const int& GetScene_ID() const;
 	Primitive* GetPrimitive();
+
 public:
 	virtual void UpdatePosition(ModelPositionData* mp, Camera* cp);
 
-protected:
+public:
 	void setConstantBuffer(void* c_buffer);
+	void setConstantBuffer(constant* c_buffer);
 	
 
 protected:

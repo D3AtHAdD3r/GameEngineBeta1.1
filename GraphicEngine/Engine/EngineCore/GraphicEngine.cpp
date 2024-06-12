@@ -147,7 +147,10 @@ void GraphicEngine::Run()
 			pRenderer->OnResize();
 		}
 			
-		pRenderer->DrawFrame();
+		if (!pRenderer->DrawFrame())
+		{
+			throw NORMAL_EXCEPT("pRenderer->DrawFrame() failed");
+		}
 
 		iApp->onEndFrame();
 	}

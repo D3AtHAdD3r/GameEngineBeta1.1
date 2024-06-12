@@ -28,6 +28,7 @@ public:
 	virtual void onEndFrame() = 0;
 	virtual void onShutdown() = 0;
 
+
 public:
 	//user to engine
 	bool CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list);

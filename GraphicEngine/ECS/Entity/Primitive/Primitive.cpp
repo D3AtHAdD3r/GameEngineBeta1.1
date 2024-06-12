@@ -2,7 +2,8 @@
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
 
 Primitive::Primitive(Mesh* mesh_Data, int primitiveID,
-	VertexShader* vShad, PixelShader* pShad, VertexBuffer* vBuf, IndexBuffer* iBuf, ConstantBuffer* cBuf,
+	VertexShader* vShad, PixelShader* pShad, VertexBuffer* vBuf, IndexBuffer* iBuf, 
+	ConstantBuffer* cBuf, void* c_Buff,
 	std::vector<Texture*>& listtextures, std::vector<Texture*>& listtexturesNormal, bool normalmap, unsigned int numberOftextures,
 	bool frontfaceculling, std::wstring primitiveName, Primitive_texture_type primitive_tex_Type) 
 	:
@@ -13,6 +14,7 @@ Primitive::Primitive(Mesh* mesh_Data, int primitiveID,
 	vertexBuffer(vBuf),
 	indexBuffer(iBuf),
 	constantBuffer(cBuf),
+	cBuff(c_Buff),
 	number_textures(numberOftextures),
 	front_face_culling(frontfaceculling),
 	back_face_culling(!frontfaceculling),

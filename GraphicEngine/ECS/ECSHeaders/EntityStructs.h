@@ -1,5 +1,6 @@
 #pragma once
-
+#include<GraphicEngine/Utilities/Math/Matrix4x4.h>
+#include<GraphicEngine/Utilities/Math/Vector4D.h>
 #include<GraphicEngine/Utilities/Math/Vector3D.h>
 #include<string>
 #include<vector>
@@ -145,4 +146,19 @@ public:
 	bool clearDepthStencil = true;
 	bool getInputEvents = false;
 	bool isTPC = false;
+};
+
+
+__declspec(align(16))
+struct constant
+{
+	Matrix4x4 m_world;
+	Matrix4x4 m_view;
+	Matrix4x4 m_proj;
+	Vector4D m_light_direction = Vector4D(0, 0, 1, 0);
+	Vector4D m_camera_position;
+	Vector4D m_light_position = Vector4D(0, 1, 0, 0);
+	float m_light_radius = 4.0f;
+	float m_time = 0.0f;
+	float distortion_level = 1.0;
 };

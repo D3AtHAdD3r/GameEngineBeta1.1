@@ -60,7 +60,13 @@ void Entity::setConstantBuffer(void* c_buffer)
 	pPrimitive->cBuff = c_buffer;
 }
 
+void Entity::setConstantBuffer(constant* c_buffer)
+{
+	constant* cbuff = (constant*)(pPrimitive->cBuff);
+	memcpy(cbuff, c_buffer, sizeof(constant));
+}
+
 Primitive* Entity::GetPrimitive()
 {
-	return nullptr;
+	return pPrimitive;
 }

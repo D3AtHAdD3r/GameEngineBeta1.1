@@ -1,6 +1,6 @@
 #include<GraphicEngine/Renderer/RendererHeaders/RendererStructs.h>
-#include<unordered_map>
 #include<GraphicEngine/Renderer/Renderer.h>
+#include<unordered_map>
 
 class D3D11Core;
 class Texture;
@@ -8,6 +8,7 @@ class ECSCore;
 struct Scene_descriptor;
 struct EntityDesc;
 class Entity;
+class Camera;
 class Scene;
 struct Renderer_PreBindData;
 struct Renderer_BindingData;
@@ -86,6 +87,10 @@ private:
 	void initRasterizerState();
 	void setRasterizerState(bool cull_front);
 	void SetFullScreenMode(bool fullscreen);
+
+
+private:
+	void UpdateConstantBuffer(Entity* currEntity, Camera* pcam);
 
 private:
 	Renderer_PreBindData* pRenderer_PreBindData = nullptr;

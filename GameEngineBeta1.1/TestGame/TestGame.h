@@ -1,6 +1,7 @@
 #pragma once
 #include<GraphicEngine/Interface/IApplication/IApplication.h>
 
+struct constant;
 
 
 class TestGame : public IApplication
@@ -18,5 +19,8 @@ public:
 
 	//custom stuff
 public:
+	bool Create_Scene_And_Entity();
+	bool CreateEntity();
 
+	constant* cb;
 };

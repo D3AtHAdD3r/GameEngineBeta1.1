@@ -14,7 +14,8 @@ FILEMAPS GetFileMaps()
     File_Map_PixelShader.emplace(0, L"..\\Shaders\\pixelShader_DL.hlsl");
 
     std::unordered_map<int, std::wstring> File_Map_Textures;
-    File_Map_Textures.emplace(0, L"..\\AssetsAndLibs\\Assets\\Textures\\asteroid.jpg");
+    File_Map_Textures.emplace(0, L"BackBuffer");
+    File_Map_Textures.emplace(1, L"..\\AssetsAndLibs\\Assets\\Textures\\asteroid.jpg");
 
     std::unordered_map<int, std::wstring> File_Map_Meshes;
     File_Map_Meshes.emplace(0, L"..\\AssetsAndLibs\\Assets\\Meshes\\asteroid.obj");
@@ -35,8 +36,8 @@ int main()
     RenderData rData;
     rData.d3dInitData.BufferCount = 1;
     rData.d3dInitData.Windowed = true;
-    rData.d3dInitData.Window_Width = 720;
-    rData.d3dInitData.Window_Height = 480;
+    rData.d3dInitData.Window_Width = 1024;
+    rData.d3dInitData.Window_Height = 768;
 
     rData.graphi_API = RenderData::GRAPHIC_API::dx11;
     rData.file_maps = GetFileMaps();

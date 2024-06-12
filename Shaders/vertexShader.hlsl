@@ -50,7 +50,7 @@ VS_OUTPUT vsmain(VS_INPUT input)
     output.texcoord = input.texcoord;
     //output.normal = normalize(mul(float4(input.normal, 0), m_world));
     //output.normal = normalize(mul(float4(input.normal, 1), m_world));
-    output.normal = normalize(mul(input.normal, m_world));
+    output.normal = normalize(mul(input.normal, /*(float3x3)*/m_world));
     
     
     //output.tbn[0] = normalize(mul(input.tangent, m_world));

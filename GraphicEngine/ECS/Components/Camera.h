@@ -34,7 +34,7 @@ private:
 	void RotateCamera(const Point& mouse_pos);
 
 private:
-	Vector3D m_world_pos_camera{ 0.0f, 0.0f, -2.0f };
+	Vector3D m_world_pos_camera{ 0.0f, 0.0f, 0.0f };
 	Vector3D m_world_pos_new;
 	Matrix4x4 m_world_matrix;
 	Matrix4x4 m_view_matrix;
@@ -100,4 +100,9 @@ private:
 	bool MovingForward = false;
 	bool MovingBackward = false;
 	bool MovingturboMode = false;
+
+public:
+	float fov = 0.785398f;
+	float zNear = 0.1f;
+	float zFar = 5000.0;
 };

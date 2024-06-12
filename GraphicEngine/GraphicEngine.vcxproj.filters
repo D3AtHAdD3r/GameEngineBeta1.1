@@ -156,6 +156,9 @@
     <Filter Include="Interface\IApplication">
       <UniqueIdentifier>{a39acf2b-4a5e-4de1-b121-9de636436fe2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{253d0ec5-9271-4aa4-8fee-707925f3caa4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h">
@@ -454,5 +457,13 @@
     <ClCompile Include="Interface\IApplication\IApplication.cpp">
       <Filter>Interface\IApplication</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Shaders\pixelShader_DL.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\vertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

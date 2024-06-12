@@ -27,7 +27,8 @@ class Primitive
 private:
 	Primitive(Mesh* mesh_Data, int primitiveID,
 		VertexShader* vShad, PixelShader* pShad,
-		VertexBuffer* vBuf, IndexBuffer* iBuf, ConstantBuffer* cBuf,
+		VertexBuffer* vBuf, IndexBuffer* iBuf, 
+		ConstantBuffer* cBuf, void* c_Buff,
 		std::vector<Texture*>& listtextures, std::vector<Texture*>& listtexturesNormal, bool normalmap, unsigned int numberOftextures,
 		bool frontfaceculling, std::wstring primitiveName, Primitive_texture_type primitive_tex_Type);
 

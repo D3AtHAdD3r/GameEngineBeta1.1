@@ -28,6 +28,9 @@ cbuffer constant : register(b0)
 float4 psmain(PS_INPUT input) : SV_Target
 {
     float4 texColor = Texture.Sample(TextureSampler, float2(input.texcoord.x, 1.0 - input.texcoord.y));
+    //return texColor;
+    
+ 
     //Ambient light
     float ka = 0.2; //ambient light coefficient
     float3 ia = float3(1.0, 1.0, 1.0); //surrounding color approx rgb value
@@ -55,4 +58,6 @@ float4 psmain(PS_INPUT input) : SV_Target
     
     float3 final_light = ambient_light + diffuse_light + specular_light;
     return float4(final_light, 1.0);
+
+
 }

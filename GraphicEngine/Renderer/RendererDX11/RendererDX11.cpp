@@ -5,9 +5,12 @@
 #include<GraphicEngine/ECS/Scene/SceneManager.h>
 #include<GraphicEngine/ECS/Scene/Scene.h>
 #include<GraphicEngine/ECS/Entity/Entity.h>
+#include<GraphicEngine/ECS/Components/Camera.h>
 #include<GraphicEngine/Renderer/RendererHelpers/ECSToRendererData.h>
+#include<GraphicEngine/Window/WindowGlobals.h>
 
 RendererDX11* RendererDX11::pRenderer = nullptr;
+
 
 RendererDX11::RendererDX11()
 {
@@ -21,10 +24,38 @@ RendererDX11::~RendererDX11()
 	if (pRenderer_BindingData) delete pRenderer_BindingData;
 }
 
+
+void RendererDX11::UpdateConstantBuffer(Entity* currEntity, Camera* pcam)
+{
+	constant cBuff;
+
+	float width = WindowGlobals::Get()->Get_WindowWidth();
+	float height = WindowGlobals::Get()->Get_WindowHeight();
+	float aspectRatio = width / height;
+
+	cBuff.m_camera_position = pcam->getCamWorldPos();
+	cBuff.m_time = 1.0f / 60.0f;
+	cBuff.m_world = currEntity->Get_Entity_WorldMatrix();
+	cBuff.m_view = pcam->getViewMatrix();
+	cBuff.m_proj.setPerspectiveFovLH(pcam->fov, aspectRatio, pcam->zNear, pcam->zFar);
+	cBuff.m_light_position = { 0,0,0,0 };
+	cBuff.m_light_direction = { 0.0f, 0.0f, -1.0f, 0.0f };
+	cBuff.distortion_level = 0.9f;
+
+	currEntity->setConstantBuffer(&cBuff);
+}
+
+
 bool RendererDX11::DrawFrame()
 {
 	for (auto& [uid, currentScene] : pECSCore->pSceneManager->GetSceneContainer())
 	{
+		//empty struct
+		*pRenderer_PreBindData = Renderer_PreBindData();
+
+		//user side thing
+		currentScene->getCamera()->updateCamera();
+
 		if (!ECSToRendererData::fill_Renderer_PreBindData(currentScene, pRenderer_PreBindData))
 			return false;
 		if (!Init_Pre_Bind(pRenderer_PreBindData))
@@ -32,6 +63,10 @@ bool RendererDX11::DrawFrame()
 
 		for (auto& currentEntity : currentScene->GetEntityContainer())
 		{
+			//empty struct
+			*pRenderer_BindingData = Renderer_BindingData();
+
+			UpdateConstantBuffer(currentEntity, currentScene->getCamera());
 			if (!ECSToRendererData::fill_Renderer_MainBindData(currentEntity->GetPrimitive(), pRenderer_BindingData))
 				return false;
 			if (!Init_Main_Bind(pRenderer_BindingData))
@@ -256,6 +291,7 @@ void RendererDX11::SetFullScreenMode(bool fullscreen)
 	HRESULT hr;
 	GFX_THROW_INFO(pD3D11Core->pSwapChain->SetFullscreenState(fullscreen, nullptr));
 }
+
 
 
 void RendererDX11::setViewport(UINT width, UINT height)

@@ -132,10 +132,12 @@ Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 	}
 
 	Primitive* currPrimitive = new Primitive(mesh_Data, prim_desc->primitive_uid,
-		vShader, pShader, vBuffer, iBuffer, cBuffer,
-		list_texture_data, list_texture_data_normal, prim_desc->isNormalMap,
-		prim_desc->numOfTextures, prim_desc->frontFaceCull,
-		prim_desc->primitive_name, prim_desc->primitive_texture_type
+		vShader, pShader, vBuffer, iBuffer, 
+		cBuffer, prim_desc->constant_buffer, 
+		list_texture_data, list_texture_data_normal, 
+		prim_desc->isNormalMap, prim_desc->numOfTextures, 
+		prim_desc->frontFaceCull, prim_desc->primitive_name, 
+		prim_desc->primitive_texture_type
 	);
 
 	PrimitiveContainer.push_back(currPrimitive);
