@@ -53,7 +53,7 @@ public:
 private:
 	Renderer* pRenderer = nullptr;
 	Window* pWindow = nullptr;
-	IApplication* iApp;
+	IApplication* iApp = nullptr;
 
 private:
 	unsigned int Window_Width = 0;

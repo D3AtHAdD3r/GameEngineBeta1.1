@@ -4,6 +4,7 @@
 
 
 
+
 class InputSystem
 {
 	friend class GraphicEngine;

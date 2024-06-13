@@ -1,25 +1,38 @@
 #include "TestGame.h"
 #include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
-//#include<GraphicEngine/Window/WindowGlobals.h>
+#include<GraphicEngine/ECS/Scene/Scene.h>
+#include<GraphicEngine/ECS/Components/Camera.h>
 #include<d3d11.h>
 
 TestGame::TestGame()
-	/*:
-	IApplication()*/
 {
+	
 }
 
 TestGame::~TestGame()
 {
+	if (cb) delete cb;
+	
 }
 
 void TestGame::onInit()
 {
-	Create_Scene_And_Entity();
+	if (!Create_Scene_And_Entity())
+		printf("Create_Scene_And_Entity failed");
+
+	SceneContainer = GetSceneContainer();
+	if (SceneContainer.empty())
+		printf("Scene container is empty\n");
 }
 
 void TestGame::onBeginFrame()
 {
+	SceneContainer.clear();
+	SceneContainer = GetSceneContainer();
+	if (SceneContainer.empty())
+		printf("Scene container is empty\n");
+
+
 }
 
 void TestGame::onEndFrame()
@@ -27,6 +40,39 @@ void TestGame::onEndFrame()
 }
 
 void TestGame::onShutdown()
+{
+}
+
+void TestGame::onKeyDown(int key)
+{
+}
+
+void TestGame::onKeyUp(int key)
+{
+	if (key == VK_ESCAPE)
+	{
+		ShowCursorFlag = !ShowCursorFlag;
+		ShowCursor(ShowCursorFlag);
+	}
+}
+
+void TestGame::onMouseMove(const Point& mouse_pos)
+{
+}
+
+void TestGame::onLeftMouseDown(const Point& mouse_pos)
+{
+}
+
+void TestGame::onLeftMouseUp(const Point& mouse_pos)
+{
+}
+
+void TestGame::onRightMouseDown(const Point& mouse_pos)
+{
+}
+
+void TestGame::onRightMouseUp(const Point& mouse_pos)
 {
 }
 
@@ -99,7 +145,15 @@ bool TestGame::Create_Scene_And_Entity()
 	return true;
 }
 
-bool TestGame::CreateEntity()
+bool TestGame::Update()
 {
-	return false;
+	if (SceneContainer.empty()) return false;
+
+	for (auto& [uid, currentScene] : SceneContainer)
+	{
+		currentScene->getCamera()->updateCamera();
+	}
+
+	return true;
 }
+

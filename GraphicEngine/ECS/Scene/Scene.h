@@ -1,7 +1,13 @@
 #pragma once
 #include<string>
-#include<GraphicEngine/Utilities/Headers/HeadersD3D.h>
+#include<d3d11.h>
+#include<vector>
 
+#ifdef PROJ_EXPORT
+#define ATT_Scene __declspec(dllexport)
+#else
+#define ATT_Scene __declspec(dllimport)
+#endif
 
 class Texture;
 class Camera;
@@ -21,7 +27,7 @@ struct color_Scene
 };
 
 
-class Scene
+class ATT_Scene Scene
 {
 	friend class SceneManager;
 private:
@@ -31,7 +37,6 @@ private:
 public:
 	bool UpdateOnResize(unsigned int client_width, unsigned int client_height);
 	
-
 public:
 	ID3D11Resource* getTexture2D();
 	ID3D11RenderTargetView* getRTV();

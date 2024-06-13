@@ -47,6 +47,7 @@ GraphicEngine::GraphicEngine(IApplication* inst_App, RenderData* p_RenderData)
 	//pWindow->addListner(this);
 	Window::get()->addListner(this);
 	InputSystem::get()->addListener(this);
+	InputSystem::get()->showCursor(false); 
 }
 
 GraphicEngine::~GraphicEngine()
@@ -174,28 +175,35 @@ void GraphicEngine::onKillFocus()
 
 void GraphicEngine::onKeyDown(int key)
 {
+	iApp->onKeyDown(key);
 }
 
 void GraphicEngine::onKeyUp(int key)
 {
+	iApp->onKeyUp(key);
 }
 
 void GraphicEngine::onMouseMove(const Point& mouse_pos)
 {
+	iApp->onMouseMove(mouse_pos);
 }
 
 void GraphicEngine::onLeftMouseDown(const Point& mouse_pos)
 {
+	iApp->onLeftMouseDown(mouse_pos);
 }
 
 void GraphicEngine::onLeftMouseUp(const Point& mouse_pos)
 {
+	iApp->onLeftMouseUp(mouse_pos);
 }
 
 void GraphicEngine::onRightMouseDown(const Point& mouse_pos)
 {
+	iApp->onRightMouseDown(mouse_pos);
 }
 
 void GraphicEngine::onRightMouseUp(const Point& mouse_pos)
 {
+	iApp->onRightMouseUp(mouse_pos);
 }

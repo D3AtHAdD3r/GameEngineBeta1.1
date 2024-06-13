@@ -4,12 +4,18 @@
 #include<GraphicEngine/InputHandling/InputListener.h>
 #include<GraphicEngine/Window/WindowListener.h>
 
+#ifdef PROJ_EXPORT
+#define ATT_Camera __declspec(dllexport)
+#else
+#define ATT_Camera __declspec(dllimport)
+#endif
+
 
 class InputListener;
 class WindowListener;
 struct CameraTranslationData;
 
-class Camera : public InputListener, public WindowListener
+class ATT_Camera Camera : public InputListener, public WindowListener
 {
 	friend class Scene;
 private:
