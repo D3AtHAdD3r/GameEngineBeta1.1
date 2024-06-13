@@ -137,14 +137,17 @@ Texture* TextureManager::CreateTextureFromBackBuffer(std::wstring tex_name, unsi
 	}
 	else
 	{
-		Texture* currTexture = new Texture(tex_name, TextureType::RTV_TEXTURE, u_ID);
+		Texture* currTexture = new Texture(tex_name, TextureType::BACK_BUFFER_TEXTURE, u_ID);
 		ID3D11RenderTargetView* pRenderTargetView = nullptr;
 		ID3D11DepthStencilView* pDepthStencilView = nullptr;
 
 		if (!CreateRenderTargetView_BackBuffer(&pRenderTargetView, buffer_index))
 			return nullptr;
 
-		if (!CreatedepthStensilView(&pDepthStencilView, WindowGlobals::Get()->Get_WindowWidth(), WindowGlobals::Get()->Get_WindowHeight()))
+		unsigned int Width = WindowGlobals::Get()->Get_WindowWidth();
+		unsigned int height = WindowGlobals::Get()->Get_WindowHeight();
+
+		if (!CreatedepthStensilView(&pDepthStencilView, Width, height))
 		{
 			if (pRenderTargetView)
 			{

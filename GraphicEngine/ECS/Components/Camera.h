@@ -8,7 +8,6 @@
 class InputListener;
 class WindowListener;
 struct CameraTranslationData;
-//class DeltaTime;
 
 class Camera : public InputListener, public WindowListener
 {

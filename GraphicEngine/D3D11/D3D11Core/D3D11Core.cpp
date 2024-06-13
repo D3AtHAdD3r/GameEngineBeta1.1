@@ -3,7 +3,7 @@
 #include<GraphicEngine/D3D11/MeshAndTextureResources/ResourceManager.h>
 #include<GraphicEngine/D3D11/D3D11Globals/D3D11Globals.h>
 #include<GraphicEngine/D3D11/D3D11Headers/D3D11Structs.h>
-
+#include<GraphicEngine/Window/WindowGlobals.h>
 
 D3D11Core::D3D11Core(D3D11_INIT_DATA* pInitData, FILEMAPS* file_maps)
 {
@@ -61,8 +61,8 @@ D3D11Core::D3D11Core(D3D11_INIT_DATA* pInitData, FILEMAPS* file_maps)
 	DXGI_SWAP_CHAIN_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 	desc.BufferCount = pInitData->BufferCount;
-	desc.BufferDesc.Width = pInitData->Window_Width;
-	desc.BufferDesc.Height = pInitData->Window_Height;
+	desc.BufferDesc.Width = WindowGlobals::Get()->Get_WindowWidth();
+	desc.BufferDesc.Height = WindowGlobals::Get()->Get_WindowHeight();
 	desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	desc.BufferDesc.RefreshRate.Numerator = 60;
 	desc.BufferDesc.RefreshRate.Denominator = 1;
