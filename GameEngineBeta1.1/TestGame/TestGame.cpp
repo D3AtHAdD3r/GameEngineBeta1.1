@@ -32,7 +32,8 @@ void TestGame::onBeginFrame()
 	if (SceneContainer.empty())
 		printf("Scene container is empty\n");
 
-
+	if (!Update())
+		printf("TestGame::Update Failed\n");
 }
 
 void TestGame::onEndFrame()
@@ -152,6 +153,9 @@ bool TestGame::Update()
 	for (auto& [uid, currentScene] : SceneContainer)
 	{
 		currentScene->getCamera()->updateCamera();
+
+
+
 	}
 
 	return true;

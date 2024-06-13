@@ -1,8 +1,12 @@
 #pragma once
 
+#ifdef PROJ_EXPORT
+#define ATT_V4 __declspec(dllexport)
+#else
+#define ATT_V4 __declspec(dllimport)
+#endif
 
-
-class Vector4D
+class ATT_V4 Vector4D
 {
 public:
 	Vector4D() :m_x(0), m_y(0), m_z(0), m_w(0)

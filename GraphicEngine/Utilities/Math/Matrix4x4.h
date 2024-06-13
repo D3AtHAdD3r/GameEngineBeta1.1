@@ -3,7 +3,13 @@
 #include "Vector3D.h"
 #include "Vector4D.h"
 
-class Matrix4x4
+#ifdef PROJ_EXPORT
+#define ATT_Mat __declspec(dllexport)
+#else
+#define ATT_Mat __declspec(dllimport)
+#endif
+
+class ATT_Mat Matrix4x4
 {
 public:
 	Matrix4x4()
