@@ -152,6 +152,11 @@
   <ItemGroup>
     <Text Include="Readme.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GraphicEngine\GraphicEngine.vcxproj">
+      <Project>{77dbaff4-231d-4bdb-80a1-ee86e07c3a7e}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

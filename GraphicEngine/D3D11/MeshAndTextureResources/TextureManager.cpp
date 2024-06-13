@@ -4,8 +4,7 @@
 #include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 #include<GraphicEngine/Window/WindowGlobals.h>
 
-#include<Dependencies/DirectXTex/include/DirectXTex.h>
-#pragma comment(lib,"DirectXTexD.lib")
+#include <DirectXTex.h>
 
 TextureManager::TextureManager(const std::unordered_map<int, std::wstring>& File_Map)
 	:

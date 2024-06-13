@@ -188,7 +188,7 @@ bool RendererDX11::SetPreBinds(Renderer_PreBindData* pData)
 	float color[4];
 	color[0] = pData->color[0], color[1] = pData->color[1], color[2] = pData->color[2], color[3] = pData->color[3];
 
-	if (pData->ClearRenderTargetView)
+	if (pData->ClearRenderTargetView && pData->pRTV != nullptr)
 	{
 		clearRenderTargetView(pData->pRTV, color);
 	}
