@@ -54,9 +54,6 @@ bool RendererDX11::DrawFrame()
 		//empty struct
 		*pRenderer_PreBindData = Renderer_PreBindData();
 
-		//user-side thing
-		//currentScene->getCamera()->updateCamera();
-
 		if (!ECSToRendererData::fill_Renderer_PreBindData(currentScene, pRenderer_PreBindData))
 			return false;
 		if (!Init_Pre_Bind(pRenderer_PreBindData))

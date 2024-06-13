@@ -41,6 +41,7 @@ public:
 
 private:
 	void updatePosition();
+	void updatePositionSmooth();
 	void RotateCamera(const Point& mouse_pos);
 
 private:

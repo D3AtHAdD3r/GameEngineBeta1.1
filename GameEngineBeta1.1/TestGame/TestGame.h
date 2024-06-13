@@ -31,7 +31,7 @@ public:
 	bool Create_Scene_And_Entity();
 	bool Update();
 public:
-	constant* cb;
+	constant* cb = nullptr;
 	bool ShowCursorFlag = false;
 public:
 	std::unordered_map<unsigned short, Scene*> SceneContainer;

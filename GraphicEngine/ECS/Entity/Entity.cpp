@@ -70,3 +70,8 @@ Primitive* Entity::GetPrimitive()
 {
 	return pPrimitive;
 }
+
+const int& Entity::Get_Entity_uID() const
+{
+	return pPrimitive->primitive_id;
+}

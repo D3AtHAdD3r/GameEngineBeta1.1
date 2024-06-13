@@ -80,7 +80,8 @@ Matrix4x4 Camera::Get_Projection_Matrix()
 
 void Camera::updateCamera()
 {
-	updatePosition();
+	updatePositionSmooth();
+	//updatePosition();
 }
 
 void Camera::updatePosition()
@@ -109,6 +110,44 @@ void Camera::updatePosition()
 	current_world_matrix *= temp;*/
 
 	Vector3D new_pos = m_world_matrix.getTranslation() + current_world_matrix.getZDirection() * (pCamData->delta_translation_z * move_speed);
+	new_pos = new_pos + current_world_matrix.getXDirection() * (pCamData->delta_translation_x * move_speed);
+
+	current_world_matrix.setTranslation(new_pos);
+	m_world_matrix = current_world_matrix;
+	m_world_pos_camera = new_pos;
+
+	current_world_matrix.inverse();
+	m_view_matrix = current_world_matrix;
+}
+
+void Camera::updatePositionSmooth()
+{
+	Vector3D currentPos = m_world_pos_camera;
+	float delta_time = 1.0f / 60.0f;
+
+	Matrix4x4 temp;
+	Matrix4x4 current_world_matrix;
+	temp.setIdentity();
+	current_world_matrix.setIdentity();
+
+	//------smooth rotation--------//
+	current_rotation.m_x = pCamData->delta_rotation_x;
+	current_rotation.m_y = pCamData->delta_rotation_y;
+	current_rotation.m_z = pCamData->delta_rotation_z;
+
+	Vector3D smooth_rotation = Vector3D::lerp(old_rotation, current_rotation, delta_time * 7.0f);
+	old_rotation = smooth_rotation;
+	//----------------------------//
+
+	temp.setIdentity();
+	temp.setRotationX(smooth_rotation.m_x);
+	current_world_matrix *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(smooth_rotation.m_y);
+	current_world_matrix *= temp;
+
+	Vector3D new_pos = m_world_pos_camera + current_world_matrix.getZDirection() * (pCamData->delta_translation_z * move_speed);
 	new_pos = new_pos + current_world_matrix.getXDirection() * (pCamData->delta_translation_x * move_speed);
 
 	current_world_matrix.setTranslation(new_pos);

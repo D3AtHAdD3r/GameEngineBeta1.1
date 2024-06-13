@@ -3,6 +3,12 @@
 #include<GraphicEngine/Utilities/Math/Vector3D.h>
 #include<string>
 
+#ifdef PROJ_EXPORT
+#define ATT_Ent __declspec(dllexport)
+#else
+#define ATT_Ent __declspec(dllimport)
+#endif
+
 class Primitive;
 class ModelData;
 struct EntityDesc;
@@ -10,7 +16,7 @@ struct ModelPositionData;
 class Camera;
 struct constant;
 
-class Entity
+class ATT_Ent Entity
 {
 	friend class EntityManager;
 protected:
@@ -24,6 +30,7 @@ public:
 	const bool& Get_LocalPlayer() const;
 	const int& GetScene_ID() const;
 	Primitive* GetPrimitive();
+	const int& Get_Entity_uID() const;
 
 public:
 	virtual void UpdatePosition(ModelPositionData* mp, Camera* cp);
