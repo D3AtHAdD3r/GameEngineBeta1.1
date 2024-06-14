@@ -4,13 +4,21 @@
 #include<GraphicEngine/Window/Window.h>
 #include<GraphicEngine/Window/WindowGlobals.h>
 #include<GraphicEngine/Utilities/Math/MathUtils.h>
+#include<GraphicEngine/Utilities/ErrorChecking/CustomException.h>
 
 
-
-Camera::Camera(bool get_Input, bool is_TPC) :
-	getInputControl(get_Input),
-	isTPC(is_TPC)
+Camera::Camera(CameraInitData* camData)
+	:
+	getInputControl(camData->get_Input),
+	isTPC(camData->isTPC),
+	uid(camData->u_id),
+	isProjecting(camData->isprojecting)
 {
+
+	if (camData->u_id < 0)
+		throw NORMAL_EXCEPT("Camera Constructor failed. Invalid input.");
+
+
 	pCamData = new CameraTranslationData();
 
 	//set world matrix
@@ -76,6 +84,11 @@ Matrix4x4 Camera::Get_Projection_Matrix()
 	Projection_Matrix.setPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
 
 	return Projection_Matrix;
+}
+
+const int& Camera::Get_UID() const
+{
+	return uid;
 }
 
 void Camera::updateCamera()

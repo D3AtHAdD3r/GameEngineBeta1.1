@@ -9,6 +9,8 @@ class VertexMesh;
 struct MaterialSlot;
 struct D3D11_INPUT_ELEMENT_DESC;
 class Camera;
+class Light;
+class Scene;
 
 namespace HARDCODINGS
 {
@@ -19,9 +21,11 @@ namespace HARDCODINGS
 
 enum ENTITY_TYPE
 {
-	DEFAULT_ENTITY = 0,
+	NORMAL_ENTITY = 0,
 	LOCALPLAYER,
-	NORMAL_ENTITY
+	CAMERA,
+	LIGHT,
+	UNKNOWN
 };
 
 enum Primitive_texture_type
@@ -43,6 +47,14 @@ struct MeshCreationData
 	std::wstring MeshName;
 };
 
+struct CameraInitData
+{
+	bool get_Input = false;
+	bool isTPC = false; 
+	int u_id = -1;
+	bool isprojecting = false;
+};
+
 struct EntityDesc
 {
 public:
@@ -57,9 +69,18 @@ public:
 	unsigned int numOfTextureNormals = 0;
 
 	Primitive_texture_type primitive_texture_type = Primitive_texture_type::unknown;
-	ENTITY_TYPE Entity_type = ENTITY_TYPE::NORMAL_ENTITY;
+	ENTITY_TYPE Entity_type = ENTITY_TYPE::UNKNOWN;
 
 	Vector3D model_initialPosition = { 0,0,0 }; //world space
+
+public:
+	int Camera_uid = -1;
+	Camera* pCam = nullptr;
+
+	int Light_uid = -1;
+	Light* pLight = nullptr;
+
+	bool Is_Renderable = true;
 
 public:
 	//vertex shader requirements
@@ -80,6 +101,7 @@ public:
 	std::wstring primitive_name;
 	int primitive_uid = -1;
 	short Scene_Id = 0;
+	Scene* Parent_Scene = nullptr;
 
 public:
 	std::string vshader_entry_point = "vsmain";
@@ -109,7 +131,6 @@ public:
 	float delta_time = 0;
 };
 
-
 struct CameraTranslationData
 {
 public:
@@ -128,7 +149,6 @@ public:
 	float delta_time = 0;
 };
 
-
 struct Scene_descriptor
 {
 public:
@@ -144,8 +164,9 @@ public:
 	bool clearRenderTargetView = true;
 	bool useDepthStencil = true;
 	bool clearDepthStencil = true;
-	bool getInputEvents = false;
-	bool isTPC = false;
+public:
+	std::vector<CameraInitData*> camData;
+	int NumberofCams = -1;
 };
 
 

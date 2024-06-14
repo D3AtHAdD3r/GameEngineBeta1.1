@@ -1,4 +1,4 @@
-#include<GraphicEngine/Renderer/RendererHeaders/RendererStructs.h>
+//#include<GraphicEngine/Renderer/RendererHeaders/RendererStructs.h>
 #include<GraphicEngine/Renderer/Renderer.h>
 #include<unordered_map>
 

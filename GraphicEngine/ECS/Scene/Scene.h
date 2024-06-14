@@ -2,6 +2,8 @@
 #include<string>
 #include<d3d11.h>
 #include<vector>
+#include<unordered_map>
+#include <typeindex>
 
 #ifdef PROJ_EXPORT
 #define ATT_Scene __declspec(dllexport)
@@ -17,6 +19,7 @@ struct Scene_descriptor;
 struct EntityDesc;
 class EntityManager;
 class Entity;
+struct CameraInitData;
 
 struct color_Scene
 {
@@ -50,9 +53,13 @@ public:
 	const bool& getclearDepthStencil() const;
 	const bool& getUseDepthStencil() const;
 	const bool& getdrawOnBackBuffer() const;
-	Camera* getCamera();
+	Camera* getActiveCamera();
 	Texture* GetSceneTexture();
-	const std::vector<Entity*>& GetEntityContainer() const;
+	const std::unordered_map<std::type_index, std::vector<Entity*>>& GetEntityContainer() const;
+
+public:
+	Camera* Get_Camera_by_uID(int uid);
+	bool Activate_Camera(int uid);   // sets a camera to project, disables rest
 
 private:
 	Entity* AddEntity(EntityDesc* pED);
@@ -60,7 +67,7 @@ private:
 	bool UpdateTextureOnResize(unsigned int width, unsigned int height);
 
 private:
-	Camera* CreateCamera(Scene_descriptor* pSD);
+	Camera* CreateCamera(CameraInitData* pCD);
 
 private:
 	bool drawOnBackBuffer = true;
@@ -84,8 +91,8 @@ private:
 private:
 	Texture* scene_texture = nullptr;
 private:
-	Camera* pcam = nullptr;
-	bool getInputEvents = false;
+	std::unordered_map<int, Camera*> CameraContainer;
+	Camera* pCameraActive = nullptr;
 
 private:
 	EntityManager* pEntityManager = nullptr;

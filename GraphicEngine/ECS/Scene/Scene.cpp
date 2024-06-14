@@ -16,7 +16,6 @@ Scene::Scene(D3D11Manager* p_D3DManager, ResourceManager* p_ResourceManager, Sce
 	sceneName(sd->scene_name),
 	clearRenderTargetView(sd->clearRenderTargetView),
 	clearDepthStencil(sd->clearDepthStencil),
-	getInputEvents(sd->getInputEvents),
 	useDepthStencil(sd->useDepthStencil),
 	scene_id(sd->scene_id),
 	BackBuffer_Index(sd->BackBuffer_Index),
@@ -25,11 +24,16 @@ Scene::Scene(D3D11Manager* p_D3DManager, ResourceManager* p_ResourceManager, Sce
 	if (!p_D3DManager || !p_ResourceManager || !sd->window_client_width || !sd->window_client_height || sd->scene_name.empty() || sd->height_ratio < 1 || sd->width_ratio < 1 || sd->scene_id < 0)
 		throw NORMAL_EXCEPT("Scene constructor failed...");
 
-	//Create Camera
-	pcam = CreateCamera(sd);
-	if (!pcam)
-		throw NORMAL_EXCEPT("Scene constructor failed. Camera creation failed.");
-	
+	//Create Cameras
+	for (int i = 0; i < sd->camData.size(); ++i)
+	{
+		Camera* pcam = CreateCamera(sd->camData[i]);
+		if (!pcam)
+			throw NORMAL_EXCEPT("Scene constructor failed. Camera creation failed.");
+		if (pcam->isProjecting)
+			pCameraActive = pcam;
+	}
+
 	//set width , height , relative to main  client window
 	this->width_ratio = sd->width_ratio;
 	this->height_ratio = sd->height_ratio;
@@ -54,7 +58,7 @@ Scene::Scene(D3D11Manager* p_D3DManager, ResourceManager* p_ResourceManager, Sce
 			throw NORMAL_EXCEPT("Texture creation failed in Scene constructor ...\n");
 	}
 
-	pEntityManager = new EntityManager(pd3dManager, presManager);
+	pEntityManager = new EntityManager(pd3dManager, presManager, this);
 
 	if (pEntityManager == nullptr)
 		throw NORMAL_EXCEPT("EntityManager creation failed in Scene constructor ...\n");
@@ -132,9 +136,9 @@ const bool& Scene::getUseDepthStencil() const
 	return useDepthStencil;
 }
 
-Camera* Scene::getCamera()
+Camera* Scene::getActiveCamera()
 {
-	return pcam;
+	return pCameraActive;
 }
 
 const bool& Scene::getdrawOnBackBuffer() const
@@ -147,9 +151,41 @@ Texture* Scene::GetSceneTexture()
 	return scene_texture;
 }
 
-const std::vector<Entity*>& Scene::GetEntityContainer() const
+const std::unordered_map<std::type_index, std::vector<Entity*>>& Scene::GetEntityContainer() const
 {
 	return pEntityManager->Get_Entity_Container();
+}
+
+Camera* Scene::Get_Camera_by_uID(int uid) 
+{
+	if (uid < 0) return nullptr;
+
+	if (CameraContainer.find(uid) != CameraContainer.end())
+		return CameraContainer[uid];
+	else
+		return nullptr;
+}
+
+bool Scene::Activate_Camera(int uid)
+{
+	if (uid < 0) return false;
+	if (CameraContainer.find(uid) != CameraContainer.end())
+	{
+		for (auto& [u_id, Camera] : CameraContainer)
+		{
+			if (u_id == uid)
+			{
+				Camera->isProjecting = true;
+				pCameraActive = Camera;
+			}
+			else
+				Camera->isProjecting = false;
+		}
+
+		return true;
+	}
+
+	return false;
 }
 
 Entity* Scene::AddEntity(EntityDesc* pED)
@@ -171,8 +207,9 @@ bool Scene::UpdateTextureOnResize(unsigned int width, unsigned int height)
 	return presManager->pTextureManager->UpdateTextureOnResize(scene_texture_uid, width, height, scene_texture);
 }
 
-Camera* Scene::CreateCamera(Scene_descriptor* pSD)
+Camera* Scene::CreateCamera(CameraInitData* pCD)
 {
-	Camera* p_Cam = new Camera(pSD->getInputEvents, pSD->isTPC);
+	Camera* p_Cam = new Camera(pCD);
+	CameraContainer.emplace(p_Cam->uid, p_Cam);
 	return p_Cam;
 }

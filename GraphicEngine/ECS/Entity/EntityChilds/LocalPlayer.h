@@ -12,6 +12,6 @@ public:
 
 
 public:
-	virtual void UpdatePosition(ModelPositionData* mp, Camera* cp) override;
+	void UpdatePosition(ModelPositionData* mp, Camera* cp);
 };
 

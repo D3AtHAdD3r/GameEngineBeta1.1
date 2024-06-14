@@ -1,4 +1,5 @@
 #include "RendererDX11.h"
+#include<GraphicEngine/Renderer/RendererHeaders/RendererStructs.h>
 #include<GraphicEngine/D3D11/D3D11Core/D3D11Core.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
 #include<GraphicEngine/ECS/ECSCore.h>
@@ -8,6 +9,7 @@
 #include<GraphicEngine/ECS/Components/Camera.h>
 #include<GraphicEngine/Renderer/RendererHelpers/ECSToRendererData.h>
 #include<GraphicEngine/Window/WindowGlobals.h>
+#include<sstream>
 
 RendererDX11* RendererDX11::pRenderer = nullptr;
 
@@ -27,6 +29,15 @@ RendererDX11::~RendererDX11()
 
 void RendererDX11::UpdateConstantBuffer(Entity* currEntity, Camera* pcam)
 {
+	if (!pcam ||!currEntity)
+	{
+		std::ostringstream oss;
+		oss << "RendererDX11::UpdateConstantBuffer Failed :: Entity or Camera is nullptr. \n"
+			<< "Entity uid : " << currEntity->Get_Entity_uID() << std::endl
+			<< "\tScene uid : " << currEntity->GetScene_ID() << std::endl;
+		throw NORMAL_EXCEPT(oss.str());
+	}
+
 	constant cBuff;
 
 	float width = (float)(WindowGlobals::Get()->Get_WindowWidth());
@@ -59,16 +70,21 @@ bool RendererDX11::DrawFrame()
 		if (!Init_Pre_Bind(pRenderer_PreBindData))
 			return false;
 
-		for (auto& currentEntity : currentScene->GetEntityContainer())
-		{
-			//empty struct
-			*pRenderer_BindingData = Renderer_BindingData();
 
-			UpdateConstantBuffer(currentEntity, currentScene->getCamera());
-			if (!ECSToRendererData::fill_Renderer_MainBindData(currentEntity->GetPrimitive(), pRenderer_BindingData))
-				return false;
-			if (!Init_Main_Bind(pRenderer_BindingData))
-				return false;
+		for (auto& [TypeIndex, EntityContainer] : currentScene->GetEntityContainer())
+		{
+			for (auto& currentEntity : EntityContainer)
+			{
+				if (currentEntity->Get_IsRenderable())
+				{
+					UpdateConstantBuffer(currentEntity, currentScene->getActiveCamera());
+					if (!ECSToRendererData::fill_Renderer_MainBindData(currentEntity->GetPrimitive(), pRenderer_BindingData))
+						return false;
+					if (!Init_Main_Bind(pRenderer_BindingData))
+						return false;
+				}
+			}
+
 		}
 	}
 

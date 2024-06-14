@@ -1,4 +1,5 @@
 #include "NormalEntity.h"
+#include<GraphicEngine/ECS/Components/ModelData.h>
 
 NormalEntity::NormalEntity(Primitive* p_Primitive, EntityDesc* ent_desc) : Entity(p_Primitive, ent_desc)
 {
@@ -6,6 +7,11 @@ NormalEntity::NormalEntity(Primitive* p_Primitive, EntityDesc* ent_desc) : Entit
 
 NormalEntity::~NormalEntity()
 {
+}
+
+void NormalEntity::UpdatePosition(ModelPositionData* mp, Camera* cp)
+{
+	pModelData->Update_Position(mp, cp);
 }
 
 void NormalEntity::Set_Rotaion(float radians_x, float radians_y, float radians_z)

@@ -3,6 +3,7 @@
 #include<GraphicEngine/ECS/Scene/Scene.h>
 #include<GraphicEngine/ECS/Components/Camera.h>
 #include<GraphicEngine/ECS/Entity/Entity.h>
+#include<GraphicEngine/ECS/Entity/EntityChilds/NormalEntity.h>
 #include<d3d11.h>
 
 TestGame::TestGame()
@@ -108,8 +109,8 @@ bool TestGame::Create_Scene_And_Entity()
 	sd.clearRenderTargetView = true;
 	sd.useDepthStencil = true;
 	sd.clearDepthStencil = true;
-	sd.getInputEvents = true;
-	sd.isTPC = false;
+	/*sd.getInputEvents = true;
+	sd.isTPC = false;*/
 
 	sd_list.push_back(&sd);
 	//----------------------------------------------------//
@@ -155,24 +156,34 @@ bool TestGame::Update()
 	{
 		currentScene->getCamera()->updateCamera();
 
-		for (auto& currentEntity : currentScene->GetEntityContainer())
+		for (auto& [TypeIndex, EntityContainer] : currentScene->GetEntityContainer())
 		{
-			if (currentEntity->Get_Entity_uID() == 0)
+
+			for (auto& currentEntity : EntityContainer)
 			{
-				ModelPositionData mp;
-				Vector3D currRotation = currentEntity->Get_Rotation();
-				mp.delta_rotation_x = currRotation.m_x;
-				mp.delta_rotation_y = currRotation.m_y;
-				mp.delta_rotation_z = currRotation.m_z;
+				if (currentEntity->Get_Entity_uID() == 0)
+				{
+					ModelPositionData mp;
 
-				currentEntity->UpdatePosition(&mp, currentScene->getCamera());
+					/*NormalEntity* curEnt = (NormalEntity*)currentEntity;
+					curEnt->Get_Rotation();*/
 
-				currRotation.m_x += 0.01f * 0.5f;
-				currRotation.m_y += 0.01f * 0.5f;
-				currRotation.m_z += 0.01f * 0.5f;
+					Vector3D currRotation = (currentEntity)->Get_Rotation();
+					mp.delta_rotation_x = currRotation.m_x;
+					mp.delta_rotation_y = currRotation.m_y;
+					mp.delta_rotation_z = currRotation.m_z;
 
-				currentEntity->Set_Rotaion(currRotation.m_x, currRotation.m_y, currRotation.m_z);
+					currentEntity->UpdatePosition(&mp, currentScene->getCamera());
+
+					currRotation.m_x += 0.01f * 0.5f;
+					currRotation.m_y += 0.01f * 0.5f;
+					currRotation.m_z += 0.01f * 0.5f;
+
+					currentEntity->Set_Rotaion(currRotation.m_x, currRotation.m_y, currRotation.m_z);
+				}
 			}
+
+			
 		}
 
 	}

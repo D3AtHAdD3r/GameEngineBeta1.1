@@ -11,8 +11,11 @@ public:
 	~NormalEntity();
 
 public:
-	virtual void Set_Rotaion(float radians_x, float radians_y, float radians_z) override;
-	virtual Vector3D Get_Rotation() override;
+	void UpdatePosition(ModelPositionData* mp, Camera* cp);
+
+public:
+	void Set_Rotaion(float radians_x, float radians_y, float radians_z);
+	Vector3D Get_Rotation();
 
 private:
 	float rotX = 0;

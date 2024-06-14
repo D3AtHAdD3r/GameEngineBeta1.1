@@ -159,6 +159,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{253d0ec5-9271-4aa4-8fee-707925f3caa4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ECS\Entity\EntityChilds\EntityCamera">
+      <UniqueIdentifier>{524e5ab4-93e0-45c9-b43d-554a56d1c878}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h">
@@ -332,6 +335,9 @@
     <ClInclude Include="Interface\IApplication\IApplication.h">
       <Filter>Interface\IApplication</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Entity\EntityChilds\Entity_Camera.h">
+      <Filter>ECS\Entity\EntityChilds\EntityCamera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D11\D3D11Resources\ConstantBuffer.cpp">
@@ -456,6 +462,9 @@
     </ClCompile>
     <ClCompile Include="Interface\IApplication\IApplication.cpp">
       <Filter>Interface\IApplication</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Entity\EntityChilds\Entity_Camera.cpp">
+      <Filter>ECS\Entity\EntityChilds\EntityCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

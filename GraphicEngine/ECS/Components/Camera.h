@@ -14,12 +14,14 @@
 class InputListener;
 class WindowListener;
 struct CameraTranslationData;
+struct CameraInitData;
 
 class ATT_Camera Camera : public InputListener, public WindowListener
 {
+	friend class Entity;
 	friend class Scene;
 private:
-	Camera(bool get_Input, bool isTPC);
+	Camera(CameraInitData* camData);
 	~Camera();
 
 public:
@@ -28,6 +30,7 @@ public:
 	 Vector3D getCamWorldPos();
 	 CameraTranslationData* getCamTranslationData();
 	 Matrix4x4 Get_Projection_Matrix();
+	 const int& Get_UID() const;
 
 public:
 	void CreateTPC(Vector3D player_pos, float cam_distance = 30.0f);
@@ -109,4 +112,8 @@ public:
 	float fov = 0.785398f;
 	float zNear = 0.1f;
 	float zFar = 5000.0f;
+
+private:
+	int uid = -1;
+	bool isProjecting = false;
 };

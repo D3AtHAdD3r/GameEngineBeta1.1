@@ -5,15 +5,16 @@
 #include<GraphicEngine/ECS/Entity/Entity.h>
 #include<GraphicEngine/ECS/Entity/EntityChilds/LocalPlayer.h>
 #include<GraphicEngine/ECS/Entity/EntityChilds/NormalEntity.h>
+#include<GraphicEngine/ECS/Entity/EntityChilds/Entity_Camera.h>
 
 
-
-EntityManager::EntityManager(D3D11Manager* p_D3DManager, ResourceManager* p_ResourceManager)
+EntityManager::EntityManager(D3D11Manager* p_D3DManager, ResourceManager* p_ResourceManager, Scene* p_Scene)
 	:
 	pd3dManager(p_D3DManager),
-	presManager(p_ResourceManager)
+	presManager(p_ResourceManager),
+	pScene(p_Scene)
 {
-	if (!p_D3DManager || !p_ResourceManager)
+	if (!p_D3DManager || !p_ResourceManager || !p_Scene)
 		throw NORMAL_EXCEPT("EntityManager constructor failed");
 
 	pPrimitiveManager = new PrimitiveManager(pd3dManager, presManager);
@@ -23,73 +24,109 @@ EntityManager::EntityManager(D3D11Manager* p_D3DManager, ResourceManager* p_Reso
 
 EntityManager::~EntityManager()
 {
-	for (auto currEntity : EntityContainer)
+	for (auto& [typeIndex, EntityConatiner] : EntityContainer)
 	{
-		delete currEntity;
+		for (auto& currEnt : EntityConatiner)
+		{
+			delete currEnt;
+		}
 	}
 
 	delete pPrimitiveManager;
+
 }
 
 Entity* EntityManager::CreateEntity(EntityDesc* ent_desc)
 {
+	//fill scene pointer of entity
+	ent_desc->Parent_Scene = this->pScene;
+
 	Primitive* current_Primitive = pPrimitiveManager->CreatePrimitive(ent_desc);
 	if (!current_Primitive)
 		return nullptr;
 
 	switch (ent_desc->Entity_type)
 	{
-	case ENTITY_TYPE::DEFAULT_ENTITY:
-	{
-		Entity* current_Entity = new Entity(current_Primitive, ent_desc);
-		this->EntityContainer.push_back(current_Entity);
-		NumberOfEntities++;
-		return current_Entity;
-		break;
-	}
-	case ENTITY_TYPE::LOCALPLAYER:
-	{
-		LocalPlayer* current_Entity = new LocalPlayer(current_Primitive, ent_desc);
-		this->EntityContainer.push_back(current_Entity);
-		NumberOfEntities++;
-		return current_Entity;
-		break;
-	}
 	case ENTITY_TYPE::NORMAL_ENTITY:
 	{
 		NormalEntity* current_Entity = new NormalEntity(current_Primitive, ent_desc);
-		this->EntityContainer.push_back(current_Entity);
+
+		if (EntityContainer.find(typeid(NormalEntity)) != EntityContainer.end())
+			EntityContainer[typeid(NormalEntity)].push_back(current_Entity);
+		else
+			EntityContainer[typeid(NormalEntity)] = { current_Entity };
+
 		NumberOfEntities++;
 		return current_Entity;
 		break;
 	}
+
+	case ENTITY_TYPE::LOCALPLAYER:
+	{
+		LocalPlayer* current_Entity = new LocalPlayer(current_Primitive, ent_desc);
+		
+		if (EntityContainer.find(typeid(LocalPlayer)) != EntityContainer.end())
+			EntityContainer[typeid(LocalPlayer)].push_back(current_Entity);
+		else
+			EntityContainer[typeid(LocalPlayer)] = { current_Entity };
+
+		NumberOfEntities++;
+		return current_Entity;
+		break;
+	}
+
+	case ENTITY_TYPE::CAMERA:
+	{
+		Entity_Camera * current_Entity = new Entity_Camera(current_Primitive, ent_desc);
+
+		if (EntityContainer.find(typeid(Entity_Camera)) != EntityContainer.end())
+			EntityContainer[typeid(Entity_Camera)].push_back(current_Entity);
+		else
+			EntityContainer[typeid(Entity_Camera)] = { current_Entity };
+
+		NumberOfEntities++;
+		return current_Entity;
+		break;
+	}
+	
 
 	}
 
 	return nullptr;
 }
 
-const std::vector<Entity*>& EntityManager::Get_Entity_Container() const
+const std::unordered_map<std::type_index, std::vector<Entity*>>& EntityManager::Get_Entity_Container() const
 {
 	return EntityContainer;
 }
 
 bool EntityManager::DeleteEntity(Entity* pEnt)
 {
-	for (int i = 0; i < EntityContainer.size(); ++i)
+	if (EntityContainer.find(typeid(*pEnt)) != EntityContainer.end())
 	{
-		if (pEnt == EntityContainer[i])
-		{
-			if (pPrimitiveManager->DeletePrimitive(pEnt->pPrimitive))
-			{
-				EntityContainer.erase(EntityContainer.begin() + i);
-				NumberOfEntities--;
-				delete pEnt;
-				return true;
-			}
+		std::vector<Entity*>& currEntContainer = EntityContainer[typeid(*pEnt)];
 
+		for (int i = 0; i < currEntContainer.size(); ++i)
+		{
+			if (pEnt == currEntContainer[i])
+			{
+				if (pPrimitiveManager->DeletePrimitive(pEnt->pPrimitive))
+				{
+					//EntityContainer[typeid(*pEnt)].erase(EntityContainer[typeid(*pEnt)].begin() + i);
+					currEntContainer.erase(currEntContainer.begin() + i);
+					NumberOfEntities--;
+					delete pEnt;
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+
+			}
 		}
 	}
 
 	return false;
+	
 }
