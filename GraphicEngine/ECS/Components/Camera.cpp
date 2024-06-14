@@ -133,7 +133,7 @@ void Camera::updatePositionSmooth()
 	//------smooth rotation--------//
 	current_rotation.m_x = pCamData->delta_rotation_x;
 	current_rotation.m_y = pCamData->delta_rotation_y;
-	current_rotation.m_z = pCamData->delta_rotation_z;
+	//current_rotation.m_z = pCamData->delta_rotation_z;
 
 	Vector3D smooth_rotation = Vector3D::lerp(old_rotation, current_rotation, delta_time * 7.0f);
 	old_rotation = smooth_rotation;

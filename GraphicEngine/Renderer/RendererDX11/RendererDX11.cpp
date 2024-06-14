@@ -29,8 +29,8 @@ void RendererDX11::UpdateConstantBuffer(Entity* currEntity, Camera* pcam)
 {
 	constant cBuff;
 
-	float width = WindowGlobals::Get()->Get_WindowWidth();
-	float height = WindowGlobals::Get()->Get_WindowHeight();
+	float width = (float)(WindowGlobals::Get()->Get_WindowWidth());
+	float height = (float)(WindowGlobals::Get()->Get_WindowHeight());
 	float aspectRatio = width / height;
 
 	cBuff.m_camera_position = pcam->getCamWorldPos();

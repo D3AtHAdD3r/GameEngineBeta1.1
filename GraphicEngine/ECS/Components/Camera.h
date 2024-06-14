@@ -42,6 +42,8 @@ public:
 private:
 	void updatePosition();
 	void updatePositionSmooth();
+
+	//currently called on InputListener callbacks
 	void RotateCamera(const Point& mouse_pos);
 
 private:
