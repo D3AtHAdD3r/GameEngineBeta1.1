@@ -209,7 +209,7 @@ void Camera::setTranslation(Vector3D new_pos)
 
 void Camera::onKeyDown(int key)
 {
-	if (!getInputControl) return;
+	if (!getInputControl || !isProjecting) return;
 
 	if (key == 'W')
 	{
@@ -239,7 +239,7 @@ void Camera::onKeyDown(int key)
 
 void Camera::onKeyUp(int key)
 {
-	if (!getInputControl) return;
+	if (!getInputControl || !isProjecting) return;
 
 	pCamData->delta_translation_z = 0.0;
 	pCamData->delta_translation_x = 0.0;
@@ -261,7 +261,7 @@ void Camera::onKeyUp(int key)
 
 void Camera::onMouseMove(const Point& mouse_pos)
 {
-	if (!getInputControl) return;
+	if (!getInputControl || !isProjecting) return;
 
 	if (!play_state)
 		return;
@@ -278,22 +278,22 @@ void Camera::onMouseMove(const Point& mouse_pos)
 
 void Camera::onLeftMouseDown(const Point& mouse_pos)
 {
-	if (!getInputControl) return;
+	if (!getInputControl || !isProjecting) return;
 }
 
 void Camera::onLeftMouseUp(const Point& mouse_pos)
 {
-	if (!getInputControl) return;
+	if (!getInputControl || !isProjecting) return;
 }
 
 void Camera::onRightMouseDown(const Point& mouse_pos)
 {
-	if (!getInputControl) return;
+	if (!getInputControl || !isProjecting) return;
 }
 
 void Camera::onRightMouseUp(const Point& mouse_pos)
 {
-	if (!getInputControl) return;
+	if (!getInputControl || !isProjecting) return;
 }
 
 void Camera::onFocus()

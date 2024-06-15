@@ -156,6 +156,11 @@ const std::unordered_map<std::type_index, std::vector<Entity*>>& Scene::GetEntit
 	return pEntityManager->Get_Entity_Container();
 }
 
+const std::unordered_map<int, Camera*>& Scene::Get_Camera_Container() const
+{
+	return CameraContainer;
+}
+
 Camera* Scene::Get_Camera_by_uID(int uid) 
 {
 	if (uid < 0) return nullptr;

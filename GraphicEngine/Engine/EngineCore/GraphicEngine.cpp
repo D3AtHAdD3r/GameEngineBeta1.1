@@ -66,7 +66,7 @@ bool GraphicEngine::Create(IApplication* instApp, RenderData* p_RenderData)
 	catch (const CustomException& e)
 	{
 		MessageBoxA(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST);
-		return false; //lol no warnings
+		return false; 
 	}
 	
 }

@@ -21,11 +21,11 @@ namespace HARDCODINGS
 
 enum ENTITY_TYPE
 {
-	NORMAL_ENTITY = 0,
-	LOCALPLAYER,
-	CAMERA,
-	LIGHT,
-	UNKNOWN
+	ENUM_NORMAL_ENTITY = 0,
+	ENUM_LOCALPLAYER,
+	ENUM_CAMERA,
+	ENUM_LIGHT,
+	ENUM_UNKNOWN
 };
 
 enum Primitive_texture_type
@@ -60,8 +60,7 @@ struct EntityDesc
 public:
 	int mesh_uid = -1;
 	bool getMeshfromFile = true;
-	MeshCreationData* mesh_creation_data = nullptr;
-
+	
 	bool isNormalMap = false;
 	std::vector<int> texture_uids;
 	std::vector<int> texture_normals_uids;
@@ -69,17 +68,13 @@ public:
 	unsigned int numOfTextureNormals = 0;
 
 	Primitive_texture_type primitive_texture_type = Primitive_texture_type::unknown;
-	ENTITY_TYPE Entity_type = ENTITY_TYPE::UNKNOWN;
+	ENTITY_TYPE Entity_type = ENTITY_TYPE::ENUM_UNKNOWN;
 
 	Vector3D model_initialPosition = { 0,0,0 }; //world space
 
 public:
 	int Camera_uid = -1;
-	Camera* pCam = nullptr;
-
 	int Light_uid = -1;
-	Light* pLight = nullptr;
-
 	bool Is_Renderable = true;
 
 public:
@@ -93,7 +88,7 @@ public:
 	
 	//Constant Buffer requirements
 	void* constant_buffer = nullptr;
-	unsigned int size_constant_buffer = 0;
+	unsigned int size_constant_buffer = 0; //***
 	int constant_buffer_uid = -1;
 
 	bool frontFaceCull = false;
@@ -101,7 +96,12 @@ public:
 	std::wstring primitive_name;
 	int primitive_uid = -1;
 	short Scene_Id = 0;
-	Scene* Parent_Scene = nullptr;
+
+public:
+	Camera* pCam = nullptr; //run time filled
+	Light* pLight = nullptr; //run time filled
+	Scene* Parent_Scene = nullptr;  //run time filled
+	MeshCreationData* mesh_creation_data = nullptr; //run time filled
 
 public:
 	std::string vshader_entry_point = "vsmain";

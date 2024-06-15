@@ -15,30 +15,30 @@ Entity::Entity(Primitive* p_Primitive, EntityDesc* ent_desc)
 	Entity_name(ent_desc->primitive_name),
 	pParentScene(ent_desc->Parent_Scene)
 {
-	if (!p_Primitive || ent_desc->Scene_Id < 0 || ent_desc->Entity_type == ENTITY_TYPE::UNKNOWN || !ent_desc->Parent_Scene)
+	if (!p_Primitive || ent_desc->Scene_Id < 0 || ent_desc->Entity_type == ENTITY_TYPE::ENUM_UNKNOWN || !ent_desc->Parent_Scene)
 		throw NORMAL_EXCEPT("Entity contructor failed, Invalid Input;");
 
 	switch (ent_desc->Entity_type)
 	{
-	case ENTITY_TYPE::NORMAL_ENTITY:
+	case ENTITY_TYPE::ENUM_NORMAL_ENTITY:
 	{
 		pModelData = new ModelData(ent_desc->model_initialPosition);
 		break;
 	}
-	case ENTITY_TYPE::LOCALPLAYER:
+	case ENTITY_TYPE::ENUM_LOCALPLAYER:
 	{
 		bLocalPlayer = true;
 		pModelData = new ModelData(ent_desc->model_initialPosition);
 		break;
 	}
-	case ENTITY_TYPE::CAMERA:
+	case ENTITY_TYPE::ENUM_CAMERA:
 	{
 		if (ent_desc->Camera_uid < 0 || !ent_desc->pCam)
 			throw NORMAL_EXCEPT("Entity contructor failed, Invalid Input - CAMERA details");
 		pCamera = ent_desc->pCam;
 		break;
 	}
-	case ENTITY_TYPE::LIGHT:
+	case ENTITY_TYPE::ENUM_LIGHT:
 	{
 		if (ent_desc->Light_uid < 0 || !ent_desc->pLight)
 			throw NORMAL_EXCEPT("Entity contructor failed, Invalid Input - LIGHT details");
@@ -138,5 +138,10 @@ const int& Entity::Get_Entity_uID() const
 
 const bool& Entity::Get_IsRenderable() const
 {
-	return Get_IsRenderable();
+	return Is_Renderable;
+}
+
+Scene* Entity::Get_Parent_Scene() const
+{
+	return pParentScene;
 }

@@ -1,10 +1,14 @@
 #pragma once
 #include<GraphicEngine/ECS/Entity/Entity.h>
 
+#ifdef PROJ_EXPORT
+#define ATT_NormalEntity __declspec(dllexport)
+#else
+#define ATT_NormalEntity __declspec(dllimport)
+#endif
 
 
-
-class NormalEntity : public Entity
+class ATT_NormalEntity NormalEntity : public Entity
 {
 public:
 	NormalEntity(Primitive* p_Primitive, EntityDesc* ent_desc);

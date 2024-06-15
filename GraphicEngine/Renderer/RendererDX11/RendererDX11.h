@@ -1,4 +1,6 @@
 //#include<GraphicEngine/Renderer/RendererHeaders/RendererStructs.h>
+#include<Windows.h>
+#include<d3d11.h>
 #include<GraphicEngine/Renderer/Renderer.h>
 #include<unordered_map>
 
@@ -10,9 +12,11 @@ struct EntityDesc;
 class Entity;
 class Camera;
 class Scene;
+struct RenderData;
 struct Renderer_PreBindData;
 struct Renderer_BindingData;
 class ECSToRendererData;
+
 
 class RendererDX11 : public Renderer
 {

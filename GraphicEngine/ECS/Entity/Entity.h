@@ -36,7 +36,7 @@ public:
 	const int& GetScene_ID() const;
 	const int& Get_Entity_uID() const;
 	const bool& Get_IsRenderable() const;
-
+	Scene* Get_Parent_Scene() const;
 public:
 	void setConstantBuffer(void* c_buffer);
 	void setConstantBuffer(constant* c_buffer);
@@ -52,7 +52,7 @@ protected:
 	int scene_id = -1;
 	bool bLocalPlayer = false;
 	bool Is_Renderable = true;
-	ENTITY_TYPE Entity_Type = ENTITY_TYPE::NORMAL_ENTITY;
+	ENTITY_TYPE Entity_Type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
 
 protected:
 	int Entity_uid = -1;

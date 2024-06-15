@@ -56,6 +56,7 @@ public:
 	Camera* getActiveCamera();
 	Texture* GetSceneTexture();
 	const std::unordered_map<std::type_index, std::vector<Entity*>>& GetEntityContainer() const;
+	const std::unordered_map<int, Camera*>& Get_Camera_Container() const;
 
 public:
 	Camera* Get_Camera_by_uID(int uid);

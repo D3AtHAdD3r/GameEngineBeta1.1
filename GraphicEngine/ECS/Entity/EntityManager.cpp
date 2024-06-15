@@ -47,7 +47,7 @@ Entity* EntityManager::CreateEntity(EntityDesc* ent_desc)
 
 	switch (ent_desc->Entity_type)
 	{
-	case ENTITY_TYPE::NORMAL_ENTITY:
+	case ENTITY_TYPE::ENUM_NORMAL_ENTITY:
 	{
 		NormalEntity* current_Entity = new NormalEntity(current_Primitive, ent_desc);
 
@@ -61,7 +61,7 @@ Entity* EntityManager::CreateEntity(EntityDesc* ent_desc)
 		break;
 	}
 
-	case ENTITY_TYPE::LOCALPLAYER:
+	case ENTITY_TYPE::ENUM_LOCALPLAYER:
 	{
 		LocalPlayer* current_Entity = new LocalPlayer(current_Primitive, ent_desc);
 		
@@ -75,7 +75,7 @@ Entity* EntityManager::CreateEntity(EntityDesc* ent_desc)
 		break;
 	}
 
-	case ENTITY_TYPE::CAMERA:
+	case ENTITY_TYPE::ENUM_CAMERA:
 	{
 		Entity_Camera * current_Entity = new Entity_Camera(current_Primitive, ent_desc);
 

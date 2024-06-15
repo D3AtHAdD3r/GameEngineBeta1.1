@@ -75,6 +75,8 @@ bool RendererDX11::DrawFrame()
 		{
 			for (auto& currentEntity : EntityContainer)
 			{
+				*pRenderer_BindingData = Renderer_BindingData();
+
 				if (currentEntity->Get_IsRenderable())
 				{
 					UpdateConstantBuffer(currentEntity, currentScene->getActiveCamera());

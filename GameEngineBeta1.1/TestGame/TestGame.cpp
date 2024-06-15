@@ -4,6 +4,8 @@
 #include<GraphicEngine/ECS/Components/Camera.h>
 #include<GraphicEngine/ECS/Entity/Entity.h>
 #include<GraphicEngine/ECS/Entity/EntityChilds/NormalEntity.h>
+#include<GraphicEngine/ECS/Entity/EntityChilds/LocalPlayer.h>
+#include<GraphicEngine/ECS/Entity/EntityChilds/Entity_Camera.h>
 #include<d3d11.h>
 
 TestGame::TestGame()
@@ -109,8 +111,15 @@ bool TestGame::Create_Scene_And_Entity()
 	sd.clearRenderTargetView = true;
 	sd.useDepthStencil = true;
 	sd.clearDepthStencil = true;
-	/*sd.getInputEvents = true;
-	sd.isTPC = false;*/
+	
+	CameraInitData cd;
+	cd.get_Input = true;
+	cd.isTPC = false;
+	cd.isprojecting = true;
+	cd.u_id = 0;
+
+	sd.camData.push_back(&cd);
+	sd.NumberofCams = sd.camData.size();
 
 	sd_list.push_back(&sd);
 	//----------------------------------------------------//
@@ -121,7 +130,7 @@ bool TestGame::Create_Scene_And_Entity()
 	ed.texture_uids.push_back(1);
 	ed.numOfTextures = 1;
 	ed.primitive_texture_type = Primitive_texture_type::oneTexMap_perDrawCall;
-	ed.Entity_type = ENTITY_TYPE::NORMAL_ENTITY;
+	ed.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
 	ed.model_initialPosition = { 0,0,20.0f };
 
 	ed.vertex_Shader_uid = 0;
@@ -154,38 +163,100 @@ bool TestGame::Update()
 
 	for (auto& [uid, currentScene] : SceneContainer)
 	{
-		currentScene->getCamera()->updateCamera();
+		//update all of them
+		for (auto& [uid, camera] : currentScene->Get_Camera_Container())
+		{
+			camera->updateCamera();
+		}
 
 		for (auto& [TypeIndex, EntityContainer] : currentScene->GetEntityContainer())
 		{
+			std::vector<Entity*> CurrentEntContainer = EntityContainer;
 
-			for (auto& currentEntity : EntityContainer)
+			if (TypeIndex == typeid(NormalEntity))
 			{
-				if (currentEntity->Get_Entity_uID() == 0)
-				{
-					ModelPositionData mp;
-
-					/*NormalEntity* curEnt = (NormalEntity*)currentEntity;
-					curEnt->Get_Rotation();*/
-
-					Vector3D currRotation = (currentEntity)->Get_Rotation();
-					mp.delta_rotation_x = currRotation.m_x;
-					mp.delta_rotation_y = currRotation.m_y;
-					mp.delta_rotation_z = currRotation.m_z;
-
-					currentEntity->UpdatePosition(&mp, currentScene->getCamera());
-
-					currRotation.m_x += 0.01f * 0.5f;
-					currRotation.m_y += 0.01f * 0.5f;
-					currRotation.m_z += 0.01f * 0.5f;
-
-					currentEntity->Set_Rotaion(currRotation.m_x, currRotation.m_y, currRotation.m_z);
-				}
+				if (!Update_NormalEntity(CurrentEntContainer)) return false;
 			}
-
+			else if (TypeIndex == typeid(LocalPlayer))
+			{
+				if (!Update_LocalPlayer(CurrentEntContainer)) return false;
+			}
+			else if (TypeIndex == typeid(Entity_Camera))
+			{
+				if (!Update_Entity_Camera(CurrentEntContainer)) return false;
+			}
 			
 		}
 
+	}
+
+	return true;
+}
+
+bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer)
+{
+	for (int i = 0; i < EntityContainer.size(); ++i)
+	{
+		if (NormalEntity* currentEntity = dynamic_cast<NormalEntity*>(EntityContainer[i]))
+		{
+			if (currentEntity->Get_Entity_uID() == 0)
+			{
+				ModelPositionData mp;
+				Vector3D currRotation = (currentEntity)->Get_Rotation();
+				mp.delta_rotation_x = currRotation.m_x;
+				mp.delta_rotation_y = currRotation.m_y;
+				mp.delta_rotation_z = currRotation.m_z;
+
+				currentEntity->UpdatePosition(&mp, currentEntity->Get_Parent_Scene()->getActiveCamera()); 
+
+				currRotation.m_x += 0.01f * 0.5f;
+				currRotation.m_y += 0.01f * 0.5f;
+				currRotation.m_z += 0.01f * 0.5f;
+
+				currentEntity->Set_Rotaion(currRotation.m_x, currRotation.m_y, currRotation.m_z);
+			}
+		}
+		else
+		{
+			printf("dynamic_casting in TestGame::UpdateNORMALENTITY failed\n ");
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool TestGame::Update_LocalPlayer(std::vector<Entity*>& EntityContainer)
+{
+	for (int i = 0; i < EntityContainer.size(); ++i)
+	{
+		if (LocalPlayer* ent = dynamic_cast<LocalPlayer*>(EntityContainer[i]))
+		{
+
+		}
+		else
+		{
+			printf("dynamic_casting in TestGame::Update_LocalPlayer failed\n ");
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool TestGame::Update_Entity_Camera(std::vector<Entity*>& EntityContainer)
+{
+	for (int i = 0; i < EntityContainer.size(); ++i)
+	{
+		if (Entity_Camera* ent = dynamic_cast<Entity_Camera*>(EntityContainer[i]))
+		{
+
+		}
+		else
+		{
+			printf("dynamic_casting in TestGame::Update_Entity_Camera failed\n ");
+			return false;
+		}
 	}
 
 	return true;
