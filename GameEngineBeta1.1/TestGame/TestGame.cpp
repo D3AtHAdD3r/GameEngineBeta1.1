@@ -27,6 +27,8 @@ void TestGame::onInit()
 	SceneContainer = GetSceneContainer();
 	if (SceneContainer.empty())
 		printf("Scene container is empty\n");
+
+	UpdateEntitiesOnInit(SceneContainer);
 }
 
 void TestGame::onBeginFrame()
@@ -58,6 +60,20 @@ void TestGame::onKeyUp(int key)
 	{
 		ShowCursorFlag = !ShowCursorFlag;
 		ShowCursor(ShowCursorFlag);
+	}
+
+	if (key == VK_TAB)
+	{
+		changeCameraFlag = !changeCameraFlag;
+
+		if (changeCameraFlag)
+		{
+			SceneContainer[0]->Activate_Camera(1);
+		}
+		else
+		{
+			SceneContainer[0]->Activate_Camera(0);
+		}
 	}
 }
 
@@ -118,7 +134,14 @@ bool TestGame::Create_Scene_And_Entity()
 	cd.isprojecting = true;
 	cd.u_id = 0;
 
+	CameraInitData cd1;
+	cd1.get_Input = false;
+	cd1.isTPC = false;
+	cd1.isprojecting = false;
+	cd1.u_id = 1;
+
 	sd.camData.push_back(&cd);
+	sd.camData.push_back(&cd1);
 	sd.NumberofCams = sd.camData.size();
 
 	sd_list.push_back(&sd);
@@ -256,6 +279,28 @@ bool TestGame::Update_Entity_Camera(std::vector<Entity*>& EntityContainer)
 		{
 			printf("dynamic_casting in TestGame::Update_Entity_Camera failed\n ");
 			return false;
+		}
+	}
+
+	return true;
+}
+
+
+
+
+bool TestGame::UpdateEntitiesOnInit(std::unordered_map<unsigned short, Scene*>& SceneContainer)
+{
+	for (auto& [uid, scene] : SceneContainer)
+	{
+		for (auto& [uid, camera] : scene->Get_Camera_Container())
+		{
+			if (uid == 1)
+			{
+				CameraTranslationData cd;
+				cd.delta_rotation_y = 3.14159f;
+				camera->updateCamera(&cd);
+				camera->setTranslation({ 0, 0, 40.0f });
+			}
 		}
 	}
 

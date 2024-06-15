@@ -40,6 +40,7 @@ public:
 
 public:
 	void updateCamera();
+	void updateCamera(CameraTranslationData* p_CamData);
 	void setTranslation(Vector3D new_pos);
 
 private:

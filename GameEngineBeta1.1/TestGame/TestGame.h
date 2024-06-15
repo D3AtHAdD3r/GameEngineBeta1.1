@@ -35,8 +35,12 @@ public:
 	bool Update_Entity_Camera(std::vector<Entity*>& EntityContainer);
 	bool Update_Entity_Light(std::vector<Entity*>& EntityContainer);
 
+public:
+	bool UpdateEntitiesOnInit(std::unordered_map<unsigned short, Scene*>& SceneContainer);
 
-	
+public:
+	bool changeCameraFlag = true;
+
 public:
 	constant* cb = nullptr;
 	bool ShowCursorFlag = false;

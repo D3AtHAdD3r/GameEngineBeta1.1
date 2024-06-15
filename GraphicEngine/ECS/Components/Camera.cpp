@@ -97,6 +97,15 @@ void Camera::updateCamera()
 	//updatePosition();
 }
 
+void Camera::updateCamera(CameraTranslationData* p_CamData)
+{
+	if (!p_CamData)
+		throw NORMAL_EXCEPT("Camera::updateCamera, p_CamData is nullptr");
+
+	memcpy(pCamData, p_CamData, sizeof(CameraTranslationData));
+	updatePosition();
+}
+
 void Camera::updatePosition()
 {
 	/*if (!first_time_rotate_camera)
