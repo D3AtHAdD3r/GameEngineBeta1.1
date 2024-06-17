@@ -23,8 +23,6 @@ enum ENTITY_TYPE
 {
 	ENUM_NORMAL_ENTITY = 0,
 	ENUM_LOCALPLAYER,
-	ENUM_CAMERA,
-	ENUM_LIGHT,
 	ENUM_UNKNOWN
 };
 
@@ -35,6 +33,52 @@ enum Primitive_texture_type
 	allTexMaps_perDrawCall,						//all tex-maps binded per draw call
 	unknown
 };
+
+struct ModelPositionData
+{
+public:
+	float delta_rotation_x = 0;
+	float delta_rotation_y = 0;
+	float delta_rotation_z = 0;
+public:
+	float delta_translation_x = 0;
+	float delta_translation_y = 0;
+	float delta_translation_z = 0;
+public:
+	float delta_scale_x = 1;
+	float delta_scale_y = 1;
+	float delta_scale_z = 1;
+public:
+
+public:
+	float delta_time = 1.0f / 60.0f;
+
+public:
+	bool SmoothRotation = false;
+	bool SmoothMovement = false;
+	float move_speed = 0.55f;
+	float lerp_Variable = 6.0f;
+	float smooth_translation_variable = 25.0f; //lol 
+};
+
+struct CameraTranslationData
+{
+public:
+	float delta_rotation_x = 0;
+	float delta_rotation_y = 0;
+	float delta_rotation_z = 0;
+public:
+	float delta_translation_x = 0;
+	float delta_translation_y = 0;
+	float delta_translation_z = 0;
+public:
+	float delta_scale_x = 1;
+	float delta_scale_y = 1;
+	float delta_scale_z = 1;
+public:
+	float delta_time = 0;
+};
+
 
 struct MeshCreationData
 {
@@ -98,6 +142,9 @@ public:
 	short Scene_Id = 0;
 
 public:
+	ModelPositionData mp;
+
+public:
 	Camera* pCam = nullptr; //run time filled
 	Light* pLight = nullptr; //run time filled
 	Scene* Parent_Scene = nullptr;  //run time filled
@@ -113,41 +160,6 @@ public:
 //using EntityDesc = Primitive_Desc;
 
 
-struct ModelPositionData
-{
-public:
-	float delta_rotation_x = 0;
-	float delta_rotation_y = 0;
-	float delta_rotation_z = 0;
-public:
-	float delta_translation_x = 0;
-	float delta_translation_y = 0;
-	float delta_translation_z = 0;
-public:
-	float delta_scale_x = 1;
-	float delta_scale_y = 1;
-	float delta_scale_z = 1;
-public:
-	float delta_time = 0;
-};
-
-struct CameraTranslationData
-{
-public:
-	float delta_rotation_x = 0;
-	float delta_rotation_y = 0;
-	float delta_rotation_z = 0;
-public:
-	float delta_translation_x = 0;
-	float delta_translation_y = 0;
-	float delta_translation_z = 0;
-public:
-	float delta_scale_x = 1;
-	float delta_scale_y = 1;
-	float delta_scale_z = 1;
-public:
-	float delta_time = 0;
-};
 
 struct Scene_descriptor
 {

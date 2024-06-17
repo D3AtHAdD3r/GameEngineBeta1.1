@@ -12,6 +12,7 @@ public:
 
 
 public:
-	void UpdatePosition(ModelPositionData* mp, Camera* cp);
+	bool UpdatePosition(ModelPositionData* mp);
+	bool UpdatepositionRelative(ModelPositionData* mp, Matrix4x4* ModelB_World_Matrix);
 };
 

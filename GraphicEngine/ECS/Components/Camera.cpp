@@ -56,7 +56,7 @@ Camera::~Camera()
 
 Matrix4x4 Camera::getWorldMatrix()
 {
-    return Matrix4x4();
+    return m_world_matrix;
 }
 
 Matrix4x4 Camera::getViewMatrix()

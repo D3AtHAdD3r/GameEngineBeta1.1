@@ -74,22 +74,6 @@ Entity* EntityManager::CreateEntity(EntityDesc* ent_desc)
 		return current_Entity;
 		break;
 	}
-
-	case ENTITY_TYPE::ENUM_CAMERA:
-	{
-		Entity_Camera * current_Entity = new Entity_Camera(current_Primitive, ent_desc);
-
-		if (EntityContainer.find(typeid(Entity_Camera)) != EntityContainer.end())
-			EntityContainer[typeid(Entity_Camera)].push_back(current_Entity);
-		else
-			EntityContainer[typeid(Entity_Camera)] = { current_Entity };
-
-		NumberOfEntities++;
-		return current_Entity;
-		break;
-	}
-	
-
 	}
 
 	return nullptr;

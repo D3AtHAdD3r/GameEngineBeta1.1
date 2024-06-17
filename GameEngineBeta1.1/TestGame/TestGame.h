@@ -30,11 +30,8 @@ public:
 public:
 	bool Create_Scene_And_Entity();
 	bool Update();
-	bool Update_NormalEntity(std::vector<Entity*>& EntityContainer);
-	bool Update_LocalPlayer(std::vector<Entity*>& EntityContainer);
-	bool Update_Entity_Camera(std::vector<Entity*>& EntityContainer);
-	bool Update_Entity_Light(std::vector<Entity*>& EntityContainer);
-
+	bool Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene* currScene);
+	bool Update_LocalPlayer(std::vector<Entity*>& EntityContainer, Scene* currScene);
 public:
 	bool UpdateEntitiesOnInit(std::unordered_map<unsigned short, Scene*>& SceneContainer);
 
@@ -46,5 +43,9 @@ public:
 	bool ShowCursorFlag = false;
 public:
 	std::unordered_map<unsigned short, Scene*> SceneContainer;
+
+	//custom
+public:
+	int val_translation = 0;
 
 };

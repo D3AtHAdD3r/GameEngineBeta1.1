@@ -22,29 +22,16 @@ Entity::Entity(Primitive* p_Primitive, EntityDesc* ent_desc)
 	{
 	case ENTITY_TYPE::ENUM_NORMAL_ENTITY:
 	{
-		pModelData = new ModelData(ent_desc->model_initialPosition);
+		pModelData = new ModelData(&(ent_desc->mp), ent_desc->model_initialPosition);
 		break;
 	}
 	case ENTITY_TYPE::ENUM_LOCALPLAYER:
 	{
 		bLocalPlayer = true;
-		pModelData = new ModelData(ent_desc->model_initialPosition);
+		pModelData = new ModelData(&(ent_desc->mp), ent_desc->model_initialPosition);
 		break;
 	}
-	case ENTITY_TYPE::ENUM_CAMERA:
-	{
-		if (ent_desc->Camera_uid < 0 || !ent_desc->pCam)
-			throw NORMAL_EXCEPT("Entity contructor failed, Invalid Input - CAMERA details");
-		pCamera = ent_desc->pCam;
-		break;
-	}
-	case ENTITY_TYPE::ENUM_LIGHT:
-	{
-		if (ent_desc->Light_uid < 0 || !ent_desc->pLight)
-			throw NORMAL_EXCEPT("Entity contructor failed, Invalid Input - LIGHT details");
-		pLight = ent_desc->pLight;
-		break;
-	}
+	
 	default:
 	{
 		throw NORMAL_EXCEPT("Entity contructor failed, Invalid Input - ENTITY_TYPE");
@@ -67,7 +54,7 @@ Vector3D Entity::Get_Entity_World_Pos() const
 		throw NORMAL_EXCEPT(oss.str());
 	}
 	
-	return pModelData->world_pos;
+	return pModelData->Current_Translation;
 }
 
 
@@ -81,7 +68,7 @@ Matrix4x4 Entity::Get_Entity_WorldMatrix() const
 		throw NORMAL_EXCEPT(oss.str());
 	}
 
-	return pModelData->world_matrix;
+	return pModelData->World_Matrix;
 }
 
 const std::wstring& Entity::Get_Entity_Name() const

@@ -9,9 +9,14 @@ NormalEntity::~NormalEntity()
 {
 }
 
-void NormalEntity::UpdatePosition(ModelPositionData* mp, Camera* cp)
+bool NormalEntity::UpdatePosition(ModelPositionData* mp)
 {
-	pModelData->Update_Position(mp, cp);
+	 return pModelData->Update(mp);
+}
+
+bool NormalEntity::UpdatepositionRelative(ModelPositionData* mp, Matrix4x4* ModelB_World_Matrix)
+{
+	return pModelData->Update_Relative(mp, ModelB_World_Matrix);
 }
 
 void NormalEntity::Set_Rotaion(float radians_x, float radians_y, float radians_z)

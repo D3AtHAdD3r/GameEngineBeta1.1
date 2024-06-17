@@ -15,8 +15,8 @@ public:
 	~NormalEntity();
 
 public:
-	void UpdatePosition(ModelPositionData* mp, Camera* cp);
-
+	bool UpdatePosition(ModelPositionData* mp);
+	bool UpdatepositionRelative(ModelPositionData* mp, Matrix4x4* ModelB_World_Matrix);
 public:
 	void Set_Rotaion(float radians_x, float radians_y, float radians_z);
 	Vector3D Get_Rotation();

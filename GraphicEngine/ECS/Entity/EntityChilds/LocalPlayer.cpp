@@ -14,7 +14,14 @@ LocalPlayer::~LocalPlayer()
 {
 }
 
-void LocalPlayer::UpdatePosition(ModelPositionData* mp, Camera* cp)
+bool LocalPlayer::UpdatePosition(ModelPositionData* mp)
 {
-	pModelData->Update_Position_Smooth_Movement(mp, cp);
+	return pModelData->Update(mp);
 }
+
+bool LocalPlayer::UpdatepositionRelative(ModelPositionData* mp, Matrix4x4* ModelB_World_Matrix)
+{
+	return pModelData->Update_Relative(mp, ModelB_World_Matrix);
+}
+
+

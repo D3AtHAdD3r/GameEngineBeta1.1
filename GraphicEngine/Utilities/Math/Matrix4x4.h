@@ -64,7 +64,7 @@ public:
 		m_mat[1][1] = cos(z);
 	}
 
-	float my_fpow(float base, unsigned exp)
+	float my_fpow(float base, unsigned exp) const
 	{
 		float result = 1.f;
 		while (exp)
@@ -78,7 +78,7 @@ public:
 		return result;
 	}
 
-	float getDeterminant()
+	float getDeterminant() const
 	{
 		Vector4D minor, v1, v2, v3;
 		float det;
@@ -152,22 +152,22 @@ public:
 		::memcpy(m_mat, matrix.m_mat, sizeof(float) * 16);
 	}
 
-	Vector3D getXDirection()
+	Vector3D getXDirection() const
 	{
 		return Vector3D(m_mat[0][0], m_mat[0][1], m_mat[0][2]);
 	}
 
-	Vector3D getYDirection()
+	Vector3D getYDirection() const
 	{
 		return Vector3D(m_mat[1][0], m_mat[1][1], m_mat[1][2]);
 	}
 
-	Vector3D getZDirection()
+	Vector3D getZDirection() const
 	{
 		return Vector3D(m_mat[2][0], m_mat[2][1], m_mat[2][2]);
 	}
 
-	Vector3D getTranslation()
+	Vector3D getTranslation() const
 	{
 		return Vector3D(m_mat[3][0], m_mat[3][1], m_mat[3][2]);
 	}

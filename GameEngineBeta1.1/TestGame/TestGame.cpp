@@ -5,7 +5,6 @@
 #include<GraphicEngine/ECS/Entity/Entity.h>
 #include<GraphicEngine/ECS/Entity/EntityChilds/NormalEntity.h>
 #include<GraphicEngine/ECS/Entity/EntityChilds/LocalPlayer.h>
-#include<GraphicEngine/ECS/Entity/EntityChilds/Entity_Camera.h>
 #include<d3d11.h>
 
 TestGame::TestGame()
@@ -198,15 +197,11 @@ bool TestGame::Update()
 
 			if (TypeIndex == typeid(NormalEntity))
 			{
-				if (!Update_NormalEntity(CurrentEntContainer)) return false;
+				if (!Update_NormalEntity(CurrentEntContainer, currentScene)) return false;
 			}
 			else if (TypeIndex == typeid(LocalPlayer))
 			{
-				if (!Update_LocalPlayer(CurrentEntContainer)) return false;
-			}
-			else if (TypeIndex == typeid(Entity_Camera))
-			{
-				if (!Update_Entity_Camera(CurrentEntContainer)) return false;
+				if (!Update_LocalPlayer(CurrentEntContainer, currentScene)) return false;
 			}
 			
 		}
@@ -216,7 +211,7 @@ bool TestGame::Update()
 	return true;
 }
 
-bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer)
+bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene* currScene)
 {
 	for (int i = 0; i < EntityContainer.size(); ++i)
 	{
@@ -230,13 +225,35 @@ bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer)
 				mp.delta_rotation_y = currRotation.m_y;
 				mp.delta_rotation_z = currRotation.m_z;
 
-				currentEntity->UpdatePosition(&mp, currentEntity->Get_Parent_Scene()->getActiveCamera()); 
+				mp.SmoothRotation = false;
 
 				currRotation.m_x += 0.01f * 0.5f;
 				currRotation.m_y += 0.01f * 0.5f;
 				currRotation.m_z += 0.01f * 0.5f;
 
 				currentEntity->Set_Rotaion(currRotation.m_x, currRotation.m_y, currRotation.m_z);
+
+				//----------------------------------//
+
+				/*if (val_translation < 300)
+				{
+					mp.delta_translation_z = 1;
+				}
+				else
+				{
+					mp.delta_translation_z = -1;
+				}
+
+				if (val_translation == 600)
+					val_translation = 0;
+
+				val_translation++;
+
+				mp.SmoothMovement = true;*/
+
+				currentEntity->UpdatePosition(&mp);
+				//Matrix4x4 camWorldMatrix = currScene->getActiveCamera()->getWorldMatrix();
+				//currentEntity->UpdatepositionRelative(&mp, &camWorldMatrix);
 			}
 		}
 		else
@@ -249,7 +266,7 @@ bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer)
 	return true;
 }
 
-bool TestGame::Update_LocalPlayer(std::vector<Entity*>& EntityContainer)
+bool TestGame::Update_LocalPlayer(std::vector<Entity*>& EntityContainer, Scene* currScene)
 {
 	for (int i = 0; i < EntityContainer.size(); ++i)
 	{
@@ -267,23 +284,7 @@ bool TestGame::Update_LocalPlayer(std::vector<Entity*>& EntityContainer)
 	return true;
 }
 
-bool TestGame::Update_Entity_Camera(std::vector<Entity*>& EntityContainer)
-{
-	for (int i = 0; i < EntityContainer.size(); ++i)
-	{
-		if (Entity_Camera* ent = dynamic_cast<Entity_Camera*>(EntityContainer[i]))
-		{
 
-		}
-		else
-		{
-			printf("dynamic_casting in TestGame::Update_Entity_Camera failed\n ");
-			return false;
-		}
-	}
-
-	return true;
-}
 
 
 

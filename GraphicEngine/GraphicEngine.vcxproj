@@ -175,7 +175,6 @@
     <ClInclude Include="ECS\ECSCore.h" />
     <ClInclude Include="ECS\ECSHeaders\EntityStructs.h" />
     <ClInclude Include="ECS\Entity\Entity.h" />
-    <ClInclude Include="ECS\Entity\EntityChilds\Entity_Camera.h" />
     <ClInclude Include="ECS\Entity\EntityChilds\LocalPlayer.h" />
     <ClInclude Include="ECS\Entity\EntityChilds\NormalEntity.h" />
     <ClInclude Include="ECS\Entity\EntityManager.h" />
@@ -232,7 +231,6 @@
     <ClCompile Include="ECS\Components\ModelData.cpp" />
     <ClCompile Include="ECS\ECSCore.cpp" />
     <ClCompile Include="ECS\Entity\Entity.cpp" />
-    <ClCompile Include="ECS\Entity\EntityChilds\Entity_Camera.cpp" />
     <ClCompile Include="ECS\Entity\EntityChilds\LocalPlayer.cpp" />
     <ClCompile Include="ECS\Entity\EntityChilds\NormalEntity.cpp" />
     <ClCompile Include="ECS\Entity\EntityManager.cpp" />
