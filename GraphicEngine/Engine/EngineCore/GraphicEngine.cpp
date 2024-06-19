@@ -139,7 +139,7 @@ void GraphicEngine::Run()
 
 		InputSystem::get()->update();
 		MessagePump();
-		
+
 		iApp->onBeginFrame();
 
 		while (!RenderFlag)
@@ -180,12 +180,20 @@ void GraphicEngine::onKeyDown(int key)
 
 void GraphicEngine::onKeyUp(int key)
 {
+	if (key == VK_ESCAPE)
+	{
+		if (!Set_Play_State())
+			throw NORMAL_EXCEPT("GraphicEngine::onKeyUp - Set_Play_State Failed");
+	}
+
 	iApp->onKeyUp(key);
 }
 
 void GraphicEngine::onMouseMove(const Point& mouse_pos)
 {
 	iApp->onMouseMove(mouse_pos);
+	if (play_state)
+		Fix_Cursor();
 }
 
 void GraphicEngine::onLeftMouseDown(const Point& mouse_pos)
@@ -206,4 +214,32 @@ void GraphicEngine::onRightMouseDown(const Point& mouse_pos)
 void GraphicEngine::onRightMouseUp(const Point& mouse_pos)
 {
 	iApp->onRightMouseUp(mouse_pos);
+}
+
+bool GraphicEngine::Set_Play_State()
+{
+	play_state = !play_state;
+
+	if (!play_state)
+	{
+		InputSystem::get()->showCursor(true);
+	}
+	else
+	{
+		InputSystem::get()->showCursor(false);
+	}
+
+	return true;
+}
+
+bool GraphicEngine::Fix_Cursor()
+{
+	//fix cursor in the middle of client window
+	int windowWidth = WindowGlobals::Get()->Get_WindowWidth();
+	int windowHeight = WindowGlobals::Get()->Get_WindowHeight();
+	Point pt = { windowWidth / 2, windowHeight / 2 };
+	ClientToScreen(Window::get()->getHwnd(), (LPPOINT)&pt);
+	InputSystem::get()->setCursorPosition(Point(pt.m_x, pt.m_y));
+
+	return true;
 }

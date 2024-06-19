@@ -202,11 +202,11 @@ void Camera::RotateCamera(const Point& mouse_pos)
 
 
 	//fix cursor in the middle of client window
-	int windowWidth = WindowGlobals::Get()->Get_WindowWidth();
+	/*int windowWidth = WindowGlobals::Get()->Get_WindowWidth();
 	int windowHeight = WindowGlobals::Get()->Get_WindowHeight();
 	Point pt = { windowWidth / 2, windowHeight / 2 };
 	ClientToScreen(Window::get()->getHwnd(), (LPPOINT)&pt);
-	InputSystem::get()->setCursorPosition(Point(pt.m_x, pt.m_y));
+	InputSystem::get()->setCursorPosition(Point(pt.m_x, pt.m_y));*/
 }
 
 void Camera::setTranslation(Vector3D new_pos)
@@ -248,19 +248,26 @@ void Camera::onKeyDown(int key)
 
 void Camera::onKeyUp(int key)
 {
+	if (key == VK_ESCAPE)
+	{
+		play_state = !play_state;
+	}
+
+
+
 	if (!getInputControl || !isProjecting) return;
 
 	pCamData->delta_translation_z = 0.0;
 	pCamData->delta_translation_x = 0.0;
 
-	if (key == VK_ESCAPE)
+	/*if (key == VK_ESCAPE)
 	{
 		play_state = !play_state;
 		if (play_state == false)
 			InputSystem::get()->showCursor(true);
 		else
 			InputSystem::get()->showCursor(false);
-	}
+	}*/
 
 	if (key == VK_SHIFT)
 	{

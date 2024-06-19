@@ -51,6 +51,10 @@ public:
 	virtual void onRightMouseUp(const Point& mouse_pos) override;
 
 private:
+	bool Set_Play_State();	//show hide cursor, fix cursor in the middle of screen - Toggle
+	bool Fix_Cursor();		//fix cursor in the middle of client window
+
+private:
 	Renderer* pRenderer = nullptr;
 	Window* pWindow = nullptr;
 	IApplication* iApp = nullptr;
@@ -63,4 +67,6 @@ private:
 private:
 	static GraphicEngine* pGraphicEngine;
 	bool RenderFlag = true;
+private:
+	bool play_state = true;
 };

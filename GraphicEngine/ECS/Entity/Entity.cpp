@@ -132,3 +132,8 @@ Scene* Entity::Get_Parent_Scene() const
 {
 	return pParentScene;
 }
+
+ModelData* Entity::Get_ModelData() const
+{
+	return pModelData;
+}

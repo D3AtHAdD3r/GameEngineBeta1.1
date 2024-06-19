@@ -336,6 +336,8 @@ bool ModelData::Update_Rotation_Direct(const Vector3D& newVal)
 	temp.setRotationZ(newVal.m_z);
 	World_Matrix *= temp;
 
+	World_Matrix.setTranslation(Current_Translation);
+
 	return true;
 }
 

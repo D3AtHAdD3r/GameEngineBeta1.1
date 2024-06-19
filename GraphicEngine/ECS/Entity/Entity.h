@@ -37,6 +37,7 @@ public:
 	const int& Get_Entity_uID() const;
 	const bool& Get_IsRenderable() const;
 	Scene* Get_Parent_Scene() const;
+	ModelData* Get_ModelData() const;
 public:
 	void setConstantBuffer(void* c_buffer);
 	void setConstantBuffer(constant* c_buffer);
