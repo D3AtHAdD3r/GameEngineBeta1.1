@@ -56,8 +56,8 @@ void Light::updatePosition(ModelPositionData* mp, Camera* cp)
 	temp.setRotationZ(mp->delta_rotation_z);
 	current_world_matrix *= temp;
 
-	Vector3D new_pos = m_world_matrix.getTranslation() + cp->getWorldMatrix().getZDirection() * (mp->delta_translation_z * move_speed);
-	new_pos = new_pos + cp->getWorldMatrix().getXDirection() * (mp->delta_translation_x * move_speed);
+	Vector3D new_pos = m_world_matrix.getTranslation() + cp->Get_World_Matirx().getZDirection() * (mp->delta_translation_z * move_speed);
+	new_pos = new_pos + cp->Get_World_Matirx().getXDirection() * (mp->delta_translation_x * move_speed);
 
 	current_world_matrix.setTranslation(new_pos);
 	m_world_matrix = current_world_matrix;

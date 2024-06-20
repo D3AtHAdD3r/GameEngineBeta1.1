@@ -1,187 +1,118 @@
 #include "Camera.h"
-#include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
+//#include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 #include<GraphicEngine/InputHandling/InputSystem.h>
 #include<GraphicEngine/Window/Window.h>
 #include<GraphicEngine/Window/WindowGlobals.h>
 #include<GraphicEngine/Utilities/Math/MathUtils.h>
 #include<GraphicEngine/Utilities/ErrorChecking/CustomException.h>
+#include<GraphicEngine/ECS/Components/ModelData.h>
+#include<GraphicEngine/ECS/Entity/Entity.h>
 
 
-Camera::Camera(CameraInitData* camData)
-	:
-	getInputControl(camData->get_Input),
-	isTPC(camData->isTPC),
-	uid(camData->u_id),
-	isProjecting(camData->isprojecting)
+Camera::Camera(CameraInitData* camInitData)
 {
+	if (!camInitData)
+		throw NORMAL_EXCEPT("Camera constructor failed. Invalid Input");
 
-	if (camData->u_id < 0)
-		throw NORMAL_EXCEPT("Camera Constructor failed. Invalid input.");
+	if (camInitData->fov <= 0 || camInitData->aspect_ratio <= 0 || camInitData->zNear <= 0 || camInitData->zFar <= 0 || camInitData->uID < 0)
+		throw NORMAL_EXCEPT("Camera constructor failed. Invalid Input");
 
+	Set_DataMembers_On_Init(camInitData);
 
-	pCamData = new CameraTranslationData();
-
-	//set world matrix
-	Matrix4x4 temp;
-	temp.setIdentity();
-
-	m_world_matrix.setIdentity();
-	m_world_matrix.setTranslation(m_world_pos_camera);
-
-	//set view matrix
-	temp = m_world_matrix;
-	temp.inverse();
-	m_view_matrix = temp;
-
-	//set projection matrix
-	float width = (float)(WindowGlobals::Get()->Get_WindowWidth());
-	float height = (float)(WindowGlobals::Get()->Get_WindowHeight());
-	float aspectRatio = width / height;
-
-	Projection_Matrix.setPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
-	
 	InputSystem::get()->addListener(this);
 	Window::get()->addListner(this);
-
-	if (isTPC)
-		CreateTPC(Vector3D());
 }
 
 Camera::~Camera()
 {
-	//delete dt;
-	delete pCamData;
 }
 
 
-Matrix4x4 Camera::getWorldMatrix()
+const Vector3D& Camera::Get_Current_World_Pos() const
 {
-    return m_world_matrix;
+	return Current_Translation;
 }
 
-Matrix4x4 Camera::getViewMatrix()
+const Vector3D& Camera::Get_Previous_World_pos() const
 {
-	return m_view_matrix;
+	return Previous_Translation;
 }
 
-Vector3D Camera::getCamWorldPos()
+const Vector3D& Camera::Get_Current_Rotation() const
 {
-	return m_world_pos_camera;
+	return Current_Rotation;
 }
 
-CameraTranslationData* Camera::getCamTranslationData()
+const Vector3D& Camera::Get_Previous_Rotation() const
 {
-	return pCamData;
+	return Previous_Rotation;
 }
 
-Matrix4x4 Camera::Get_Projection_Matrix()
+const Matrix4x4& Camera::Get_ViewMatrix() const
 {
-	//set projection matrix
-	float width = (float)(WindowGlobals::Get()->Get_WindowWidth());
-	float height = (float)(WindowGlobals::Get()->Get_WindowHeight());
-	float aspectRatio = width / height;
-
-	Projection_Matrix.setPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
-
-	return Projection_Matrix;
+	return ViewMatrix;
 }
 
-const int& Camera::Get_UID() const
+const Matrix4x4& Camera::Get_ProjectionMatrix() const
 {
-	return uid;
+	return ProjectionMatrix;
 }
 
-void Camera::updateCamera()
+const Matrix4x4& Camera::Get_World_Matirx() const
 {
-	updatePositionSmooth();
-	//updatePosition();
+	return World_Matrix;
 }
 
-void Camera::updateCamera(CameraTranslationData* p_CamData)
+const int& Camera::Get_uID() const
 {
-	if (!p_CamData)
-		throw NORMAL_EXCEPT("Camera::updateCamera, p_CamData is nullptr");
-
-	memcpy(pCamData, p_CamData, sizeof(CameraTranslationData));
-	updatePosition();
+	return uID;
 }
 
-void Camera::updatePosition()
+
+
+void Camera::Set_DataMembers_On_Init(CameraInitData* camInitData)
 {
-	/*if (!first_time_rotate_camera)
-		delta_time = dt->GetDeltaTime();*/
+	uID = camInitData->uID;
+	fov = camInitData->fov;
+	aspect_ratio = camInitData->aspect_ratio;
+	zNear = camInitData->zNear;
+	zFar = camInitData->zFar;
+	Current_Translation = camInitData->world_pos;
+	GetInput = camInitData->GetInput;
+	isProjecting = camInitData->isProjecting;
+	SmoothRotaion = camInitData->SmoothRotation;
+	SmoothTranslation = camInitData->SmoothTranslation;
+	move_speed = camInitData->move_speed;
 
-	Matrix4x4 temp;
-	Matrix4x4 current_world_matrix;
-	temp.setIdentity();
-	current_world_matrix.setIdentity();
+	World_Matrix.setIdentity();
+	World_Matrix.setTranslation(Current_Translation);
 
-	//temp.setScale(Vector3D(mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z));
-	//current_world_matrix *= temp;
+	Matrix4x4 temp = World_Matrix;
+	temp.inverse();
+	ViewMatrix = temp;
 
-	temp.setIdentity();
-	temp.setRotationX(pCamData->delta_rotation_x);
-	current_world_matrix *= temp;
-
-	temp.setIdentity();
-	temp.setRotationY(pCamData->delta_rotation_y);
-	current_world_matrix *= temp;
-
-	/*temp.setIdentity();
-	temp.setRotationZ(mp.delta_rotation_z);
-	current_world_matrix *= temp;*/
-
-	Vector3D new_pos = m_world_matrix.getTranslation() + current_world_matrix.getZDirection() * (pCamData->delta_translation_z * move_speed);
-	new_pos = new_pos + current_world_matrix.getXDirection() * (pCamData->delta_translation_x * move_speed);
-
-	current_world_matrix.setTranslation(new_pos);
-	m_world_matrix = current_world_matrix;
-	m_world_pos_camera = new_pos;
-
-	current_world_matrix.inverse();
-	m_view_matrix = current_world_matrix;
+	ProjectionMatrix.setPerspectiveFovLH(fov, aspect_ratio, zNear, zFar);
 }
 
-void Camera::updatePositionSmooth()
+bool Camera::Set_CamData_From_Parent_Entity()
 {
-	Vector3D currentPos = m_world_pos_camera;
-	float delta_time = 1.0f / 60.0f;
+	if (!parentEntity_ModelData) return false;
 
-	Matrix4x4 temp;
-	Matrix4x4 current_world_matrix;
-	temp.setIdentity();
-	current_world_matrix.setIdentity();
+	CamData.delta_rotation_x = parentEntity_ModelData->mp.delta_rotation_x;
+	CamData.delta_rotation_y = parentEntity_ModelData->mp.delta_rotation_y;
+	CamData.delta_rotation_z = parentEntity_ModelData->mp.delta_rotation_z;
 
-	//------smooth rotation--------//
-	current_rotation.m_x = pCamData->delta_rotation_x;
-	current_rotation.m_y = pCamData->delta_rotation_y;
-	//current_rotation.m_z = pCamData->delta_rotation_z;
+	Vector3D translate;
+	translate.m_x = parentEntity_ModelData->Current_Translation.m_x + cam_attach_details.delta_offset_model_x;
+	translate.m_y = parentEntity_ModelData->Current_Translation.m_y + cam_attach_details.delta_offset_model_y;
+	translate.m_z = parentEntity_ModelData->Current_Translation.m_z + cam_attach_details.delta_offset_model_z;
 
-	Vector3D smooth_rotation = Vector3D::lerp(old_rotation, current_rotation, delta_time * 7.0f);
-	old_rotation = smooth_rotation;
-	//----------------------------//
+	if (!Update_Translation_Direct(translate)) return false;
 
-	temp.setIdentity();
-	temp.setRotationX(smooth_rotation.m_x);
-	current_world_matrix *= temp;
-
-	temp.setIdentity();
-	temp.setRotationY(smooth_rotation.m_y);
-	current_world_matrix *= temp;
-
-	Vector3D new_pos = m_world_pos_camera + current_world_matrix.getZDirection() * (pCamData->delta_translation_z * move_speed);
-	new_pos = new_pos + current_world_matrix.getXDirection() * (pCamData->delta_translation_x * move_speed);
-
-	current_world_matrix.setTranslation(new_pos);
-	m_world_matrix = current_world_matrix;
-	m_world_pos_camera = new_pos;
-
-	current_world_matrix.inverse();
-	m_view_matrix = current_world_matrix;
+	return true;
 }
 
-
-void Camera::RotateCamera(const Point& mouse_pos)
+bool Camera::Set_Camera_Rotations_From_Input(const Point& mouse_pos)
 {
 	Point pt_client = mouse_pos;
 	ScreenToClient(Window::get()->getHwnd(), (LPPOINT)&pt_client);
@@ -191,200 +122,216 @@ void Camera::RotateCamera(const Point& mouse_pos)
 
 	float temp_delta = 1.0f / 60.0f;
 
-	pCamData->delta_rotation_x += (pt_client.m_y - mouse_y_client_center) * temp_delta/*delta_time*/ * 0.1f;
-	pCamData->delta_rotation_y += (pt_client.m_x - mouse_x_client_center) * temp_delta/*delta_time*/ * 0.1f;
+	CamData.delta_rotation_x += (pt_client.m_y - mouse_y_client_center) * temp_delta/*delta_time*/ * 0.1f;
+	CamData.delta_rotation_y += (pt_client.m_x - mouse_x_client_center) * temp_delta/*delta_time*/ * 0.1f;
 
-	if (pCamData->delta_rotation_x >= 1.57f)
-		pCamData->delta_rotation_x = 1.57f;
-	else if (pCamData->delta_rotation_x <= -1.57f)
-		pCamData->delta_rotation_x = -1.57f;
+	if (CamData.delta_rotation_x >= 1.57f)
+		CamData.delta_rotation_x = 1.57f;
+	else if (CamData.delta_rotation_x <= -1.57f)
+		CamData.delta_rotation_x = -1.57f;
 
-
-
-	//fix cursor in the middle of client window
-	/*int windowWidth = WindowGlobals::Get()->Get_WindowWidth();
-	int windowHeight = WindowGlobals::Get()->Get_WindowHeight();
-	Point pt = { windowWidth / 2, windowHeight / 2 };
-	ClientToScreen(Window::get()->getHwnd(), (LPPOINT)&pt);
-	InputSystem::get()->setCursorPosition(Point(pt.m_x, pt.m_y));*/
+	return true;
 }
 
-void Camera::setTranslation(Vector3D new_pos)
+bool Camera::Attach(Entity* ent, CameraAttachDetails* CamDetails)
 {
-	m_world_pos_camera = new_pos;
-	m_world_matrix.setTranslation(new_pos);
+	if (!ent || !CamDetails) return false;
+
+	if (CamDetails->camType == CameraType::freeCam) return false;
+
+	parentEntity = ent;
+	parentEntity_ModelData = ent->Get_ModelData();
+	isAttached = true;
+	camType = CamDetails->camType;
+
+	cam_attach_details = *CamDetails;
+
+	return true;
 }
 
-
-void Camera::onKeyDown(int key)
+bool Camera::Detach()
 {
-	if (!getInputControl || !isProjecting) return;
+	if (camType == CameraType::freeCam || !parentEntity || !parentEntity_ModelData || !isAttached) return false;
 
-	if (key == 'W')
-	{
-		pCamData->delta_translation_z = 1.0;
-	}
+	parentEntity = nullptr;
+	parentEntity_ModelData = nullptr;
+	isAttached = false;
+	camType = CameraType::freeCam;
+	cam_attach_details = CameraAttachDetails();
 
-	if (key == 'S')
-	{
-		pCamData->delta_translation_z = -1.0;
-	}
-
-	if (key == 'A')
-	{
-		pCamData->delta_translation_x = -1.0;
-	}
-
-	if (key == 'D')
-	{
-		pCamData->delta_translation_x = 1.0;
-	}
-
-	if (key == VK_SHIFT)
-	{
-		turboMode = true;
-	}
+	return true;
 }
 
-void Camera::onKeyUp(int key)
+void Camera::ActivateCamera()
 {
-	if (key == VK_ESCAPE)
+	GetInput = true;
+	isProjecting = true;
+}
+
+void Camera::DeActivateCamera()
+{
+	GetInput = false;
+	isProjecting = false;
+}
+
+bool Camera::Update()
+{
+	if (isAttached)
 	{
-		play_state = !play_state;
+		if (!Set_CamData_From_Parent_Entity()) return false;
+
+		if (camType == CameraType::fpc)
+		{
+			if (!Update_fpc_Internal()) return false;
+		}
+		else if (camType == CameraType::tpc)
+		{
+			//....
+		}
 	}
-
-
-
-	if (!getInputControl || !isProjecting) return;
-
-	pCamData->delta_translation_z = 0.0;
-	pCamData->delta_translation_x = 0.0;
-
-	/*if (key == VK_ESCAPE)
+	else
 	{
-		play_state = !play_state;
-		if (play_state == false)
-			InputSystem::get()->showCursor(true);
+		if (SmoothRotaion || SmoothTranslation)
+		{
+			return Update_default_Smooth_Internal();
+		}
 		else
-			InputSystem::get()->showCursor(false);
-	}*/
-
-	if (key == VK_SHIFT)
-	{
-		turboMode = false;
-	}
-}
-
-void Camera::onMouseMove(const Point& mouse_pos)
-{
-	if (!getInputControl || !isProjecting) return;
-
-	if (!play_state)
-		return;
-
-	if (first_time_rotate_camera)
-	{
-		first_time_rotate_camera = false;
-		//return;
+		{
+			return Update_default_Internal();
+		}
 	}
 
 
-	RotateCamera(mouse_pos);
+	return true;
 }
 
-void Camera::onLeftMouseDown(const Point& mouse_pos)
+bool Camera::Update(CameraPositionData* cam_update_data)
 {
-	if (!getInputControl || !isProjecting) return;
+	if (!cam_update_data) return false;
+	CamData = *cam_update_data;
+
+	if (SmoothRotaion || SmoothTranslation)
+	{
+		return Update_default_Smooth_Internal();
+	}
+	else
+	{
+		return Update_default_Internal();
+	}
 }
 
-void Camera::onLeftMouseUp(const Point& mouse_pos)
+bool Camera::Update_Translation_Direct(const Vector3D& newVal)
 {
-	if (!getInputControl || !isProjecting) return;
+	Previous_Translation = Current_Translation;
+	Current_Translation = newVal;
+	World_Matrix.setTranslation(Current_Translation);
+
+	Matrix4x4 temp = World_Matrix;
+	temp.inverse();
+	ViewMatrix = temp;
+	return true;
 }
 
-void Camera::onRightMouseDown(const Point& mouse_pos)
+bool Camera::Update_Rotation_Direct(const Vector3D& newVal)
 {
-	if (!getInputControl || !isProjecting) return;
+	Matrix4x4 temp;
+	Matrix4x4 world_matrix;
+	temp.setIdentity();
+	world_matrix.setIdentity();
+
+
+	temp.setRotationX(newVal.m_x);
+	world_matrix *= temp;
+	
+
+	temp.setIdentity();
+	temp.setRotationY(newVal.m_y);
+	world_matrix *= temp;
+	
+
+	temp.setIdentity();
+	temp.setRotationZ(newVal.m_z);
+	world_matrix *= temp;
+	
+
+	world_matrix.setTranslation(World_Matrix.getTranslation());
+	World_Matrix = world_matrix;
+	ProjectionMatrix.setPerspectiveFovLH(fov, aspect_ratio, zNear, zFar);
+
+	
+	world_matrix.inverse();
+	ViewMatrix = temp;
+
+	CamData.delta_rotation_x = newVal.m_x;
+	CamData.delta_rotation_y = newVal.m_y;
+	CamData.delta_rotation_z = newVal.m_z;
+
+	return true;
 }
 
-void Camera::onRightMouseUp(const Point& mouse_pos)
+
+bool Camera::Update_default_Internal()
 {
-	if (!getInputControl || !isProjecting) return;
-}
-
-void Camera::onFocus()
-{
-	InputSystem::get()->addListener(this);
-
-}
-
-void Camera::onKillFocus()
-{
-	InputSystem::get()->removeListener(this);
-
-}
-
-void Camera::onSize()
-{
-}
-
-void Camera::CreateTPC(Vector3D player_pos, float cam_distance)
-{
-	isTPC = true;
-
-	this->player_position_world = player_pos;
-	this->cam_distance_player = cam_distance;
-	this->fix_cam_distance = cam_distance;
-	this->current_cam_distance = cam_distance;
-
 	Matrix4x4 temp;
 	Matrix4x4 current_world_matrix;
 	temp.setIdentity();
 	current_world_matrix.setIdentity();
 
 	temp.setIdentity();
-	temp.setRotationX(pCamData->delta_rotation_x);
+	temp.setRotationX(CamData.delta_rotation_x);
 	current_world_matrix *= temp;
 
 	temp.setIdentity();
-	temp.setRotationY(pCamData->delta_rotation_y);
+	temp.setRotationY(CamData.delta_rotation_y);
 	current_world_matrix *= temp;
 
-	m_world_pos_camera = player_position_world;
+	temp.setIdentity();
+	temp.setRotationZ(CamData.delta_rotation_z);
+	current_world_matrix *= temp;
 
-	Vector3D new_pos = m_world_pos_camera + current_world_matrix.getZDirection() * (-cam_distance_player);
-	//new_pos = new_pos + current_world_matrix.getXDirection() * (pCamData->delta_translation_x * move_speed);
+	//movement in relation to current camera's x,y,z direction
+	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
+	new_pos = new_pos + World_Matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
+	new_pos = new_pos + World_Matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
 
 	current_world_matrix.setTranslation(new_pos);
-	m_world_matrix = current_world_matrix;
-	m_world_pos_camera = new_pos;
+	World_Matrix = current_world_matrix;
 
 	current_world_matrix.inverse();
-	m_view_matrix = current_world_matrix;
+	ViewMatrix = current_world_matrix;
+
+	ProjectionMatrix.setPerspectiveFovLH(fov, aspect_ratio, zNear, zFar);
+
+	Previous_Rotation = Current_Rotation;
+	Previous_Translation = Current_Translation;
+
+	Current_Rotation = { CamData.delta_rotation_x, CamData.delta_rotation_y, CamData.delta_rotation_z };
+	Current_Translation = new_pos;
+
+	CamData.delta_translation_x = CamData.delta_translation_y = CamData.delta_translation_z = 0;
+	return true;
 }
 
-void Camera::updateTPC(Vector3D player_pos, float delta_time_lerp)
+bool Camera::Update_default_Smooth_Internal()
 {
-	/*if (!first_time_rotate_camera)
-		delta_time = dt->GetDeltaTime();*/
-
-	delta_time = 1.0f / 60.0f;
-
-	this->player_position_world = player_pos;
-
 	Matrix4x4 temp;
 	Matrix4x4 current_world_matrix;
 	temp.setIdentity();
 	current_world_matrix.setIdentity();
 
-	//------smooth rotation--------//
-	current_rotation.m_x = pCamData->delta_rotation_x;
-	current_rotation.m_y = pCamData->delta_rotation_y;
-	current_rotation.m_z = pCamData->delta_rotation_z;
+	Vector3D smooth_rotation;
 
-	Vector3D smooth_rotation = Vector3D::lerp(old_rotation, current_rotation, delta_time_lerp * 4.0f);
-	old_rotation = smooth_rotation;
-	//-----------------------------//
+	if (SmoothRotaion)
+	{
+		Current_Rotation = { CamData.delta_rotation_x, CamData.delta_rotation_y, CamData.delta_rotation_z };
+		smooth_rotation = Vector3D::lerp(Previous_Rotation, Current_Rotation, CamData.delta_time * CamData.smooth_rotation_Variable);
+		Previous_Rotation = smooth_rotation;
+	}
+	else
+	{
+		Previous_Rotation = Current_Rotation;
+		smooth_rotation = Current_Rotation = { CamData.delta_rotation_x, CamData.delta_rotation_y , CamData.delta_rotation_z };
+	}
 
 	temp.setIdentity();
 	temp.setRotationX(smooth_rotation.m_x);
@@ -394,88 +341,196 @@ void Camera::updateTPC(Vector3D player_pos, float delta_time_lerp)
 	temp.setRotationY(smooth_rotation.m_y);
 	current_world_matrix *= temp;
 
-	if (pCamData->delta_translation_z)
-	{
-		if (pCamData->delta_translation_z > 0)
-		{
-			if (turboMode)
-			{
-				cam_distance_player = fix_cam_distance + 15;
-				MovingForward = true;
-				MovingturboMode = true;
-				MovingBackward = false;
-			}
-			else
-			{
-				cam_distance_player = fix_cam_distance + 10;
-				MovingForward = true;
-				MovingturboMode = false;
-				MovingBackward = false;
-			}
+	temp.setIdentity();
+	temp.setRotationZ(smooth_rotation.m_z);
+	current_world_matrix *= temp;
 
-		}
-		else if (pCamData->delta_translation_z < 0)
-		{
-			cam_distance_player = fix_cam_distance - 4;
-			MovingForward = false;
-			MovingturboMode = false;
-			MovingBackward = true;
-		}
+	//movement in relation to current entity's x,y,z direction
+	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
+	new_pos = new_pos + World_Matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
+	new_pos = new_pos + World_Matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
+
+	if (SmoothTranslation)
+	{
+		Vector3D world_pos_new;
+		world_pos_new = Vector3D::lerp(Current_Translation, new_pos, CamData.delta_time * CamData.smooth_translation_variable);
+		current_world_matrix.setTranslation(world_pos_new);
+		World_Matrix = current_world_matrix;
+		Previous_Translation = Current_Translation;
+		Current_Translation = world_pos_new;
 	}
 	else
 	{
-		cam_distance_player = fix_cam_distance;
-		MovingForward = false;
-		MovingturboMode = false;
-		MovingBackward = false;
+		current_world_matrix.setTranslation(new_pos);
+		World_Matrix = current_world_matrix;
+		Previous_Translation = Current_Translation;
+		Current_Translation = new_pos;
 	}
 
-	current_cam_distance = lerp(current_cam_distance, cam_distance_player, delta_time);
+	current_world_matrix.inverse();
+	ViewMatrix = current_world_matrix;
+	ProjectionMatrix.setPerspectiveFovLH(fov, aspect_ratio, zNear, zFar);
 
-	Vector3D new_pos = player_position_world + current_world_matrix.getZDirection() * (-current_cam_distance);
-	new_pos = new_pos + current_world_matrix.getYDirection() * (4.0);
+	CamData.delta_translation_x = CamData.delta_translation_y = CamData.delta_translation_z = 0;
+	return true;
+}
 
-	//----smooth movement---//
-	/*m_world_pos_new = Vector3D::lerp(m_world_pos_camera, new_pos, delta_time_lerp * 18.0f);
-	current_world_matrix.setTranslation(m_world_pos_new);
-	m_world_matrix = current_world_matrix;
-	m_world_pos_camera = m_world_pos_new;*/
-	//----------------------//
+bool Camera::Update_fpc_Internal()
+{
+	Matrix4x4 temp;
+	Matrix4x4 current_world_matrix;
+	temp.setIdentity();
+	current_world_matrix.setIdentity();
+
+	temp.setIdentity();
+	temp.setRotationX(CamData.delta_rotation_x);
+	current_world_matrix *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(CamData.delta_rotation_y);
+	current_world_matrix *= temp;
+
+	temp.setIdentity();
+	temp.setRotationZ(CamData.delta_rotation_z);
+	current_world_matrix *= temp;
+
+	//movement in relation to current camera's x,y,z direction
+	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
+	new_pos = new_pos + World_Matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
+	new_pos = new_pos + World_Matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
 
 	current_world_matrix.setTranslation(new_pos);
-	m_world_matrix = current_world_matrix;
-	m_world_pos_camera = new_pos;
+	World_Matrix = current_world_matrix;
 
 	current_world_matrix.inverse();
-	m_view_matrix = current_world_matrix;
+	ViewMatrix = current_world_matrix;
+
+	ProjectionMatrix.setPerspectiveFovLH(fov, aspect_ratio, zNear, zFar);
+
+	Previous_Rotation = Current_Rotation;
+	Previous_Translation = Current_Translation;
+
+	Current_Rotation = { CamData.delta_rotation_x, CamData.delta_rotation_y, CamData.delta_rotation_z };
+	Current_Translation = new_pos;
+
+	CamData.delta_translation_x = CamData.delta_translation_y = CamData.delta_translation_z = 0;
+	return true;
 }
 
-bool Camera::isTPP()
+void Camera::Set_isProjecting(bool flag)
 {
-	return isTPC;
+	isProjecting = flag;
 }
 
-void Camera::set_cam_distance(float distance)
+void Camera::Set_GetInput(bool flag)
 {
-	fix_cam_distance = distance;
+	GetInput = flag;
 }
 
-bool Camera::isturboMode()
+void Camera::Set_Camera_Internals(float fov, float aspect_ratio, float zNear, float zFar)
 {
-	return turboMode;
+	this->fov = fov;
+	this->aspect_ratio = aspect_ratio;
+	this->zNear = zNear;
+	this->zFar = zFar;
 }
 
-bool Camera::isMovingForward()
+void Camera::Set_Smooth_Movements(bool smooth_rotaion, bool smooth_translation)
 {
-	return MovingForward;
+	this->SmoothRotaion = smooth_rotaion;
+	this->SmoothTranslation = smooth_translation;
 }
 
-bool Camera::isMovingBackward()
+void Camera::onKeyDown(int key)
 {
-	return MovingBackward;
+	if (!GetInput) return;
+
+	if (!isAttached)
+	{
+		if (key == 'W')
+		{
+			CamData.delta_translation_z = 1.0;
+		}
+
+		if (key == 'S')
+		{
+			CamData.delta_translation_z = -1.0;
+		}
+
+		if (key == 'A')
+		{
+			CamData.delta_translation_x = -1.0;
+		}
+
+		if (key == 'D')
+		{
+			CamData.delta_translation_x = 1.0;
+		}
+	}
+
 }
 
-bool Camera::isMovingturboMode()
+void Camera::onKeyUp(int key)
 {
-	return MovingturboMode;
+	if (key == VK_ESCAPE)
+		play_state = !play_state;
+
+	if (!GetInput) return;
+
+	if (!isAttached)
+	{
+		CamData.delta_translation_x = 0;
+		CamData.delta_translation_y = 0;
+		CamData.delta_translation_z = 0;
+	}
+
 }
+
+void Camera::onMouseMove(const Point& mouse_pos)
+{
+	if (!GetInput) return;
+	if (!play_state) return;
+
+	Set_Camera_Rotations_From_Input(mouse_pos);
+}
+
+void Camera::onLeftMouseDown(const Point& mouse_pos)
+{
+	if (!GetInput) return;
+}
+
+void Camera::onLeftMouseUp(const Point& mouse_pos)
+{
+	if (!GetInput) return;
+}
+
+void Camera::onRightMouseDown(const Point& mouse_pos)
+{
+	if (!GetInput) return;
+}
+
+void Camera::onRightMouseUp(const Point& mouse_pos)
+{
+	if (!GetInput) return;
+}
+
+void Camera::onFocus()
+{
+}
+
+void Camera::onKillFocus()
+{
+}
+
+void Camera::onSize()
+{
+}
+
+
+
+
+
+
+
+
+

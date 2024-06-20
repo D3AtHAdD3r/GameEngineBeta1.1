@@ -27,7 +27,7 @@ void TestGame::onInit()
 	if (SceneContainer.empty())
 		printf("Scene container is empty\n");
 
-	UpdateEntitiesOnInit(SceneContainer);
+	UpdateOnInit(SceneContainer);
 }
 
 void TestGame::onBeginFrame()
@@ -73,6 +73,12 @@ void TestGame::onKeyUp(int key)
 		{
 			SceneContainer[0]->Activate_Camera(0);
 		}
+	}
+
+	if (key == VK_INSERT)
+	{
+		AttachCameraFlag = !AttachCameraFlag;
+		Insert_Key_Pressed = true;
 	}
 }
 
@@ -126,18 +132,33 @@ bool TestGame::Create_Scene_And_Entity()
 	sd.clearRenderTargetView = true;
 	sd.useDepthStencil = true;
 	sd.clearDepthStencil = true;
+
+
+	float fov = 0.785398f;
+	float zNear = 0.1f;
+	float zFar = 5000.0f;
+	float aspectRatio = 1024.0f / 768.0f;
 	
 	CameraInitData cd;
-	cd.get_Input = true;
-	cd.isTPC = false;
-	cd.isprojecting = true;
-	cd.u_id = 0;
-
+	cd.GetInput = true;
+	cd.isProjecting = true;
+	cd.uID = 0;
+	cd.fov = fov;
+	cd.zNear = zNear;
+	cd.zFar = zFar;
+	cd.aspect_ratio = aspectRatio;
+	/*cd.SmoothRotation = true;
+	cd.SmoothTranslation = true;*/
+	
 	CameraInitData cd1;
-	cd1.get_Input = false;
-	cd1.isTPC = false;
-	cd1.isprojecting = false;
-	cd1.u_id = 1;
+	cd1.GetInput = false;
+	cd1.isProjecting = false;
+	cd1.uID = 1;
+	cd1.fov = fov;
+	cd1.zNear = zNear;
+	cd1.zFar = zFar;
+	cd1.aspect_ratio = aspectRatio;
+	cd1.world_pos = { 0,0,40.0f };
 
 	sd.camData.push_back(&cd);
 	sd.camData.push_back(&cd1);
@@ -168,8 +189,13 @@ bool TestGame::Create_Scene_And_Entity()
 	ed.primitive_name = L"asteroid";
 	ed.primitive_uid = 0;
 	ed.Scene_Id = 0;
-
 	ed_list.push_back(&ed);
+
+
+	EntityDesc ed2 = ed;
+	ed2.primitive_uid = 1;
+	ed2.model_initialPosition = { 0,0,80.0f };
+	ed_list.push_back(&ed2);
 
 	if (!CreateSceneAndEntity(sd_list, ed_list))
 	{
@@ -179,92 +205,6 @@ bool TestGame::Create_Scene_And_Entity()
 	return true;
 }
 
-bool TestGame::Update()
-{
-	if (SceneContainer.empty()) return false;
-
-	for (auto& [uid, currentScene] : SceneContainer)
-	{
-		//update all of them
-		for (auto& [uid, camera] : currentScene->Get_Camera_Container())
-		{
-			camera->updateCamera();
-		}
-
-		for (auto& [TypeIndex, EntityContainer] : currentScene->GetEntityContainer())
-		{
-			std::vector<Entity*> CurrentEntContainer = EntityContainer;
-
-			if (TypeIndex == typeid(NormalEntity))
-			{
-				if (!Update_NormalEntity(CurrentEntContainer, currentScene)) return false;
-			}
-			else if (TypeIndex == typeid(LocalPlayer))
-			{
-				if (!Update_LocalPlayer(CurrentEntContainer, currentScene)) return false;
-			}
-			
-		}
-
-	}
-
-	return true;
-}
-
-bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene* currScene)
-{
-	for (int i = 0; i < EntityContainer.size(); ++i)
-	{
-		if (NormalEntity* currentEntity = dynamic_cast<NormalEntity*>(EntityContainer[i]))
-		{
-			if (currentEntity->Get_Entity_uID() == 0)
-			{
-				ModelPositionData mp;
-				Vector3D currRotation = (currentEntity)->Get_Rotation();
-				mp.delta_rotation_x = currRotation.m_x;
-				mp.delta_rotation_y = currRotation.m_y;
-				mp.delta_rotation_z = currRotation.m_z;
-
-				mp.SmoothRotation = false;
-
-				currRotation.m_x += 0.01f * 0.5f;
-				currRotation.m_y += 0.01f * 0.5f;
-				currRotation.m_z += 0.01f * 0.5f;
-
-				currentEntity->Set_Rotaion(currRotation.m_x, currRotation.m_y, currRotation.m_z);
-
-				//----------------------------------//
-
-				/*if (val_translation < 300)
-				{
-					mp.delta_translation_z = 1;
-				}
-				else
-				{
-					mp.delta_translation_z = -1;
-				}
-
-				if (val_translation == 600)
-					val_translation = 0;
-
-				val_translation++;
-
-				mp.SmoothMovement = true;*/
-
-				currentEntity->UpdatePosition(&mp);
-				//Matrix4x4 camWorldMatrix = currScene->getActiveCamera()->getWorldMatrix();
-				//currentEntity->UpdatepositionRelative(&mp, &camWorldMatrix);
-			}
-		}
-		else
-		{
-			printf("dynamic_casting in TestGame::UpdateNORMALENTITY failed\n ");
-			return false;
-		}
-	}
-
-	return true;
-}
 
 bool TestGame::Update_LocalPlayer(std::vector<Entity*>& EntityContainer, Scene* currScene)
 {
@@ -285,23 +225,125 @@ bool TestGame::Update_LocalPlayer(std::vector<Entity*>& EntityContainer, Scene* 
 }
 
 
-
-
-
-
-bool TestGame::UpdateEntitiesOnInit(std::unordered_map<unsigned short, Scene*>& SceneContainer)
+bool TestGame::UpdateOnInit(std::unordered_map<unsigned short, Scene*>& SceneContainer)
 {
 	for (auto& [uid, scene] : SceneContainer)
 	{
+		//Rotate Second Camera 180 degrees
 		for (auto& [uid, camera] : scene->Get_Camera_Container())
 		{
 			if (uid == 1)
 			{
-				CameraTranslationData cd;
-				cd.delta_rotation_y = 3.14159f;
-				camera->updateCamera(&cd);
-				camera->setTranslation({ 0, 0, 40.0f });
+			
+				Vector3D rot = { 0.0f,3.14159f, 0.0f };
+				CameraPositionData cd;
+				cd.delta_rotation_y = rot.m_y;
+
+				//if (!camera->Update(&cd)) return false;
+				if (!camera->Update_Rotation_Direct(rot)) return false;
 			}
+		}
+	}
+
+	return true;
+}
+
+
+
+bool TestGame::AttachCamera(int Entiy_uID, int Camera_uID, Scene* pScene)
+{
+	CameraAttachDetails cd;
+	cd.camType = CameraType::fpc;
+	cd.delta_offset_model_z = 3.0f;
+
+	if (pScene->Attach_Camera(Entiy_uID, Camera_uID, &cd)) return false;
+
+	return true;
+}
+
+bool TestGame::Update()
+{
+	if (SceneContainer.empty()) return false;
+
+	for (auto& [uid, currentScene] : SceneContainer)
+	{
+		//update all cameras
+		for (auto& [uid, camera] : currentScene->Get_Camera_Container())
+		{
+			camera->Update();
+		}
+
+
+		for (auto& [TypeIndex, EntityContainer] : currentScene->GetEntityContainer())
+		{
+			std::vector<Entity*> CurrentEntContainer = EntityContainer;
+
+			if (TypeIndex == typeid(NormalEntity))
+			{
+				if (!Update_NormalEntity(CurrentEntContainer, currentScene)) return false;
+			}
+			else if (TypeIndex == typeid(LocalPlayer))
+			{
+				if (!Update_LocalPlayer(CurrentEntContainer, currentScene)) return false;
+			}
+
+		}
+
+		if (Insert_Key_Pressed)
+		{
+			if (AttachCameraFlag)
+			{
+				if (currentScene->Get_Scene_uID() == 0)
+				{
+					if (!AttachCamera(0, currentScene->getActiveCamera()->Get_uID(), currentScene)) return false;
+				}
+			}
+			else
+			{
+				if (currentScene->Get_Scene_uID() == 0)
+				{
+					if (!currentScene->Detach_Camera(currentScene->getActiveCamera()->Get_uID())) return false;
+				}
+			}
+
+			Insert_Key_Pressed = false;
+		}
+
+
+	}
+
+	return true;
+}
+
+
+bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene* currScene)
+{
+	for (int i = 0; i < EntityContainer.size(); ++i)
+	{
+		if (NormalEntity* currentEntity = dynamic_cast<NormalEntity*>(EntityContainer[i]))
+		{
+			if (currentEntity->Get_Entity_uID() == 0)
+			{
+				ModelPositionData mp;
+				/*Vector3D currRotation = (currentEntity)->Get_Rotation();
+				mp.delta_rotation_x = currRotation.m_x;
+				mp.delta_rotation_y = currRotation.m_y;
+				mp.delta_rotation_z = currRotation.m_z;
+
+				mp.SmoothRotation = false;
+
+				currRotation.m_x += 0.01f * 0.5f;
+				currRotation.m_y += 0.01f * 0.5f;
+				currRotation.m_z += 0.01f * 0.5f;
+
+				currentEntity->Set_Rotaion(currRotation.m_x, currRotation.m_y, currRotation.m_z);*/
+				//currentEntity->UpdatePosition(&mp);
+			}
+		}
+		else
+		{
+			printf("dynamic_casting in TestGame::UpdateNORMALENTITY failed\n ");
+			return false;
 		}
 	}
 

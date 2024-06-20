@@ -44,10 +44,10 @@ void RendererDX11::UpdateConstantBuffer(Entity* currEntity, Camera* pcam)
 	float height = (float)(WindowGlobals::Get()->Get_WindowHeight());
 	float aspectRatio = width / height;
 
-	cBuff.m_camera_position = pcam->getCamWorldPos();
+	cBuff.m_camera_position = pcam->Get_Current_World_Pos();
 	cBuff.m_world = currEntity->Get_Entity_WorldMatrix();
-	cBuff.m_view = pcam->getViewMatrix();
-	cBuff.m_proj = pcam->Get_Projection_Matrix();
+	cBuff.m_view = pcam->Get_ViewMatrix();
+	cBuff.m_proj = pcam->Get_ProjectionMatrix();
 	
 	//get from light component
 	cBuff.m_light_position = { 0,0,0,0 };

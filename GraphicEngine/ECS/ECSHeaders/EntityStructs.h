@@ -48,20 +48,57 @@ public:
 	float delta_scale_x = 1;
 	float delta_scale_y = 1;
 	float delta_scale_z = 1;
-public:
 
 public:
 	float delta_time = 1.0f / 60.0f;
 
 public:
-	bool SmoothRotation = false;
-	bool SmoothMovement = false;
+	bool SmoothRotation = false; //used when initializing model only, not on updates 
+	bool SmoothMovement = false; //used when initializing model only, not on updates 
 	float move_speed = 0.55f;
-	float lerp_Variable = 6.0f;
+	float lerp_Variable = 6.0f; //used in smooth rotaions
 	float smooth_translation_variable = 25.0f; //lol 
 };
 
-struct CameraTranslationData
+enum CameraType
+{
+	freeCam = 0,
+	fpc,
+	tpc,
+	unknownCam
+};
+
+
+struct CameraInitData
+{
+public:
+	int uID = -1;
+	float fov = 0;
+	float aspect_ratio = 0;
+	float zNear = 0;
+	float zFar = 0;
+	Vector3D world_pos;
+public:
+	bool GetInput = false;
+	bool isProjecting = false;
+	bool SmoothRotation = false;
+	bool SmoothTranslation = false;
+public:
+	float move_speed = 0.55f;
+};
+
+
+struct CameraAttachDetails
+{
+public:
+	CameraType camType = CameraType::freeCam;
+	//offset of camera from model world position
+	float delta_offset_model_x = 0;
+	float delta_offset_model_y = 0;
+	float delta_offset_model_z = 0;
+};
+
+struct CameraPositionData
 {
 public:
 	float delta_rotation_x = 0;
@@ -71,14 +108,13 @@ public:
 	float delta_translation_x = 0;
 	float delta_translation_y = 0;
 	float delta_translation_z = 0;
-public:
-	float delta_scale_x = 1;
-	float delta_scale_y = 1;
-	float delta_scale_z = 1;
-public:
-	float delta_time = 0;
-};
 
+public:
+	float delta_time = 1.0f / 60.0f;
+	float move_speed = 0.55f;
+	float smooth_rotation_Variable = 8.0f;
+	float smooth_translation_variable = 25.0f;
+};
 
 struct MeshCreationData
 {
@@ -91,13 +127,6 @@ struct MeshCreationData
 	std::wstring MeshName;
 };
 
-struct CameraInitData
-{
-	bool get_Input = false;
-	bool isTPC = false; 
-	int u_id = -1;
-	bool isprojecting = false;
-};
 
 struct EntityDesc
 {

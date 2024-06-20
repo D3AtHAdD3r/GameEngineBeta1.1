@@ -8,6 +8,7 @@
 class ModelData
 {
 	friend class Entity;
+	friend class Camera;
 public:
 	ModelData();
 	ModelData(ModelPositionData* mp_update, const Vector3D& model_pos_world);

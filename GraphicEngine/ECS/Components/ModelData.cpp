@@ -12,8 +12,14 @@ ModelData::ModelData(ModelPositionData* mp_update, const Vector3D& model_pos_wor
 	if (!mp_update)
 		throw NORMAL_EXCEPT("ModelData Constructor Failed. Invalid Input");
 	mp = *mp_update;
+
 	SetDataMembers();
-	Update_Translation_Direct(model_pos_world);
+
+	if (!Update_Translation_Direct(model_pos_world))
+		throw NORMAL_EXCEPT("ModelData Constructor Failed. Update_Translation_Direct() Failed");
+
+	if (!Update())
+		throw NORMAL_EXCEPT("ModelData Constructor Failed. Update Failed");
 }
 
 ModelData::~ModelData()

@@ -20,6 +20,7 @@ struct EntityDesc;
 class EntityManager;
 class Entity;
 struct CameraInitData;
+struct CameraAttachDetails;
 
 struct color_Scene
 {
@@ -53,6 +54,8 @@ public:
 	const bool& getclearDepthStencil() const;
 	const bool& getUseDepthStencil() const;
 	const bool& getdrawOnBackBuffer() const;
+	const int& Get_Scene_uID() const;
+public:
 	Camera* getActiveCamera();
 	Texture* GetSceneTexture();
 	const std::unordered_map<std::type_index, std::vector<Entity*>>& GetEntityContainer() const;
@@ -61,6 +64,12 @@ public:
 public:
 	Camera* Get_Camera_by_uID(int uid);
 	bool Activate_Camera(int uid);   // sets a camera to project, disables rest
+	bool Attach_Camera(int Entiy_uID, int Camera_uID, CameraAttachDetails* CamDetails);
+	bool Detach_Camera(int Camera_uID);
+	
+public:
+	Entity* Get_Entity(int Entiy_uID);
+	Camera* Get_Camera(int Camera_uID);
 
 private:
 	Entity* AddEntity(EntityDesc* pED);

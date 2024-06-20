@@ -6,6 +6,7 @@
 #include<GraphicEngine/ECS/Entity/EntityManager.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
 #include<GraphicEngine/ECS/Components/Camera.h>
+#include<GraphicEngine/ECS/Entity/Entity.h>
 
 
 Scene::Scene(D3D11Manager* p_D3DManager, ResourceManager* p_ResourceManager, Scene_descriptor* sd)
@@ -146,6 +147,11 @@ const bool& Scene::getdrawOnBackBuffer() const
 	return drawOnBackBuffer;
 }
 
+const int& Scene::Get_Scene_uID() const
+{
+	return scene_id;
+}
+
 Texture* Scene::GetSceneTexture()
 {
 	return scene_texture;
@@ -180,17 +186,73 @@ bool Scene::Activate_Camera(int uid)
 		{
 			if (u_id == uid)
 			{
-				Camera->isProjecting = true;
+				Camera->ActivateCamera();
 				pCameraActive = Camera;
 			}
 			else
-				Camera->isProjecting = false;
+				Camera->DeActivateCamera();
 		}
 
 		return true;
 	}
 
 	return false;
+}
+
+bool Scene::Attach_Camera(int Entiy_uID, int Camera_uID, CameraAttachDetails* CamDetails)
+{
+	if (!CamDetails) return false;
+
+	Entity* ent = Get_Entity(Entiy_uID);
+	if (!ent) return false;
+
+	Camera* cam = Get_Camera(Camera_uID);
+	if (!cam) return false;
+
+	if (cam->isAttached)
+	{
+		if (!cam->Detach()) return false;
+	}
+
+	if (!cam->Attach(ent, CamDetails)) return false;
+
+	return true;
+}
+
+bool Scene::Detach_Camera(int Camera_uID)
+{
+	Camera* cam = Get_Camera(Camera_uID);
+	if (!cam) return false;
+
+	cam->Detach();
+
+	return true;
+}
+
+
+
+Entity* Scene::Get_Entity(int Entiy_uID)
+{
+	std::unordered_map<std::type_index, std::vector<Entity*>>& EntityContainer = pEntityManager->EntityContainer;
+
+	for (auto& [type_index, currEntContainer] : EntityContainer)
+	{
+		for (auto& currEntity : currEntContainer)
+		{
+			if (currEntity->Get_Entity_uID() == Entiy_uID)
+				return currEntity;
+		}
+	}
+
+	return nullptr;
+}
+
+Camera* Scene::Get_Camera(int Camera_uID)
+{
+	if (CameraContainer.find(Camera_uID) != CameraContainer.end())
+		return CameraContainer[Camera_uID];
+	else
+		return nullptr;
 }
 
 Entity* Scene::AddEntity(EntityDesc* pED)
@@ -215,6 +277,6 @@ bool Scene::UpdateTextureOnResize(unsigned int width, unsigned int height)
 Camera* Scene::CreateCamera(CameraInitData* pCD)
 {
 	Camera* p_Cam = new Camera(pCD);
-	CameraContainer.emplace(p_Cam->uid, p_Cam);
+	CameraContainer.emplace(p_Cam->uID, p_Cam);
 	return p_Cam;
 }

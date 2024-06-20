@@ -37,6 +37,8 @@ Entity::Entity(Primitive* p_Primitive, EntityDesc* ent_desc)
 		throw NORMAL_EXCEPT("Entity contructor failed, Invalid Input - ENTITY_TYPE");
 	}
 	}
+
+	//pModelData->Update();
 }
 
 Entity::~Entity()

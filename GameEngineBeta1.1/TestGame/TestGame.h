@@ -33,8 +33,12 @@ public:
 	bool Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene* currScene);
 	bool Update_LocalPlayer(std::vector<Entity*>& EntityContainer, Scene* currScene);
 public:
-	bool UpdateEntitiesOnInit(std::unordered_map<unsigned short, Scene*>& SceneContainer);
+	bool UpdateOnInit(std::unordered_map<unsigned short, Scene*>& SceneContainer);
 
+public:
+	bool AttachCamera(int Entiy_uID, int Camera_uID, Scene* pScene);
+	bool AttachCameraFlag = false;
+	bool Insert_Key_Pressed = false;
 public:
 	bool changeCameraFlag = true;
 

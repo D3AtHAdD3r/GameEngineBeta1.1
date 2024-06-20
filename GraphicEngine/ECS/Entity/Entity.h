@@ -46,7 +46,7 @@ protected:
 	Scene* pParentScene = nullptr;
 	Primitive* pPrimitive = nullptr;
 	ModelData* pModelData = nullptr;
-	Camera* pCamera = nullptr;
+	//Camera* pCamera = nullptr;		//Not nedded yet
 	Light* pLight = nullptr;
 
 protected:

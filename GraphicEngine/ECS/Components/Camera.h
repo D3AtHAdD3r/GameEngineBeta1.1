@@ -1,6 +1,5 @@
 #pragma once
-#include<GraphicEngine/Utilities/Math/Matrix4x4.h>
-#include<GraphicEngine/Utilities/Math/Vector3D.h>
+#include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 #include<GraphicEngine/InputHandling/InputListener.h>
 #include<GraphicEngine/Window/WindowListener.h>
 
@@ -13,60 +12,97 @@
 
 class InputListener;
 class WindowListener;
-struct CameraTranslationData;
-struct CameraInitData;
+class Entity;
+class ModelData;
 
 class ATT_Camera Camera : public InputListener, public WindowListener
 {
 	friend class Entity;
 	friend class Scene;
 private:
-	Camera(CameraInitData* camData);
+	Camera(CameraInitData* camInitData);
 	~Camera();
 
 public:
-	 Matrix4x4 getWorldMatrix();
-	 Matrix4x4 getViewMatrix();
-	 Vector3D getCamWorldPos();
-	 CameraTranslationData* getCamTranslationData();
-	 Matrix4x4 Get_Projection_Matrix();
-	 const int& Get_UID() const;
+	//Getters
+	const Vector3D& Get_Current_World_Pos() const;
+	const Vector3D& Get_Previous_World_pos() const;
+	const Vector3D& Get_Current_Rotation() const;
+	const Vector3D& Get_Previous_Rotation() const;
+	const Matrix4x4& Get_ViewMatrix() const;
+	const Matrix4x4& Get_ProjectionMatrix() const;
+	const Matrix4x4& Get_World_Matirx() const;
+	const int& Get_uID() const;
+
+	//Setters
+	void Set_isProjecting(bool flag);
+	void Set_GetInput(bool flag);
+	void Set_Camera_Internals(float fov, float aspect_ratio, float zNear, float zFar);
+	void Set_Smooth_Movements(bool smooth_rotaion, bool smooth_translation);
+public:
+	bool Update();
+	bool Update(CameraPositionData* cam_update);
 
 public:
-	void CreateTPC(Vector3D player_pos, float cam_distance = 30.0f);
-	void updateTPC(Vector3D player_pos, float delta_time_lerp);
-	bool isTPP();
-	void set_cam_distance(float distance);
+	bool Update_Translation_Direct(const Vector3D& newVal);
+	bool Update_Rotation_Direct(const Vector3D& newVal); //not working properly, needs fixing
+
+private:
+	bool Update_default_Internal();
+	bool Update_default_Smooth_Internal();
+	bool Update_fpc_Internal();
+	//bool Update_tpc_Internal();
+	//bool Update_tpc_Smooth_Internal();
+private:
+	void Set_DataMembers_On_Init(CameraInitData* camInitData);
+	bool Set_CamData_From_Parent_Entity();
+	bool Set_Camera_Rotations_From_Input(const Point& mouse_pos);
+
+private:
+	bool Attach(Entity* ent, CameraAttachDetails* CamDetails);
+	bool Detach();
+	void ActivateCamera();
+	void DeActivateCamera();
+
+
+private:
+	bool GetInput = false;
+	bool isProjecting = false;
+	bool isAttached = false;
+private:
+	CameraType camType = CameraType::freeCam;
+private:
+	Entity* parentEntity = nullptr;
+	ModelData* parentEntity_ModelData = nullptr;
+	CameraPositionData CamData;
+	CameraAttachDetails cam_attach_details;
+private:
+	Vector3D Current_Translation;
+	Vector3D Previous_Translation;
+	Vector3D Current_Rotation;
+	Vector3D Previous_Rotation;
+	Matrix4x4 World_Matrix;
+	Matrix4x4 ViewMatrix;
+	Matrix4x4 ProjectionMatrix;
+private:
+	bool SmoothRotaion = false;
+	bool SmoothTranslation = false;
+	float move_speed = 0.55f;
+	float current_move_speed = 0;
+private:
+	float fov = 0;
+	float aspect_ratio = 0;
+	float zNear = 0;
+	float zFar = 0;
+private:
+	int uID = -1;
+
+private:
+	bool play_state = true; //if cam will take mouse input or not
+
 
 public:
-	void updateCamera();
-	void updateCamera(CameraTranslationData* p_CamData);
-	void setTranslation(Vector3D new_pos);
-
-private:
-	void updatePosition();
-	void updatePositionSmooth();
-
-	//currently called on InputListener callbacks
-	void RotateCamera(const Point& mouse_pos);
-
-private:
-	Vector3D m_world_pos_camera{ 0.0f, 0.0f, 0.0f };
-	Vector3D m_world_pos_new;
-	Matrix4x4 m_world_matrix;
-	Matrix4x4 m_view_matrix;
-	Matrix4x4 Projection_Matrix;
-	
-private:
-	float delta_rotate_seed_camera = 0.85f;
-	bool first_time_rotate_camera = true;
-	float move_speed = 0.25f;
-	float delta_time = 0;
-private:
-	CameraTranslationData* pCamData = nullptr;
-
-public:
-	// Inherited via InputListener
+	//Inherited functions via InputHandler
 	virtual void onKeyDown(int key) override;
 	virtual void onKeyUp(int key) override;
 
@@ -80,41 +116,4 @@ public:
 	virtual void onFocus() override;
 	virtual void onKillFocus() override;
 	virtual void onSize() override;
-
-private:
-	//ThirdPersonCamera
-	Vector3D player_position_world = { 0,0,0 };
-	float cam_distance_player = 0;
-	float current_cam_distance = 0;
-	float fix_cam_distance = 0;
-	bool isTPC = false;
-
-private:
-	Vector3D old_rotation;
-	Vector3D current_rotation;
-
-private:
-	bool play_state = true;
-	bool getInputControl = false;
-
-public:
-	bool isturboMode();
-	bool isMovingForward();
-	bool isMovingBackward();
-	bool isMovingturboMode();
-private:
-	//localplayer attributes
-	bool turboMode = false;
-	bool MovingForward = false;
-	bool MovingBackward = false;
-	bool MovingturboMode = false;
-
-public:
-	float fov = 0.785398f;
-	float zNear = 0.1f;
-	float zFar = 5000.0f;
-
-private:
-	int uid = -1;
-	bool isProjecting = false;
 };
