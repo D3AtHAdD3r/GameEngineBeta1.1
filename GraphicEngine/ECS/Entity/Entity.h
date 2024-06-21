@@ -1,7 +1,5 @@
 #pragma once
 #include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
-//#include<GraphicEngine/Utilities/Math/Matrix4x4.h>
-//#include<GraphicEngine/Utilities/Math/Vector3D.h>
 #include<string>
 
 #ifdef PROJ_EXPORT
@@ -42,6 +40,7 @@ public:
 	void setConstantBuffer(void* c_buffer);
 	void setConstantBuffer(constant* c_buffer);
 
+
 protected:
 	Scene* pParentScene = nullptr;
 	Primitive* pPrimitive = nullptr;
@@ -58,4 +57,21 @@ protected:
 protected:
 	int Entity_uid = -1;
 	std::wstring Entity_name;
+
+
+	
+public:
+	//----------------------------------------//
+	//----------Testing Stuff-----------------//
+	//----------------------------------------//
+	//for testing, like attaching camera to an entity
+	bool Attach(Entity* ent_parent, EntityAttachDetails* EntDetails);
+	bool Detach();
+	bool UpdateAttached();
+	bool isAttached = false;
+	Entity* parentEntity = nullptr;
+	ModelData* parentEntity_ModelData = nullptr;
+	EntityAttachDetails entity_Attach_Details;
+	//----------------------------------------//
+	//----------------------------------------//
 };

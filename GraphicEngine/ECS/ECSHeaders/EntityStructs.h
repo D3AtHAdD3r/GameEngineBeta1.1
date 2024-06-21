@@ -88,6 +88,14 @@ public:
 };
 
 
+struct EntityAttachDetails
+{
+	float delta_offset_model_x = 0;
+	float delta_offset_model_y = 0;
+	float delta_offset_model_z = 0;
+};
+
+
 struct CameraAttachDetails
 {
 public:

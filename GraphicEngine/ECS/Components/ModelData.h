@@ -3,9 +3,13 @@
 #include<GraphicEngine/Utilities/Math/Matrix4x4.h>
 #include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 
+#ifdef PROJ_EXPORT
+#define ATT_Model __declspec(dllexport)
+#else
+#define ATT_Model __declspec(dllimport)
+#endif
 
-
-class ModelData
+class ATT_Model ModelData
 {
 	friend class Entity;
 	friend class Camera;
@@ -15,12 +19,9 @@ public:
 	~ModelData();
 
 public:
-	const Vector3D& Get_Current_World_Pos() const;
-	const Vector3D& Get_Previous_World_pos() const;
-	const Vector3D& Get_Current_Rotation() const;
-	const Vector3D& Get_Previous_Rotation() const;
-	const Vector3D& Get_Current_Scaling() const;
-	const Vector3D& Get_Previous_Scaling() const;
+	const Vector3D& Get_World_Pos() const;
+	const Vector3D& Get_Rotation() const;
+	const Vector3D& Get_Scaling() const;
 	const Matrix4x4& Get_World_Matirx() const;
 	const ModelPositionData& Get_Model_Position_Data() const;
 
@@ -30,9 +31,9 @@ public:
 	bool Update_Relative(ModelPositionData* mp_update, Matrix4x4* ModelB_World_Matrix);
 
 public:
-	bool Update_Translation_Direct(const Vector3D& newVal);		//Update Translation Direct(no incremental)
-	bool Update_Rotation_Direct(const Vector3D& newVal);		//Only updates Rotation
-	bool Update_Scaling_Direct(const Vector3D& newVal);
+	bool Update_Translation_Absolute(const Vector3D& newVal);		//Update Translation Direct(no incremental)
+	bool Update_Rotation(const Vector3D& newVal);		//Only updates Rotation
+	bool Update_Scaling(const Vector3D& newVal); //needs fixing
 
 private:
 	bool Update_default_Internal();
@@ -46,12 +47,9 @@ private:
 private:
 	ModelPositionData mp;
 private:
-	Vector3D Current_Translation;
-	Vector3D Previous_Translation;
-	Vector3D Current_Rotation;
-	Vector3D Previous_Rotation;
-	Vector3D Current_Scaling{ 1.0f,1.0f,1.0f };
-	Vector3D Previous_Scaling;
+	Vector3D Translation;
+	Vector3D Rotation;
+	Vector3D Scaling{ 1.0f,1.0f,1.0f };
 	Matrix4x4 World_Matrix;
 private:
 	bool IsSmoothRotaion = false;

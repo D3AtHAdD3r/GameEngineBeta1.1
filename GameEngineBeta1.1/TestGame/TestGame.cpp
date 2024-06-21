@@ -5,6 +5,7 @@
 #include<GraphicEngine/ECS/Entity/Entity.h>
 #include<GraphicEngine/ECS/Entity/EntityChilds/NormalEntity.h>
 #include<GraphicEngine/ECS/Entity/EntityChilds/LocalPlayer.h>
+#include<GraphicEngine/ECS/Components/ModelData.h>
 #include<d3d11.h>
 
 TestGame::TestGame()
@@ -243,6 +244,38 @@ bool TestGame::UpdateOnInit(std::unordered_map<unsigned short, Scene*>& SceneCon
 				if (!camera->Update_Rotation_Direct(rot)) return false;
 			}
 		}
+
+		for (auto& [typeindex, entityContainer] : scene->GetEntityContainer())
+		{
+			Entity* Parent = nullptr;
+			for (auto& currEnt : entityContainer)
+			{
+				if (currEnt->Get_Entity_uID() == 0)
+				{
+					Parent = currEnt;
+
+					Vector3D scaling = { 2.0f, 2.0f, 2.0f };
+					currEnt->Get_ModelData()->Update_Scaling(scaling);
+				}
+					
+			}
+
+			for (auto& currEnt : entityContainer)
+			{
+				if (currEnt->Get_Entity_uID() == 1)
+				{
+					EntityAttachDetails ed;
+					ed.delta_offset_model_y = 8;
+					ed.delta_offset_model_z = 5;
+					if (!currEnt->Attach(Parent, &ed))
+						return false;
+
+					Vector3D scaling = { 0.5f, 0.5f,0.5f };
+					currEnt->Get_ModelData()->Update_Scaling(scaling);
+				}
+			}
+		}
+
 	}
 
 	return true;
@@ -254,9 +287,9 @@ bool TestGame::AttachCamera(int Entiy_uID, int Camera_uID, Scene* pScene)
 {
 	CameraAttachDetails cd;
 	cd.camType = CameraType::fpc;
-	cd.delta_offset_model_z = 3.0f;
+	cd.delta_offset_model_z = 1.0f;
 
-	if (pScene->Attach_Camera(Entiy_uID, Camera_uID, &cd)) return false;
+	if (!pScene->Attach_Camera(Entiy_uID, Camera_uID, &cd)) return false;
 
 	return true;
 }
@@ -308,8 +341,6 @@ bool TestGame::Update()
 
 			Insert_Key_Pressed = false;
 		}
-
-
 	}
 
 	return true;
@@ -324,20 +355,13 @@ bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene*
 		{
 			if (currentEntity->Get_Entity_uID() == 0)
 			{
-				ModelPositionData mp;
-				/*Vector3D currRotation = (currentEntity)->Get_Rotation();
-				mp.delta_rotation_x = currRotation.m_x;
-				mp.delta_rotation_y = currRotation.m_y;
-				mp.delta_rotation_z = currRotation.m_z;
-
-				mp.SmoothRotation = false;
-
-				currRotation.m_x += 0.01f * 0.5f;
-				currRotation.m_y += 0.01f * 0.5f;
-				currRotation.m_z += 0.01f * 0.5f;
-
-				currentEntity->Set_Rotaion(currRotation.m_x, currRotation.m_y, currRotation.m_z);*/
-				//currentEntity->UpdatePosition(&mp);
+				Vector3D current_Rotation = currentEntity->Get_ModelData()->Get_Rotation();
+				current_Rotation.m_y = current_Rotation.m_y + 0.01f * 0.5f;
+				if (!currentEntity->Get_ModelData()->Update_Rotation(current_Rotation)) return false;
+			}
+			if (currentEntity->Get_Entity_uID() == 1)
+			{
+				currentEntity->UpdateAttached();
 			}
 		}
 		else

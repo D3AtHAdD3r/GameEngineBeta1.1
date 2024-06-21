@@ -9,6 +9,7 @@ NormalEntity::~NormalEntity()
 {
 }
 
+
 bool NormalEntity::UpdatePosition(ModelPositionData* mp)
 {
 	 return pModelData->Update(mp);

@@ -103,9 +103,9 @@ bool Camera::Set_CamData_From_Parent_Entity()
 	CamData.delta_rotation_z = parentEntity_ModelData->mp.delta_rotation_z;
 
 	Vector3D translate;
-	translate.m_x = parentEntity_ModelData->Current_Translation.m_x + cam_attach_details.delta_offset_model_x;
-	translate.m_y = parentEntity_ModelData->Current_Translation.m_y + cam_attach_details.delta_offset_model_y;
-	translate.m_z = parentEntity_ModelData->Current_Translation.m_z + cam_attach_details.delta_offset_model_z;
+	translate.m_x = parentEntity_ModelData->Translation.m_x + cam_attach_details.delta_offset_model_x;
+	translate.m_y = parentEntity_ModelData->Translation.m_y + cam_attach_details.delta_offset_model_y;
+	translate.m_z = parentEntity_ModelData->Translation.m_z + cam_attach_details.delta_offset_model_z;
 
 	if (!Update_Translation_Direct(translate)) return false;
 
@@ -145,6 +145,26 @@ bool Camera::Attach(Entity* ent, CameraAttachDetails* CamDetails)
 	camType = CamDetails->camType;
 
 	cam_attach_details = *CamDetails;
+
+	if (camType == CameraType::fpc)
+	{
+		Vector3D newPos;
+		Vector3D EntPos = ent->Get_ModelData()->Translation;
+		Vector3D EntRot = ent->Get_ModelData()->Rotation;
+
+		//take care of scaling factor later on 
+		newPos.m_x = EntPos.m_x + cam_attach_details.delta_offset_model_x; // * scaling_x
+		newPos.m_y = EntPos.m_y + cam_attach_details.delta_offset_model_y;
+		newPos.m_z = EntPos.m_z + cam_attach_details.delta_offset_model_z;
+
+		CamData.delta_rotation_x = EntRot.m_x;
+		CamData.delta_rotation_y = EntRot.m_y;
+		CamData.delta_rotation_z = EntRot.m_z;
+
+		if (!Update_Rotation_Direct(EntRot)) return false;
+		if (!Update_Translation_Direct(newPos)) return false;
+	}
+
 
 	return true;
 }
@@ -226,7 +246,9 @@ bool Camera::Update_Translation_Direct(const Vector3D& newVal)
 	Current_Translation = newVal;
 	World_Matrix.setTranslation(Current_Translation);
 
-	Matrix4x4 temp = World_Matrix;
+	Matrix4x4 temp;
+	temp.setIdentity();
+	temp = World_Matrix;
 	temp.inverse();
 	ViewMatrix = temp;
 	return true;
@@ -377,6 +399,14 @@ bool Camera::Update_default_Smooth_Internal()
 
 bool Camera::Update_fpc_Internal()
 {
+	Vector3D currRot = parentEntity->Get_ModelData()->Rotation;
+	Vector3D currTranslate = parentEntity->Get_ModelData()->Translation;
+	CamData.delta_rotation_x = currRot.m_x;
+	CamData.delta_rotation_y = currRot.m_y;
+	CamData.delta_rotation_z = currRot.m_z;
+	World_Matrix.setTranslation(currTranslate);
+	
+
 	Matrix4x4 temp;
 	Matrix4x4 current_world_matrix;
 	temp.setIdentity();
@@ -394,10 +424,17 @@ bool Camera::Update_fpc_Internal()
 	temp.setRotationZ(CamData.delta_rotation_z);
 	current_world_matrix *= temp;
 
+
+
 	//movement in relation to current camera's x,y,z direction
-	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
+	/*Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
 	new_pos = new_pos + World_Matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
-	new_pos = new_pos + World_Matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
+	new_pos = new_pos + World_Matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);*/
+
+
+	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (cam_attach_details.delta_offset_model_z);
+	//new_pos = new_pos + World_Matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
+	//new_pos = new_pos + World_Matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
 
 	current_world_matrix.setTranslation(new_pos);
 	World_Matrix = current_world_matrix;

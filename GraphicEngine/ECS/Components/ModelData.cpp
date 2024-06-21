@@ -15,7 +15,7 @@ ModelData::ModelData(ModelPositionData* mp_update, const Vector3D& model_pos_wor
 
 	SetDataMembers();
 
-	if (!Update_Translation_Direct(model_pos_world))
+	if (!Update_Translation_Absolute(model_pos_world))
 		throw NORMAL_EXCEPT("ModelData Constructor Failed. Update_Translation_Direct() Failed");
 
 	if (!Update())
@@ -26,35 +26,24 @@ ModelData::~ModelData()
 {
 }
 
-const Vector3D& ModelData::Get_Current_World_Pos() const
+const Vector3D& ModelData::Get_World_Pos() const
 {
-	return Current_Translation;
+	return Translation;
 }
 
-const Vector3D& ModelData::Get_Previous_World_pos() const
+
+const Vector3D& ModelData::Get_Rotation() const
 {
-	return Previous_Translation;
+	return Rotation;
 }
 
-const Vector3D& ModelData::Get_Current_Rotation() const
+
+const Vector3D& ModelData::Get_Scaling() const
 {
-	return Current_Rotation;
+	return Scaling;
 }
 
-const Vector3D& ModelData::Get_Previous_Rotation() const
-{
-	return Previous_Rotation;
-}
 
-const Vector3D& ModelData::Get_Current_Scaling() const
-{
-	return Current_Scaling;
-}
-
-const Vector3D& ModelData::Get_Previous_Scaling() const
-{
-	return Previous_Scaling;
-}
 
 const Matrix4x4& ModelData::Get_World_Matirx() const
 {
@@ -119,7 +108,7 @@ bool ModelData::Update_default_Internal()
 	temp.setRotationZ(mp.delta_rotation_z);
 	current_world_matrix *= temp;
 
-	//movement in relation to current entity's x,y,z direction
+	//movement Relative to current entity's x,y,z direction
 	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (mp.delta_translation_z * mp.move_speed);
 	new_pos = new_pos + World_Matrix.getXDirection() * (mp.delta_translation_x * mp.move_speed);
 	new_pos = new_pos + World_Matrix.getYDirection() * (mp.delta_translation_y * mp.move_speed);
@@ -128,14 +117,9 @@ bool ModelData::Update_default_Internal()
 	World_Matrix = current_world_matrix;
 	//Current_Translation = new_pos;
 
-	//SetDataMembers
-	Previous_Scaling = Current_Scaling;
-	Previous_Rotation = Current_Rotation;
-	Previous_Translation = Current_Translation;
-
-	Current_Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
-	Current_Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
-	Current_Translation = new_pos;
+	Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
+	Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
+	Translation = new_pos;
 
 	mp.delta_translation_x = mp.delta_translation_y = mp.delta_translation_z = 0;
 	return true;
@@ -153,21 +137,20 @@ bool ModelData::Update_default_Smooth_Internal()
 	temp.setScale(Vector3D(mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z));
 	current_world_matrix *= temp;
 
-	Previous_Scaling = Current_Scaling;
-	Current_Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
+	Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
 
 	Vector3D smooth_rotation;
+	Vector3D previous_rotation = Rotation;
 
 	if (IsSmoothRotaion)
 	{
-		Current_Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
-		smooth_rotation = Vector3D::lerp(Previous_Rotation, Current_Rotation, mp.delta_time * mp.lerp_Variable);
-		Previous_Rotation = smooth_rotation;
+		Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
+		smooth_rotation = Vector3D::lerp(previous_rotation, Rotation, mp.delta_time * mp.lerp_Variable);
+		Rotation = smooth_rotation;
 	}
 	else
 	{
-		Previous_Rotation = Current_Rotation;
-		smooth_rotation = Current_Rotation = { mp.delta_rotation_x, mp.delta_rotation_y , mp.delta_rotation_z };
+		smooth_rotation = Rotation = { mp.delta_rotation_x, mp.delta_rotation_y , mp.delta_rotation_z };
 	}
 
 	temp.setIdentity();
@@ -191,18 +174,16 @@ bool ModelData::Update_default_Smooth_Internal()
 	if (IsSmoothMovement)
 	{
 		Vector3D world_pos_new;
-		world_pos_new = Vector3D::lerp(Current_Translation, new_pos, mp.delta_time * mp.smooth_translation_variable);
+		world_pos_new = Vector3D::lerp(Translation, new_pos, mp.delta_time * mp.smooth_translation_variable);
 		current_world_matrix.setTranslation(world_pos_new);
 		World_Matrix = current_world_matrix;
-		Previous_Translation = Current_Translation;
-		Current_Translation = world_pos_new;
+		Translation = world_pos_new;
 	}
 	else
 	{
 		current_world_matrix.setTranslation(new_pos);
 		World_Matrix = current_world_matrix;
-		Previous_Translation = Current_Translation;
-		Current_Translation = new_pos;
+		Translation = new_pos;
 	}
 
 	mp.delta_translation_x = mp.delta_translation_y = mp.delta_translation_z = 0;
@@ -240,14 +221,10 @@ bool ModelData::Update_Relative_Internal(Matrix4x4* ModelB_World_Matrix)
 	World_Matrix = current_world_matrix;
 	//Current_Translation = new_pos;
 
-	//SetDataMembers
-	Previous_Scaling = Current_Scaling;
-	Previous_Rotation = Current_Rotation;
-	Previous_Translation = Current_Translation;
-
-	Current_Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
-	Current_Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
-	Current_Translation = new_pos;
+	
+	Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
+	Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
+	Translation = new_pos;
 
 	mp.delta_translation_x = mp.delta_translation_y = mp.delta_translation_z = 0;
 	return true;
@@ -263,21 +240,20 @@ bool ModelData::Update_Relative_Smooth_Internal(Matrix4x4* ModelB_World_Matrix)
 	temp.setScale(Vector3D(mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z));
 	current_world_matrix *= temp;
 
-	Previous_Scaling = Current_Scaling;
-	Current_Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
+	Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
 
 	Vector3D smooth_rotation;
+	Vector3D previous_rotation = Rotation;
 
 	if (IsSmoothRotaion)
 	{
-		Current_Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
-		smooth_rotation = Vector3D::lerp(Previous_Rotation, Current_Rotation, mp.delta_time * mp.lerp_Variable);
-		Previous_Rotation = smooth_rotation;
+		Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
+		smooth_rotation = Vector3D::lerp(previous_rotation, Rotation, mp.delta_time * mp.lerp_Variable);
+		Rotation = smooth_rotation;
 	}
 	else
 	{
-		Previous_Rotation = Current_Rotation;
-		smooth_rotation = Current_Rotation = { mp.delta_rotation_x, mp.delta_rotation_y , mp.delta_rotation_z };
+		smooth_rotation = Rotation = { mp.delta_rotation_x, mp.delta_rotation_y , mp.delta_rotation_z };
 	}
 
 	temp.setIdentity();
@@ -301,58 +277,50 @@ bool ModelData::Update_Relative_Smooth_Internal(Matrix4x4* ModelB_World_Matrix)
 	if (IsSmoothMovement)
 	{
 		Vector3D world_pos_new;
-		world_pos_new = Vector3D::lerp(Current_Translation, new_pos, mp.delta_time * mp.smooth_translation_variable);
+		world_pos_new = Vector3D::lerp(Translation, new_pos, mp.delta_time * mp.smooth_translation_variable);
 		current_world_matrix.setTranslation(world_pos_new);
 		World_Matrix = current_world_matrix;
-		Previous_Translation = Current_Translation;
-		Current_Translation = world_pos_new;
+		Translation = world_pos_new;
 	}
 	else
 	{
 		current_world_matrix.setTranslation(new_pos);
 		World_Matrix = current_world_matrix;
-		Previous_Translation = Current_Translation;
-		Current_Translation = new_pos;
+		Translation = new_pos;
 	}
 
 	mp.delta_translation_x = mp.delta_translation_y = mp.delta_translation_z = 0;
 	return true;
 }
 
-bool ModelData::Update_Translation_Direct(const Vector3D& newVal)
+bool ModelData::Update_Translation_Absolute(const Vector3D& newVal)
 {
-	Previous_Translation = Current_Translation;
-	Current_Translation = newVal;
-	World_Matrix.setTranslation(Current_Translation);
-	return true;
-}
+	Translation = newVal;
+	World_Matrix.setTranslation(Translation);
 
-bool ModelData::Update_Rotation_Direct(const Vector3D& newVal)
-{
-	Matrix4x4 temp;
-	temp.setIdentity();
-	temp.setRotationX(newVal.m_x);
-	World_Matrix *= temp;
-
-	temp.setIdentity();
-	temp.setRotationY(newVal.m_y);
-	World_Matrix *= temp;
-
-	temp.setIdentity();
-	temp.setRotationZ(newVal.m_z);
-	World_Matrix *= temp;
-
-	World_Matrix.setTranslation(Current_Translation);
+	if (!Update()) return false;
 
 	return true;
 }
 
-bool ModelData::Update_Scaling_Direct(const Vector3D& newVal)
+bool ModelData::Update_Rotation(const Vector3D& newVal)
 {
-	Matrix4x4 temp;
-	temp.setIdentity();
-	temp.setScale(newVal);
-	World_Matrix *= temp;
+	mp.delta_rotation_x = newVal.m_x;
+	mp.delta_rotation_y = newVal.m_y;
+	mp.delta_rotation_z = newVal.m_z;
+
+	if (!Update()) return false;
+
+	return true;
+}
+
+bool ModelData::Update_Scaling(const Vector3D& newVal)
+{
+	mp.delta_scale_x = newVal.m_x;
+	mp.delta_scale_y = newVal.m_y;
+	mp.delta_scale_z = newVal.m_z;
+
+	if (!Update()) return false;
 
 	return true;
 }
@@ -361,13 +329,9 @@ bool ModelData::Update_Scaling_Direct(const Vector3D& newVal)
 
 void ModelData::SetDataMembers()
 {
-	Previous_Scaling = Current_Scaling;
-	Previous_Rotation = Current_Rotation;
-	Previous_Translation = Current_Translation;
-
-	Current_Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
-	Current_Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
-	Current_Translation = { mp.delta_translation_x, mp.delta_translation_y, mp.delta_translation_z };
+	Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
+	Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
+	Translation = { mp.delta_translation_x, mp.delta_translation_y, mp.delta_translation_z };
 
 	IsSmoothRotaion = mp.SmoothRotation;
 	IsSmoothMovement = mp.SmoothMovement;

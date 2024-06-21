@@ -22,6 +22,9 @@ public:
 	Vector3D Get_Rotation();
 
 private:
+
+
+private:
 	float rotX = 0;
 	float rotY = 0;
 	float rotZ = 0;
