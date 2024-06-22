@@ -109,9 +109,9 @@ bool ModelData::Update_default_Internal()
 	current_world_matrix *= temp;
 
 	//movement Relative to current entity's x,y,z direction
-	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (mp.delta_translation_z * mp.move_speed);
-	new_pos = new_pos + World_Matrix.getXDirection() * (mp.delta_translation_x * mp.move_speed);
-	new_pos = new_pos + World_Matrix.getYDirection() * (mp.delta_translation_y * mp.move_speed);
+	Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (mp.delta_translation_z * mp.move_speed);
+	new_pos = new_pos + current_world_matrix.getXDirection() * (mp.delta_translation_x * mp.move_speed);
+	new_pos = new_pos + current_world_matrix.getYDirection() * (mp.delta_translation_y * mp.move_speed);
 
 	current_world_matrix.setTranslation(new_pos);
 	World_Matrix = current_world_matrix;
@@ -166,9 +166,9 @@ bool ModelData::Update_default_Smooth_Internal()
 	current_world_matrix *= temp;
 
 	//movement in relation to current entity's x,y,z direction
-	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (mp.delta_translation_z * mp.move_speed);
-	new_pos = new_pos + World_Matrix.getXDirection() * (mp.delta_translation_x * mp.move_speed);
-	new_pos = new_pos + World_Matrix.getYDirection() * (mp.delta_translation_y * mp.move_speed);
+	Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (mp.delta_translation_z * mp.move_speed);
+	new_pos = new_pos + current_world_matrix.getXDirection() * (mp.delta_translation_x * mp.move_speed);
+	new_pos = new_pos + current_world_matrix.getYDirection() * (mp.delta_translation_y * mp.move_speed);
 
 
 	if (IsSmoothMovement)

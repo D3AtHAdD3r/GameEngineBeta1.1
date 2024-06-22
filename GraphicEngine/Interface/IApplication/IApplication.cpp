@@ -32,3 +32,12 @@ const std::unordered_map<unsigned short, Scene*>& IApplication::GetSceneContaine
 {
 	return pRenderer->GetSceneContainer();
 }
+
+float IApplication::Get_AspectRatio()
+{
+	float width = (float)(WindowGlobals::Get()->Get_WindowWidth());
+	float height = (float)(WindowGlobals::Get()->Get_WindowHeight());
+	float aspectRatio = width / height;
+
+	return aspectRatio;
+}

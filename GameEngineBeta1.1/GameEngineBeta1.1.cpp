@@ -21,7 +21,7 @@ FILEMAPS GetFileMaps()
 
 
     std::unordered_map<int, std::wstring> File_Map_Meshes;
-    File_Map_Meshes.emplace(0, L"..\\AssetsAndLibs\\Assets\\Meshes\\statue.obj");
+    File_Map_Meshes.emplace(0, L"..\\AssetsAndLibs\\Assets\\Meshes\\asteroid.obj");
     File_Map_Meshes.emplace(1, L"..\\AssetsAndLibs\\Assets\\Meshes\\sphere.obj");
     File_Map_Meshes.emplace(2, L"..\\AssetsAndLibs\\Assets\\Meshes\\dragon.obj");
 

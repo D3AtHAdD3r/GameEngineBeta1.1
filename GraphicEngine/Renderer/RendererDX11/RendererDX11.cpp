@@ -469,7 +469,7 @@ void RendererDX11::initRasterizerState()
 	desc.CullMode = D3D11_CULL_FRONT;
 	desc.DepthClipEnable = true;
 	desc.FillMode = D3D11_FILL_SOLID;
-	desc.FrontCounterClockwise = true;
+	//desc.FrontCounterClockwise = true; // 
 	GFX_THROW_INFO(pD3D11Core->pDevice->CreateRasterizerState(&desc, &cull_front_state));
 	
 

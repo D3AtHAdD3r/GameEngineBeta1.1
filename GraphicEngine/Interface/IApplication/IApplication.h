@@ -47,6 +47,7 @@ public:
 	Entity* CreateEntity(EntityDesc* pED, bool check_ent_desc = true);
 	bool DeleteEntity(Entity* pEnt, Scene* pScene = nullptr);
 	const std::unordered_map<unsigned short, Scene*>& GetSceneContainer();
+	float Get_AspectRatio(); //temporary
 
 private:
 	void Init_IApp();

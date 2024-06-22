@@ -20,9 +20,9 @@ Entity::Entity(Primitive* p_Primitive, EntityDesc* ent_desc)
 
 
 	ModelPositionData mp;
-	mp.delta_rotation_x = ent_desc->model_initialPosition.m_x;
-	mp.delta_rotation_y = ent_desc->model_initialPosition.m_y;
-	mp.delta_rotation_z = ent_desc->model_initialPosition.m_z;
+	mp.delta_rotation_x = ent_desc->model_initialRotation.m_x;
+	mp.delta_rotation_y = ent_desc->model_initialRotation.m_y;
+	mp.delta_rotation_z = ent_desc->model_initialRotation.m_z;
 
 	mp.delta_scale_x = ent_desc->model_initialScaling.m_x;
 	mp.delta_scale_y = ent_desc->model_initialScaling.m_y;

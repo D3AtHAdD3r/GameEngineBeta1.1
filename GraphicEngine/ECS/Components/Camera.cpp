@@ -307,14 +307,14 @@ bool Camera::Update_default_Internal()
 	temp.setRotationY(CamData.delta_rotation_y);
 	current_world_matrix *= temp;
 
-	temp.setIdentity();
+	/*temp.setIdentity();
 	temp.setRotationZ(CamData.delta_rotation_z);
-	current_world_matrix *= temp;
+	current_world_matrix *= temp;*/
 
 	//movement in relation to current camera's x,y,z direction
-	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
-	new_pos = new_pos + World_Matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
-	new_pos = new_pos + World_Matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
+	Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
+	new_pos = new_pos + current_world_matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
+	new_pos = new_pos + current_world_matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
 
 	current_world_matrix.setTranslation(new_pos);
 	World_Matrix = current_world_matrix;
@@ -368,9 +368,9 @@ bool Camera::Update_default_Smooth_Internal()
 	current_world_matrix *= temp;
 
 	//movement in relation to current entity's x,y,z direction
-	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
-	new_pos = new_pos + World_Matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
-	new_pos = new_pos + World_Matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
+	Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
+	new_pos = new_pos + current_world_matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
+	new_pos = new_pos + current_world_matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
 
 	if (SmoothTranslation)
 	{
@@ -427,14 +427,14 @@ bool Camera::Update_fpc_Internal()
 
 
 	//movement in relation to current camera's x,y,z direction
-	/*Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
-	new_pos = new_pos + World_Matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
-	new_pos = new_pos + World_Matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);*/
+	/*Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
+	new_pos = new_pos + current_world_matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
+	new_pos = new_pos + current_world_matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);*/
 
 
-	Vector3D new_pos = World_Matrix.getTranslation() + World_Matrix.getZDirection() * (cam_attach_details.delta_offset_model_z);
-	//new_pos = new_pos + World_Matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
-	//new_pos = new_pos + World_Matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
+	Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (cam_attach_details.delta_offset_model_z);
+	//new_pos = new_pos + current_world_matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
+	//new_pos = new_pos + current_world_matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
 
 	current_world_matrix.setTranslation(new_pos);
 	World_Matrix = current_world_matrix;

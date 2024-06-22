@@ -152,7 +152,7 @@ bool TestGame::Create_Scene_And_Entity()
 	float fov = 0.785398f;
 	float zNear = 0.1f;
 	float zFar = 5000.0f;
-	float aspectRatio = 1024.0f / 768.0f;
+	float aspectRatio = Get_AspectRatio();
 	
 	CameraInitData cd;
 	cd.GetInput = true;
@@ -162,8 +162,8 @@ bool TestGame::Create_Scene_And_Entity()
 	cd.zNear = zNear;
 	cd.zFar = zFar;
 	cd.aspect_ratio = aspectRatio;
-	/*cd.SmoothRotation = true;
-	cd.SmoothTranslation = true;*/
+	cd.SmoothRotation = true;
+	cd.SmoothTranslation = true;
 	
 	CameraInitData cd1;
 	cd1.GetInput = false;
@@ -182,7 +182,7 @@ bool TestGame::Create_Scene_And_Entity()
 	sd_list.push_back(&sd);
 	//----------------------------------------------------//
 
-	//Statue
+	//Asteroid
 	EntityDesc ed;
 	ed.mesh_uid = 0;
 	ed.getMeshfromFile = true;
@@ -190,7 +190,7 @@ bool TestGame::Create_Scene_And_Entity()
 	ed.primitive_texture_type = Primitive_texture_Binding_type::oneTexMap_perDrawCall;
 	ed.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
 	ed.model_initialPosition = { 0,0,20.0f };
-	ed.model_initialScaling = { 7.0f,7.0f,7.0f };
+	//ed.model_initialScaling = { 7.0f,7.0f,7.0f };
 
 	ed.vertex_Shader_uid = 0;
 	ed.inLayout = layout;
@@ -220,23 +220,6 @@ bool TestGame::Create_Scene_And_Entity()
 	ed2.frontFaceCull = true;
 	ed2.pixel_Shader_uid = 1;
 	ed_list.push_back(&ed2);
-
-
-	//Dragon
-	EntityDesc ed3 = ed;
-	ed3.texture_uids.clear();
-	ed3.texture_normals_uids.clear();
-	ed3.primitive_uid = 22;
-	ed3.primitive_name = L"Dragon";
-	ed3.mesh_uid = 2;
-	//ed3.texture_uids.push_back(3);
-	ed3.model_initialPosition = { 0,0,10.0f };
-	ed3.model_initialScaling = { 10.0f,10.0f,10.0f };
-	ed3.model_initialRotation = { 0,1.74533,0 };
-	
-	ed3.frontFaceCull = false;
-	ed3.pixel_Shader_uid = 2;
-	//ed_list.push_back(&ed3);
 
 
 	if (!CreateSceneAndEntity(sd_list, ed_list))
@@ -406,9 +389,9 @@ bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene*
 		{
 			if (currentEntity->Get_Entity_uID() == 0)
 			{
-				/*Vector3D current_Rotation = currentEntity->Get_ModelData()->Get_Rotation();
+				Vector3D current_Rotation = currentEntity->Get_ModelData()->Get_Rotation();
 				current_Rotation.m_y = current_Rotation.m_y + 0.01f * 0.5f;
-				if (!currentEntity->Get_ModelData()->Update_Rotation(current_Rotation)) return false;*/
+				if (!currentEntity->Get_ModelData()->Update_Rotation(current_Rotation)) return false;
 			}
 			/*if (currentEntity->Get_Entity_uID() == 1)
 			{
