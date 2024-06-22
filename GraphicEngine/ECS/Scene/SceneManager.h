@@ -28,7 +28,7 @@ private:
 	bool CreateSceneOnly(Scene_descriptor* pSD, bool check_scene_desc = true);
 private:
 	bool check_scene_descriptor(Scene_descriptor* sd);
-	bool check_Entity_desc(const EntityDesc* EntityDesc);
+	bool check_Entity_desc(EntityDesc* EntityDesc);
 
 private:
 	bool checkSceneExist(short SceneID);

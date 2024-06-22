@@ -22,13 +22,27 @@ TestGame::~TestGame()
 void TestGame::onInit()
 {
 	if (!Create_Scene_And_Entity())
+	{
 		printf("Create_Scene_And_Entity failed");
+		//return false;
+	}
+		
 
 	SceneContainer = GetSceneContainer();
 	if (SceneContainer.empty())
+	{
 		printf("Scene container is empty\n");
+		//return false;
+	}
+		
 
-	UpdateOnInit(SceneContainer);
+	if (!UpdateOnInit(SceneContainer))
+	{
+		printf("UpdateOnInit(SceneContainer) failed\n");
+		//return false;
+	}
+
+	//return true;
 }
 
 void TestGame::onBeginFrame()
@@ -168,14 +182,15 @@ bool TestGame::Create_Scene_And_Entity()
 	sd_list.push_back(&sd);
 	//----------------------------------------------------//
 
+	//Statue
 	EntityDesc ed;
 	ed.mesh_uid = 0;
 	ed.getMeshfromFile = true;
 	ed.texture_uids.push_back(1);
-	ed.numOfTextures = 1;
-	ed.primitive_texture_type = Primitive_texture_type::oneTexMap_perDrawCall;
+	ed.primitive_texture_type = Primitive_texture_Binding_type::oneTexMap_perDrawCall;
 	ed.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
 	ed.model_initialPosition = { 0,0,20.0f };
+	ed.model_initialScaling = { 7.0f,7.0f,7.0f };
 
 	ed.vertex_Shader_uid = 0;
 	ed.inLayout = layout;
@@ -187,16 +202,42 @@ bool TestGame::Create_Scene_And_Entity()
 	ed.size_constant_buffer = sizeof(constant);
 	ed.constant_buffer_uid = 0;
 
-	ed.primitive_name = L"asteroid";
+	ed.primitive_name = L"statue";
 	ed.primitive_uid = 0;
 	ed.Scene_Id = 0;
 	ed_list.push_back(&ed);
 
 
+	//Skybox
 	EntityDesc ed2 = ed;
+	ed2.texture_uids.clear();
+	ed2.texture_normals_uids.clear();
 	ed2.primitive_uid = 1;
-	ed2.model_initialPosition = { 0,0,80.0f };
+	ed2.primitive_name = L"skybox";
+	ed2.mesh_uid = 1;
+	ed2.texture_uids.push_back(2);
+	ed2.model_initialPosition = { 0,0,0 };
+	ed2.frontFaceCull = true;
+	ed2.pixel_Shader_uid = 1;
 	ed_list.push_back(&ed2);
+
+
+	//Dragon
+	EntityDesc ed3 = ed;
+	ed3.texture_uids.clear();
+	ed3.texture_normals_uids.clear();
+	ed3.primitive_uid = 22;
+	ed3.primitive_name = L"Dragon";
+	ed3.mesh_uid = 2;
+	//ed3.texture_uids.push_back(3);
+	ed3.model_initialPosition = { 0,0,10.0f };
+	ed3.model_initialScaling = { 10.0f,10.0f,10.0f };
+	ed3.model_initialRotation = { 0,1.74533,0 };
+	
+	ed3.frontFaceCull = false;
+	ed3.pixel_Shader_uid = 2;
+	//ed_list.push_back(&ed3);
+
 
 	if (!CreateSceneAndEntity(sd_list, ed_list))
 	{
@@ -250,17 +291,27 @@ bool TestGame::UpdateOnInit(std::unordered_map<unsigned short, Scene*>& SceneCon
 			Entity* Parent = nullptr;
 			for (auto& currEnt : entityContainer)
 			{
-				if (currEnt->Get_Entity_uID() == 0)
+				if (currEnt->Get_Entity_uID() == 1)
+				{
+					//skybox
+					Vector3D scale = { 1000.0f, 1000.0f, 1000.0f };
+					currEnt->Get_ModelData()->Update_Scaling(scale);
+				}
+
+
+
+
+
+				/*if (currEnt->Get_Entity_uID() == 0)
 				{
 					Parent = currEnt;
 
 					Vector3D scaling = { 2.0f, 2.0f, 2.0f };
 					currEnt->Get_ModelData()->Update_Scaling(scaling);
-				}
-					
+				}*/
 			}
 
-			for (auto& currEnt : entityContainer)
+			/*for (auto& currEnt : entityContainer)
 			{
 				if (currEnt->Get_Entity_uID() == 1)
 				{
@@ -273,7 +324,7 @@ bool TestGame::UpdateOnInit(std::unordered_map<unsigned short, Scene*>& SceneCon
 					Vector3D scaling = { 0.5f, 0.5f,0.5f };
 					currEnt->Get_ModelData()->Update_Scaling(scaling);
 				}
-			}
+			}*/
 		}
 
 	}
@@ -355,14 +406,14 @@ bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene*
 		{
 			if (currentEntity->Get_Entity_uID() == 0)
 			{
-				Vector3D current_Rotation = currentEntity->Get_ModelData()->Get_Rotation();
+				/*Vector3D current_Rotation = currentEntity->Get_ModelData()->Get_Rotation();
 				current_Rotation.m_y = current_Rotation.m_y + 0.01f * 0.5f;
-				if (!currentEntity->Get_ModelData()->Update_Rotation(current_Rotation)) return false;
+				if (!currentEntity->Get_ModelData()->Update_Rotation(current_Rotation)) return false;*/
 			}
-			if (currentEntity->Get_Entity_uID() == 1)
+			/*if (currentEntity->Get_Entity_uID() == 1)
 			{
 				currentEntity->UpdateAttached();
-			}
+			}*/
 		}
 		else
 		{

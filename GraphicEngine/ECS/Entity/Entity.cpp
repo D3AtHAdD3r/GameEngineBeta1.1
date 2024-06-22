@@ -18,17 +18,29 @@ Entity::Entity(Primitive* p_Primitive, EntityDesc* ent_desc)
 	if (!p_Primitive || ent_desc->Scene_Id < 0 || ent_desc->Entity_type == ENTITY_TYPE::ENUM_UNKNOWN || !ent_desc->Parent_Scene)
 		throw NORMAL_EXCEPT("Entity contructor failed, Invalid Input;");
 
+
+	ModelPositionData mp;
+	mp.delta_rotation_x = ent_desc->model_initialPosition.m_x;
+	mp.delta_rotation_y = ent_desc->model_initialPosition.m_y;
+	mp.delta_rotation_z = ent_desc->model_initialPosition.m_z;
+
+	mp.delta_scale_x = ent_desc->model_initialScaling.m_x;
+	mp.delta_scale_y = ent_desc->model_initialScaling.m_y;
+	mp.delta_scale_z = ent_desc->model_initialScaling.m_z;
+
+
 	switch (ent_desc->Entity_type)
 	{
 	case ENTITY_TYPE::ENUM_NORMAL_ENTITY:
 	{
-		pModelData = new ModelData(&(ent_desc->mp), ent_desc->model_initialPosition);
+		
+		pModelData = new ModelData(&mp, ent_desc->model_initialPosition);
 		break;
 	}
 	case ENTITY_TYPE::ENUM_LOCALPLAYER:
 	{
 		bLocalPlayer = true;
-		pModelData = new ModelData(&(ent_desc->mp), ent_desc->model_initialPosition);
+		pModelData = new ModelData(&mp, ent_desc->model_initialPosition);
 		break;
 	}
 	

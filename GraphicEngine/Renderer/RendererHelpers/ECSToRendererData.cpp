@@ -64,7 +64,7 @@ bool ECSToRendererData::fill_Renderer_MainBindData(Primitive* pPrim, Renderer_Bi
 	pBindData->size_vertex = pPrim->GetMesh()->getVertexSize();
 
 	pBindData->FrontFaceCull = pPrim->GetFrontFaceCulling();
-	pBindData->TexBindType = (Primitive_texture_type)(pPrim->Get_Primitive_texture_Type());
+	pBindData->TexBindType = (Primitive_texture_Binding_type)(pPrim->Get_Primitive_texture_Type());
 
 	pBindData->MaterialCount = pPrim->GetMesh()->GetMaterialCount();
 

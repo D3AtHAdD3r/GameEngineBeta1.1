@@ -32,6 +32,9 @@ private:
 	bool InitializeRenderer(RenderData* p_RenderData);
 	bool MessagePump();
 
+private:
+	void Check_File_Exists(RenderData* p_RenderData);
+
 public:
 	//Inherited from window listener
 	virtual void onSize() override;

@@ -77,7 +77,6 @@ bool ParseObjFile(const wchar_t* full_path, std::vector<VertexMesh>& list_vertic
 		list_material.resize(MaterialSize);
 	}
 
-
 	size_t index_global_offset = 0;
 
 	//Parsing materials

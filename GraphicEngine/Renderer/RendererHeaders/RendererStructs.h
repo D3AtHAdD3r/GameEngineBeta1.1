@@ -53,7 +53,7 @@ struct Renderer_BindingData
 	bool FrontFaceCull = false;
 
 	//Texture
-	Primitive_texture_type TexBindType = Primitive_texture_type::unknown;
+	Primitive_texture_Binding_type TexBindType = Primitive_texture_Binding_type::unknown;
 	SIZE_T MaterialCount = 0;
 	std::vector<std::pair<SIZE_T, SIZE_T>> Material_Draw_Details; // start_index, num_indices
 

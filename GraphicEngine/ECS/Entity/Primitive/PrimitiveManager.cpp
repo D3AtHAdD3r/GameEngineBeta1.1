@@ -67,9 +67,9 @@ Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 	std::vector<Texture*> list_texture_data;
 	std::vector<Texture*> list_texture_data_normal;
 
-	if (prim_desc->numOfTextures > 0)
+	if (prim_desc->texture_uids.size() > 0)
 	{
-		for (unsigned int i = 0; i < prim_desc->numOfTextures; ++i)
+		for (unsigned int i = 0; i < prim_desc->texture_uids.size(); ++i)
 		{
 			Texture* texture_data = pResourceManager->pTextureManager->CreateTexture(prim_desc->texture_uids[i]);
 			if (texture_data == nullptr)
@@ -135,7 +135,7 @@ Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 		vShader, pShader, vBuffer, iBuffer, 
 		cBuffer, prim_desc->constant_buffer, 
 		list_texture_data, list_texture_data_normal, 
-		prim_desc->isNormalMap, prim_desc->numOfTextures, 
+		prim_desc->isNormalMap, prim_desc->texture_uids.size(),
 		prim_desc->frontFaceCull, prim_desc->primitive_name, 
 		prim_desc->primitive_texture_type
 	);

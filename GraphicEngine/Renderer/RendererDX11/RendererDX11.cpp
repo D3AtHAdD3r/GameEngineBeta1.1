@@ -192,7 +192,7 @@ bool RendererDX11::CheckMainBindData(Renderer_BindingData* pData)
 	if (!pData->vBuffer || !pData->cbuffer || !pData->iLayout || 
 		!pData->pShader || !pData->size_vertex || !pData->vShader || 
 		!pData->pIndexbuffer || !pData->pCBuffer_data ||
-		pData->TexBindType == Primitive_texture_type::unknown ||
+		pData->TexBindType == Primitive_texture_Binding_type::unknown ||
 		!pData->MaterialCount)
 		return false;
 
@@ -260,7 +260,7 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 	//Textures
 	switch (pData->TexBindType)
 	{
-	case Primitive_texture_type::oneTexMap_OneNormalMap_perDrawCall:
+	case Primitive_texture_Binding_type::oneTexMap_OneNormalMap_perDrawCall:
 	{
 		for (size_t m = 0; m < pData->MaterialCount; ++m)
 		{
@@ -274,7 +274,7 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 		break;
 	}
 
-	case Primitive_texture_type::oneTexMap_perDrawCall:
+	case Primitive_texture_Binding_type::oneTexMap_perDrawCall:
 	{
 		for (size_t m = 0; m < pData->MaterialCount; ++m)
 		{
@@ -288,7 +288,7 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 		break;
 	}
 
-	case Primitive_texture_type::allTexMaps_perDrawCall:
+	case Primitive_texture_Binding_type::allTexMaps_perDrawCall:
 	{
 		setTextureResourceVertexShader(pData->list_textures);
 		setTextureResourcePixelShader(pData->list_textures);
@@ -296,6 +296,19 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 		UINT index_count = (UINT)(pData->Material_Draw_Details[0].second);
 		drawIndexedTriangleList(index_count, 0, start_index_location);
 	}
+
+	case Primitive_texture_Binding_type::NoTextures:
+	{
+		for (size_t m = 0; m < pData->MaterialCount; ++m)
+		{
+			UINT start_index_location = (UINT)(pData->Material_Draw_Details[m].first);
+			UINT index_count = (UINT)(pData->Material_Draw_Details[m].second);
+			drawIndexedTriangleList(index_count, 0, start_index_location);
+		}
+		
+		break;
+	}
+
 	break;
 	}
 
@@ -456,6 +469,7 @@ void RendererDX11::initRasterizerState()
 	desc.CullMode = D3D11_CULL_FRONT;
 	desc.DepthClipEnable = true;
 	desc.FillMode = D3D11_FILL_SOLID;
+	desc.FrontCounterClockwise = true;
 	GFX_THROW_INFO(pD3D11Core->pDevice->CreateRasterizerState(&desc, &cull_front_state));
 	
 

@@ -7,7 +7,8 @@
 #include<GraphicEngine/InputHandling/InputSystem.h>
 #include<GraphicEngine/Renderer/RendererDX11/RendererDX11.h>
 #include<GraphicEngine/Interface/IApplication/IApplication.h>
-
+#include<GraphicEngine/Utilities/UtilitiyFuncs/utilityFunctions.h>
+#include"sstream"
 
 GraphicEngine* GraphicEngine::pGraphicEngine = nullptr;
 //IApplication* GraphicEngine::iApp = nullptr;
@@ -18,6 +19,9 @@ GraphicEngine::GraphicEngine(IApplication* inst_App, RenderData* p_RenderData)
 {
 	if (!inst_App || !p_RenderData)
 		throw NORMAL_EXCEPT("GraphicEngine Creation failed. Invalid input in constructor");
+
+	//Check Concrete File Exist
+	Check_File_Exists(p_RenderData);
 
 	Window_Width = p_RenderData->d3dInitData.Window_Width;
 	Window_Height = p_RenderData->d3dInitData.Window_Height;
@@ -127,6 +131,63 @@ bool GraphicEngine::MessagePump()
 	}
 	Sleep(1);
 	return true;
+}
+
+void GraphicEngine::Check_File_Exists(RenderData* p_RenderData)
+{
+	FILEMAPS& fMaps = p_RenderData->file_maps;
+
+	std::unordered_map<int, std::wstring>& File_Map_VertexShader = fMaps.File_Map_VertexShader;
+	std::unordered_map<int, std::wstring>& File_Map_PixelShader = fMaps.File_Map_PixelShader;
+	std::unordered_map<int, std::wstring>& File_Map_Textures = fMaps.File_Map_Textures;
+	std::unordered_map<int, std::wstring>& File_Map_Meshes = fMaps.File_Map_Meshes;
+
+	for (auto& [uid, FileName] : File_Map_VertexShader)
+	{
+		if (!UtilityFuncs::Check_File_Exist(FileName))
+		{
+			std::ostringstream oss;
+			oss << "File Not Found : " << UtilityFuncs::unicodeToMultibyte(FileName) << std::endl;
+			throw NORMAL_EXCEPT(oss.str());
+		}
+	}
+
+	for (auto& [uid, FileName] : File_Map_PixelShader)
+	{
+		if (!UtilityFuncs::Check_File_Exist(FileName))
+		{
+			std::ostringstream oss;
+			oss << "File Not Found : " << UtilityFuncs::unicodeToMultibyte(FileName) << std::endl;
+			throw NORMAL_EXCEPT(oss.str());
+		}
+	}
+
+	for (auto& [uid, FileName] : File_Map_Textures)
+	{
+		//Check if RTV or BackBuffer texture
+		std::wstring firstThree = FileName.substr(0, 3);
+		if (firstThree == HARDCODINGS::RTV_NAME_START || firstThree == HARDCODINGS::BackBuffer_NAME_START)
+			continue;
+
+		if (!UtilityFuncs::Check_File_Exist(FileName))
+		{
+			std::ostringstream oss;
+			oss << "File Not Found : " << UtilityFuncs::unicodeToMultibyte(FileName) << std::endl;
+			throw NORMAL_EXCEPT(oss.str());
+		}
+	}
+
+	for (auto& [uid, FileName] : File_Map_Meshes)
+	{
+		if (!UtilityFuncs::Check_File_Exist(FileName))
+		{
+			std::ostringstream oss;
+			oss << "File Not Found : " << UtilityFuncs::unicodeToMultibyte(FileName) << std::endl;
+			throw NORMAL_EXCEPT(oss.str());
+		}
+	}
+
+
 }
 
 void GraphicEngine::Run()

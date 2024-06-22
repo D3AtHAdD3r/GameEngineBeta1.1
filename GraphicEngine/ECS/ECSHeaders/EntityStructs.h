@@ -15,6 +15,7 @@ class Scene;
 namespace HARDCODINGS
 {
 	static std::wstring RTV_NAME_START = L"RTV";
+	static std::wstring BackBuffer_NAME_START = L"BBF"; //lol
 	static std::string World_config_loc = "..\\GameDataConfigs\\WorldData";
 	static std::string world_name = "world_spaceship";
 }
@@ -26,11 +27,12 @@ enum ENTITY_TYPE
 	ENUM_UNKNOWN
 };
 
-enum Primitive_texture_type
+enum Primitive_texture_Binding_type
 {
 	oneTexMap_OneNormalMap_perDrawCall = 0,		//1 tex-Map, 1NormalMap- binded per draw call (normal maps required)
 	oneTexMap_perDrawCall,						//1 tex-map binded per draw call
 	allTexMaps_perDrawCall,						//all tex-maps binded per draw call
+	NoTextures,
 	unknown
 };
 
@@ -139,25 +141,23 @@ struct MeshCreationData
 struct EntityDesc
 {
 public:
+	std::wstring primitive_name;
+	int primitive_uid = -1;
+	short Scene_Id = 0;
+
+public:
 	int mesh_uid = -1;
 	bool getMeshfromFile = true;
 	
 	bool isNormalMap = false;
 	std::vector<int> texture_uids;
 	std::vector<int> texture_normals_uids;
-	unsigned int numOfTextures = 0;
-	unsigned int numOfTextureNormals = 0;
-
-	Primitive_texture_type primitive_texture_type = Primitive_texture_type::unknown;
+	
+	Primitive_texture_Binding_type primitive_texture_type = Primitive_texture_Binding_type::unknown;
 	ENTITY_TYPE Entity_type = ENTITY_TYPE::ENUM_UNKNOWN;
-
-	Vector3D model_initialPosition = { 0,0,0 }; //world space
-
 public:
-	int Camera_uid = -1;
-	int Light_uid = -1;
 	bool Is_Renderable = true;
-
+	bool frontFaceCull = false;
 public:
 	//vertex shader requirements
 	int vertex_Shader_uid = -1;
@@ -171,28 +171,21 @@ public:
 	void* constant_buffer = nullptr;
 	unsigned int size_constant_buffer = 0; //***
 	int constant_buffer_uid = -1;
-
-	bool frontFaceCull = false;
 public:
-	std::wstring primitive_name;
-	int primitive_uid = -1;
-	short Scene_Id = 0;
-
-public:
-	ModelPositionData mp;
-
+	Vector3D model_initialPosition = { 0.0f,0.0f,0.0f }; //world space
+	Vector3D model_initialRotation = { 0.0f,0.0f,0.0f }; //world space
+	Vector3D model_initialScaling = { 1.0f,1.0f,1.0f }; //world space
+	
 public:
 	Camera* pCam = nullptr; //run time filled
 	Light* pLight = nullptr; //run time filled
 	Scene* Parent_Scene = nullptr;  //run time filled
 	MeshCreationData* mesh_creation_data = nullptr; //run time filled
-
 public:
 	std::string vshader_entry_point = "vsmain";
 	std::string pshader_entry_point = "psmain";
 	std::string vshader_version = "vs_5_0";
 	std::string pshader_version = "ps_5_0";
-
 };
 //using EntityDesc = Primitive_Desc;
 

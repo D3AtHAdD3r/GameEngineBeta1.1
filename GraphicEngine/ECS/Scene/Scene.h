@@ -47,14 +47,14 @@ public:
 	ID3D11DepthStencilView* getDSV();
 	ID3D11ShaderResourceView* getSRV();
 	color_Scene getColorBackground();
-	const unsigned int& getWidth() const;
-	const unsigned int& getHeight() const;
-	const std::wstring& GetSceneName() const;
-	const bool& getclearRenderTargetView() const;
-	const bool& getclearDepthStencil() const;
-	const bool& getUseDepthStencil() const;
-	const bool& getdrawOnBackBuffer() const;
-	const int& Get_Scene_uID() const;
+	unsigned int getWidth() const;
+	unsigned int getHeight() const;
+	std::wstring GetSceneName() const;
+	bool getclearRenderTargetView() const;
+	bool getclearDepthStencil() const;
+	bool getUseDepthStencil() const;
+	bool getdrawOnBackBuffer() const;
+	int Get_Scene_uID() const;
 public:
 	Camera* getActiveCamera();
 	Texture* GetSceneTexture();

@@ -5,7 +5,7 @@ Primitive::Primitive(Mesh* mesh_Data, int primitiveID,
 	VertexShader* vShad, PixelShader* pShad, VertexBuffer* vBuf, IndexBuffer* iBuf, 
 	ConstantBuffer* cBuf, void* c_Buff,
 	std::vector<Texture*>& listtextures, std::vector<Texture*>& listtexturesNormal, bool normalmap, unsigned int numberOftextures,
-	bool frontfaceculling, std::wstring primitiveName, Primitive_texture_type primitive_tex_Type) 
+	bool frontfaceculling, std::wstring primitiveName, Primitive_texture_Binding_type primitive_tex_Type)
 	:
 	mesh_Data(mesh_Data),
 	primitive_id(primitiveID),
@@ -100,7 +100,7 @@ const bool& Primitive::GetFrontFaceCulling()
     return front_face_culling;
 }
 
-const Primitive_texture_type& Primitive::Get_Primitive_texture_Type()
+const Primitive_texture_Binding_type& Primitive::Get_Primitive_texture_Type()
 {
     return primitive_texture_Type;
 }

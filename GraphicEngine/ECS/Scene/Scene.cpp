@@ -107,32 +107,32 @@ color_Scene Scene::getColorBackground()
 	return color_background;
 }
 
-const unsigned int& Scene::getWidth() const
+unsigned int Scene::getWidth() const
 {
 	return width;
 }
 
-const unsigned int& Scene::getHeight() const
+unsigned int Scene::getHeight() const
 {
 	return height;
 }
 
-const std::wstring& Scene::GetSceneName() const
+std::wstring Scene::GetSceneName() const
 {
 	return sceneName;
 }
 
-const bool& Scene::getclearRenderTargetView() const
+bool Scene::getclearRenderTargetView() const
 {
 	return clearRenderTargetView;
 }
 
-const bool& Scene::getclearDepthStencil() const 
+bool Scene::getclearDepthStencil() const 
 {
 	return clearDepthStencil;
 }
 
-const bool& Scene::getUseDepthStencil() const
+bool Scene::getUseDepthStencil() const
 {
 	return useDepthStencil;
 }
@@ -142,12 +142,12 @@ Camera* Scene::getActiveCamera()
 	return pCameraActive;
 }
 
-const bool& Scene::getdrawOnBackBuffer() const
+bool Scene::getdrawOnBackBuffer() const
 {
 	return drawOnBackBuffer;
 }
 
-const int& Scene::Get_Scene_uID() const
+int Scene::Get_Scene_uID() const
 {
 	return scene_id;
 }

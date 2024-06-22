@@ -144,7 +144,7 @@ bool SceneManager::check_scene_descriptor(Scene_descriptor* sd)
     return true;
 }
 
-bool SceneManager::check_Entity_desc(const EntityDesc* EntityDesc)
+bool SceneManager::check_Entity_desc(EntityDesc* EntityDesc)
 {
     if (EntityDesc->primitive_uid < 0 || EntityDesc->constant_buffer_uid < 0 ||
         EntityDesc->pixel_Shader_uid < 0 || EntityDesc->vertex_Shader_uid < 0)
@@ -157,7 +157,7 @@ bool SceneManager::check_Entity_desc(const EntityDesc* EntityDesc)
 
     if (!EntityDesc->constant_buffer || !EntityDesc->size_constant_buffer) return false;
 
-    if (EntityDesc->primitive_texture_type == Primitive_texture_type::unknown)
+    if (EntityDesc->primitive_texture_type == Primitive_texture_Binding_type::unknown)
         return false;
 
     if (EntityDesc->Scene_Id < 0) return false;
@@ -167,7 +167,7 @@ bool SceneManager::check_Entity_desc(const EntityDesc* EntityDesc)
     //1 normal map per 1 tex map required  
     if (EntityDesc->isNormalMap)
     {
-        if (EntityDesc->primitive_texture_type != Primitive_texture_type::oneTexMap_OneNormalMap_perDrawCall) return false;
+        if (EntityDesc->primitive_texture_type != Primitive_texture_Binding_type::oneTexMap_OneNormalMap_perDrawCall) return false;
         if (EntityDesc->texture_uids.size() != EntityDesc->texture_normals_uids.size()) return false;
     }
 
@@ -178,6 +178,12 @@ bool SceneManager::check_Entity_desc(const EntityDesc* EntityDesc)
     else
     {
         if (EntityDesc->mesh_creation_data == nullptr) return false;
+    }
+
+
+    if (EntityDesc->texture_uids.empty())
+    {
+        EntityDesc->primitive_texture_type = Primitive_texture_Binding_type::NoTextures;
     }
 
     return true;

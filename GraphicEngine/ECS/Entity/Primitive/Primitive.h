@@ -30,7 +30,7 @@ private:
 		VertexBuffer* vBuf, IndexBuffer* iBuf, 
 		ConstantBuffer* cBuf, void* c_Buff,
 		std::vector<Texture*>& listtextures, std::vector<Texture*>& listtexturesNormal, bool normalmap, unsigned int numberOftextures,
-		bool frontfaceculling, std::wstring primitiveName, Primitive_texture_type primitive_tex_Type);
+		bool frontfaceculling, std::wstring primitiveName, Primitive_texture_Binding_type primitive_tex_Type);
 
 	~Primitive();
 
@@ -46,7 +46,7 @@ public:
 	ConstantBuffer* GetConstantBuffer();
 
 	const bool& GetFrontFaceCulling();
-	const Primitive_texture_type& Get_Primitive_texture_Type();
+	const Primitive_texture_Binding_type& Get_Primitive_texture_Type();
 	const std::vector<Texture*>& Get_Texture_List();
 	const std::vector<Texture*>& Get_Texture_Normal_List();
 
@@ -81,6 +81,6 @@ private:
 	bool front_face_culling = false;
 	bool back_face_culling = true;
 	bool normal_map = false;
-	Primitive_texture_type primitive_texture_Type;
+	Primitive_texture_Binding_type primitive_texture_Type;
 	unsigned int number_textures = 0;
 };
