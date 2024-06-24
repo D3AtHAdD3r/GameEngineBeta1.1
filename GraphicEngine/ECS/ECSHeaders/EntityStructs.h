@@ -36,6 +36,21 @@ enum Primitive_texture_Binding_type
 	unknown
 };
 
+
+struct ModelInitData
+{
+	Vector3D Rotation;
+	Vector3D Scale;
+	Vector3D Tranlation;
+
+	bool SmoothRotation = false;
+	bool SmoothMovement = false;
+
+	//float move_speed = 0.55f;
+	//float lerp_Variable = 6.0f; //used in smooth rotaions
+	//float smooth_translation_variable = 25.0f; //lol 
+};
+
 struct ModelPositionData
 {
 public:
@@ -55,8 +70,6 @@ public:
 	float delta_time = 1.0f / 60.0f;
 
 public:
-	bool SmoothRotation = false; //used when initializing model only, not on updates 
-	bool SmoothMovement = false; //used when initializing model only, not on updates 
 	float move_speed = 0.55f;
 	float lerp_Variable = 6.0f; //used in smooth rotaions
 	float smooth_translation_variable = 25.0f; //lol 
@@ -175,6 +188,8 @@ public:
 	Vector3D model_initialPosition = { 0.0f,0.0f,0.0f }; //world space
 	Vector3D model_initialRotation = { 0.0f,0.0f,0.0f }; //world space
 	Vector3D model_initialScaling = { 1.0f,1.0f,1.0f }; //world space
+	bool SmoothRotation = false; 
+	bool SmoothMovement = false; 
 	
 public:
 	Camera* pCam = nullptr; //run time filled

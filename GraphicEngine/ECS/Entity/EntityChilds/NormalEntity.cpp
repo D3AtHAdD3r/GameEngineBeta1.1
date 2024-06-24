@@ -47,9 +47,7 @@ bool NormalEntity::Attach(Entity* ent_parent, EntityAttachDetails* EntDetails)
 bool NormalEntity::UpdateAttached()
 {
 	if (!isAttached) return false;
-	ModelPositionData mp = parentEntity->Get_ModelData()->Get_Model_Position_Data();
-
-
+	
 	Vector3D CurrentParentPos = parentEntity->Get_ModelData()->Get_World_Pos();
 	Vector3D CurrentParentRotation = parentEntity->Get_ModelData()->Get_Rotation();
 	Vector3D CurrentParentSCaling = parentEntity->Get_ModelData()->Get_Scaling();

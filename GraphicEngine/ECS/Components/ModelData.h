@@ -15,7 +15,7 @@ class ATT_Model ModelData
 	friend class Camera;
 public:
 	ModelData();
-	ModelData(ModelPositionData* mp_update, const Vector3D& model_pos_world);
+	ModelData(ModelInitData* mp_update);
 	~ModelData();
 
 public:
@@ -41,9 +41,6 @@ private:
 	bool Update_default_Smooth_Internal();
 	bool Update_Relative_Internal(Matrix4x4* ModelB_World_Matrix);			// Not used in normal update procedure
 	bool Update_Relative_Smooth_Internal(Matrix4x4* ModelB_World_Matrix);	// Not used in normal update procedure
-
-private:
-	void SetDataMembers();
 
 private:
 	ModelPositionData mp;

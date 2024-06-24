@@ -146,24 +146,24 @@ bool Camera::Attach(Entity* ent, CameraAttachDetails* CamDetails)
 
 	cam_attach_details = *CamDetails;
 
-	if (camType == CameraType::fpc)
-	{
-		Vector3D newPos;
-		Vector3D EntPos = ent->Get_ModelData()->Translation;
-		Vector3D EntRot = ent->Get_ModelData()->Rotation;
+	//if (camType == CameraType::fpc)
+	//{
+	//	Vector3D newPos;
+	//	Vector3D EntPos = ent->Get_ModelData()->Translation;
+	//	Vector3D EntRot = ent->Get_ModelData()->Rotation;
 
-		//take care of scaling factor later on 
-		newPos.m_x = EntPos.m_x + cam_attach_details.delta_offset_model_x; // * scaling_x
-		newPos.m_y = EntPos.m_y + cam_attach_details.delta_offset_model_y;
-		newPos.m_z = EntPos.m_z + cam_attach_details.delta_offset_model_z;
+	//	//take care of scaling factor later on 
+	//	newPos.m_x = EntPos.m_x + cam_attach_details.delta_offset_model_x; // * scaling_x
+	//	newPos.m_y = EntPos.m_y + cam_attach_details.delta_offset_model_y;
+	//	newPos.m_z = EntPos.m_z + cam_attach_details.delta_offset_model_z;
 
-		CamData.delta_rotation_x = EntRot.m_x;
-		CamData.delta_rotation_y = EntRot.m_y;
-		CamData.delta_rotation_z = EntRot.m_z;
+	//	CamData.delta_rotation_x = EntRot.m_x;
+	//	CamData.delta_rotation_y = EntRot.m_y;
+	//	CamData.delta_rotation_z = EntRot.m_z;
 
-		if (!Update_Rotation_Direct(EntRot)) return false;
-		if (!Update_Translation_Direct(newPos)) return false;
-	}
+	//	if (!Update_Rotation_Direct(EntRot)) return false;
+	//	if (!Update_Translation_Direct(newPos)) return false;
+	//}
 
 
 	return true;
@@ -399,13 +399,19 @@ bool Camera::Update_default_Smooth_Internal()
 
 bool Camera::Update_fpc_Internal()
 {
-	Vector3D currRot = parentEntity->Get_ModelData()->Rotation;
-	Vector3D currTranslate = parentEntity->Get_ModelData()->Translation;
-	CamData.delta_rotation_x = currRot.m_x;
-	CamData.delta_rotation_y = currRot.m_y;
-	CamData.delta_rotation_z = currRot.m_z;
-	World_Matrix.setTranslation(currTranslate);
-	
+	Vector3D CurrentParentPos = parentEntity->Get_ModelData()->Translation;
+	Vector3D CurrentParentRotation = parentEntity->Get_ModelData()->Rotation;
+	Vector3D CurrentRotation = CurrentParentRotation /*+ pModelData->Get_Initial_Rotation()*/;
+
+	float offsetX = cam_attach_details.delta_offset_model_x;
+	float offsetY = cam_attach_details.delta_offset_model_y;
+	float offsetZ = cam_attach_details.delta_offset_model_z;
+
+	//Get Translation, relative to parent entity, update it
+	Vector3D new_pos = CurrentParentPos + parentEntity->Get_ModelData()->Get_World_Matirx().getZDirection() * (offsetZ);
+	new_pos = new_pos + parentEntity->Get_ModelData()->Get_World_Matirx().getXDirection() * (offsetX);
+	new_pos = new_pos + parentEntity->Get_ModelData()->Get_World_Matirx().getYDirection() * (offsetY);
+
 
 	Matrix4x4 temp;
 	Matrix4x4 current_world_matrix;
@@ -413,28 +419,16 @@ bool Camera::Update_fpc_Internal()
 	current_world_matrix.setIdentity();
 
 	temp.setIdentity();
-	temp.setRotationX(CamData.delta_rotation_x);
+	temp.setRotationX(CurrentRotation.m_x);
 	current_world_matrix *= temp;
 
 	temp.setIdentity();
-	temp.setRotationY(CamData.delta_rotation_y);
+	temp.setRotationY(CurrentRotation.m_y);
 	current_world_matrix *= temp;
 
 	temp.setIdentity();
-	temp.setRotationZ(CamData.delta_rotation_z);
+	temp.setRotationZ(CurrentRotation.m_z);
 	current_world_matrix *= temp;
-
-
-
-	//movement in relation to current camera's x,y,z direction
-	/*Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
-	new_pos = new_pos + current_world_matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
-	new_pos = new_pos + current_world_matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);*/
-
-
-	Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (cam_attach_details.delta_offset_model_z);
-	//new_pos = new_pos + current_world_matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
-	//new_pos = new_pos + current_world_matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
 
 	current_world_matrix.setTranslation(new_pos);
 	World_Matrix = current_world_matrix;
@@ -444,13 +438,13 @@ bool Camera::Update_fpc_Internal()
 
 	ProjectionMatrix.setPerspectiveFovLH(fov, aspect_ratio, zNear, zFar);
 
-	Previous_Rotation = Current_Rotation;
-	Previous_Translation = Current_Translation;
-
-	Current_Rotation = { CamData.delta_rotation_x, CamData.delta_rotation_y, CamData.delta_rotation_z };
+	Current_Rotation = CurrentRotation;
 	Current_Translation = new_pos;
 
 	CamData.delta_translation_x = CamData.delta_translation_y = CamData.delta_translation_z = 0;
+	CamData.delta_rotation_x = CurrentRotation.m_x;
+	CamData.delta_rotation_y = CurrentRotation.m_y;
+	CamData.delta_rotation_z = CurrentRotation.m_z;
 	return true;
 }
 

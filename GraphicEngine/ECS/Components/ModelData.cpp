@@ -7,15 +7,28 @@ ModelData::ModelData()
 {
 }
 
-ModelData::ModelData(ModelPositionData* mp_update, const Vector3D& model_pos_world)
+ModelData::ModelData(ModelInitData* InitData)
 {
-	if (!mp_update)
+	if (!InitData)
 		throw NORMAL_EXCEPT("ModelData Constructor Failed. Invalid Input");
-	mp = *mp_update;
 
-	SetDataMembers();
+	mp.delta_rotation_x = InitData->Rotation.m_x;
+	mp.delta_rotation_y = InitData->Rotation.m_y;
+	mp.delta_rotation_z = InitData->Rotation.m_z;
 
-	if (!Update_Translation_Absolute(model_pos_world))
+	mp.delta_scale_x = InitData->Scale.m_x;
+	mp.delta_scale_y = InitData->Scale.m_y;
+	mp.delta_scale_z = InitData->Scale.m_z;
+
+	Scaling = InitData->Scale;
+	Rotation = Initial_Rotation = InitData->Rotation;
+	Translation = InitData->Tranlation;
+
+	IsSmoothRotaion = InitData->SmoothRotation;
+	IsSmoothMovement = InitData->SmoothMovement;
+	
+
+	if (!Update_Translation_Absolute(Translation))
 		throw NORMAL_EXCEPT("ModelData Constructor Failed. Update_Translation_Direct() Failed");
 
 	if (!Update())
@@ -332,12 +345,3 @@ bool ModelData::Update_Scaling(const Vector3D& newVal)
 
 
 
-void ModelData::SetDataMembers()
-{
-	Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
-	Rotation = Initial_Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
-	Translation = { mp.delta_translation_x, mp.delta_translation_y, mp.delta_translation_z };
-
-	IsSmoothRotaion = mp.SmoothRotation;
-	IsSmoothMovement = mp.SmoothMovement;
-}
