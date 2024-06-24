@@ -21,6 +21,7 @@ public:
 public:
 	const Vector3D& Get_World_Pos() const;
 	const Vector3D& Get_Rotation() const;
+	const Vector3D& Get_Initial_Rotation() const;
 	const Vector3D& Get_Scaling() const;
 	const Matrix4x4& Get_World_Matirx() const;
 	const ModelPositionData& Get_Model_Position_Data() const;
@@ -38,8 +39,8 @@ public:
 private:
 	bool Update_default_Internal();
 	bool Update_default_Smooth_Internal();
-	bool Update_Relative_Internal(Matrix4x4* ModelB_World_Matrix);
-	bool Update_Relative_Smooth_Internal(Matrix4x4* ModelB_World_Matrix);
+	bool Update_Relative_Internal(Matrix4x4* ModelB_World_Matrix);			// Not used in normal update procedure
+	bool Update_Relative_Smooth_Internal(Matrix4x4* ModelB_World_Matrix);	// Not used in normal update procedure
 
 private:
 	void SetDataMembers();
@@ -50,6 +51,7 @@ private:
 	Vector3D Translation;
 	Vector3D Rotation;
 	Vector3D Scaling{ 1.0f,1.0f,1.0f };
+	Vector3D Initial_Rotation;
 	Matrix4x4 World_Matrix;
 private:
 	bool IsSmoothRotaion = false;

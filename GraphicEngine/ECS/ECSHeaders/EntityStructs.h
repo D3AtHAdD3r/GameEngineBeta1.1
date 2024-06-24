@@ -86,7 +86,7 @@ public:
 	bool SmoothRotation = false;
 	bool SmoothTranslation = false;
 public:
-	float move_speed = 0.55f;
+	float move_speed = 1.5f;
 };
 
 

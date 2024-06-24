@@ -28,6 +28,10 @@ public:
 	virtual Matrix4x4 Get_Entity_WorldMatrix() const;
 	
 public:
+	ModelData* Get_ModelData();
+
+
+public:
 	Primitive* GetPrimitive();
 	const std::wstring& Get_Entity_Name() const;
 	const bool& Get_LocalPlayer() const;
@@ -58,20 +62,4 @@ protected:
 	int Entity_uid = -1;
 	std::wstring Entity_name;
 
-
-	
-public:
-	//----------------------------------------//
-	//----------Testing Stuff-----------------//
-	//----------------------------------------//
-	//for testing, like attaching camera to an entity
-	bool Attach(Entity* ent_parent, EntityAttachDetails* EntDetails);
-	bool Detach();
-	bool UpdateAttached();
-	bool isAttached = false;
-	Entity* parentEntity = nullptr;
-	ModelData* parentEntity_ModelData = nullptr;
-	EntityAttachDetails entity_Attach_Details;
-	//----------------------------------------//
-	//----------------------------------------//
 };

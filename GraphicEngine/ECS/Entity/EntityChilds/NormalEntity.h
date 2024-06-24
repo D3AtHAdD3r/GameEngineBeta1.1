@@ -15,18 +15,24 @@ public:
 	~NormalEntity();
 
 public:
+	bool Update();
 	bool UpdatePosition(ModelPositionData* mp);
 	bool UpdatepositionRelative(ModelPositionData* mp, Matrix4x4* ModelB_World_Matrix);
+
 public:
-	void Set_Rotaion(float radians_x, float radians_y, float radians_z);
-	Vector3D Get_Rotation();
+	//----------------------------------------//
+	//----------Testing Stuff-----------------//
+	//----------------------------------------//
+	//for testing, like attaching camera to an entity
+	bool Attach(Entity* ent_parent, EntityAttachDetails* EntDetails);
+	bool Detach();
+	bool UpdateAttached();
+	bool isAttached = false;
+	Entity* parentEntity = nullptr;
+	ModelData* parentEntity_ModelData = nullptr;
+	EntityAttachDetails entity_Attach_Details;
+	//----------------------------------------//
+	//----------------------------------------//
 
-private:
-
-
-private:
-	float rotX = 0;
-	float rotY = 0;
-	float rotZ = 0;
 };
 

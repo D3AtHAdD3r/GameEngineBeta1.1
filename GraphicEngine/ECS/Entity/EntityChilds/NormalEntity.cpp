@@ -10,6 +10,14 @@ NormalEntity::~NormalEntity()
 }
 
 
+bool NormalEntity::Update()
+{
+	if (isAttached)
+		return UpdateAttached();
+	else
+		return pModelData->Update();
+}
+
 bool NormalEntity::UpdatePosition(ModelPositionData* mp)
 {
 	 return pModelData->Update(mp);
@@ -20,14 +28,46 @@ bool NormalEntity::UpdatepositionRelative(ModelPositionData* mp, Matrix4x4* Mode
 	return pModelData->Update_Relative(mp, ModelB_World_Matrix);
 }
 
-void NormalEntity::Set_Rotaion(float radians_x, float radians_y, float radians_z)
+
+
+bool NormalEntity::Attach(Entity* ent_parent, EntityAttachDetails* EntDetails)
 {
-	this->rotX = radians_x;
-	this->rotY = radians_y;
-	this->rotZ = radians_z;
+	if (!ent_parent || !EntDetails) return false;
+
+	parentEntity = ent_parent;
+	parentEntity_ModelData = ent_parent->Get_ModelData();
+
+	entity_Attach_Details = *EntDetails;
+
+	isAttached = true;
+	return true;
 }
 
-Vector3D NormalEntity::Get_Rotation()
+
+bool NormalEntity::UpdateAttached()
 {
-	return Vector3D(this->rotX, this->rotY, this->rotZ);
+	if (!isAttached) return false;
+	ModelPositionData mp = parentEntity->Get_ModelData()->Get_Model_Position_Data();
+
+
+	Vector3D CurrentParentPos = parentEntity->Get_ModelData()->Get_World_Pos();
+	Vector3D CurrentParentRotation = parentEntity->Get_ModelData()->Get_Rotation();
+	Vector3D CurrentParentSCaling = parentEntity->Get_ModelData()->Get_Scaling();
+
+	Vector3D CurrentRotation = CurrentParentRotation + pModelData->Get_Initial_Rotation();
+
+	float offsetX = entity_Attach_Details.delta_offset_model_x;
+	float offsetY = entity_Attach_Details.delta_offset_model_y;
+	float offsetZ = entity_Attach_Details.delta_offset_model_z;
+
+	//Get Translation, relative to parent entity, update it
+	Vector3D new_pos = CurrentParentPos + parentEntity->Get_ModelData()->Get_World_Matirx().getZDirection() * (offsetZ);
+	new_pos = new_pos + parentEntity->Get_ModelData()->Get_World_Matirx().getXDirection() * (offsetX);
+	new_pos = new_pos + parentEntity->Get_ModelData()->Get_World_Matirx().getYDirection() * (offsetY);
+
+
+	if (!pModelData->Update_Translation_Absolute(new_pos)) return false;
+	if (!pModelData->Update_Rotation(CurrentRotation)) return false;
+
+	return true;
 }

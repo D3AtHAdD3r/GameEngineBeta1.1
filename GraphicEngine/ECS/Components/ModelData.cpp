@@ -37,6 +37,11 @@ const Vector3D& ModelData::Get_Rotation() const
 	return Rotation;
 }
 
+const Vector3D& ModelData::Get_Initial_Rotation() const
+{
+	return Initial_Rotation;
+}
+
 
 const Vector3D& ModelData::Get_Scaling() const
 {
@@ -330,7 +335,7 @@ bool ModelData::Update_Scaling(const Vector3D& newVal)
 void ModelData::SetDataMembers()
 {
 	Scaling = { mp.delta_scale_x, mp.delta_scale_y, mp.delta_scale_z };
-	Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
+	Rotation = Initial_Rotation = { mp.delta_rotation_x, mp.delta_rotation_y, mp.delta_rotation_z };
 	Translation = { mp.delta_translation_x, mp.delta_translation_y, mp.delta_translation_z };
 
 	IsSmoothRotaion = mp.SmoothRotation;

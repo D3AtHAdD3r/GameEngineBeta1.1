@@ -173,7 +173,9 @@ bool TestGame::Create_Scene_And_Entity()
 	cd1.zNear = zNear;
 	cd1.zFar = zFar;
 	cd1.aspect_ratio = aspectRatio;
-	cd1.world_pos = { 0,0,40.0f };
+	cd1.world_pos = { 0,100,-20.0f };
+	cd1.SmoothRotation = true;
+	cd1.SmoothTranslation = true;
 
 	sd.camData.push_back(&cd);
 	sd.camData.push_back(&cd1);
@@ -189,7 +191,7 @@ bool TestGame::Create_Scene_And_Entity()
 	ed.texture_uids.push_back(1);
 	ed.primitive_texture_type = Primitive_texture_Binding_type::oneTexMap_perDrawCall;
 	ed.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
-	ed.model_initialPosition = { 0,0,20.0f };
+	ed.model_initialPosition = { 0,20,80.0f };
 	//ed.model_initialScaling = { 7.0f,7.0f,7.0f };
 
 	ed.vertex_Shader_uid = 0;
@@ -221,6 +223,33 @@ bool TestGame::Create_Scene_And_Entity()
 	ed2.pixel_Shader_uid = 1;
 	ed_list.push_back(&ed2);
 
+	//Dragon
+	EntityDesc ed3 = ed;
+	ed3.texture_uids.clear();
+	ed3.texture_normals_uids.clear();
+	ed3.primitive_uid = 2;
+	ed3.primitive_name = L"Dragon";
+	ed3.mesh_uid = 2;
+	ed3.texture_uids.push_back(3);
+	ed3.model_initialPosition = { 0,20,40 };
+	ed3.frontFaceCull = false;
+	ed3.pixel_Shader_uid = 0;
+	ed_list.push_back(&ed3);
+
+	//DigiCame
+	EntityDesc ed4 = ed;
+	ed4.texture_uids.clear();
+	ed4.texture_normals_uids.clear();
+	ed4.primitive_uid = 3;
+	ed4.primitive_name = L"DigiCam";
+	ed4.mesh_uid = 3;
+	ed4.texture_uids.push_back(4);
+	ed4.model_initialPosition = { 0,0,20 };
+	ed4.model_initialScaling = { 0.3,0.3,0.3 };
+	ed4.model_initialRotation = { 4.71239 , 0, 0 };
+	ed4.frontFaceCull = false;
+	ed4.pixel_Shader_uid = 0;
+	ed_list.push_back(&ed4);
 
 	if (!CreateSceneAndEntity(sd_list, ed_list))
 	{
@@ -259,12 +288,7 @@ bool TestGame::UpdateOnInit(std::unordered_map<unsigned short, Scene*>& SceneCon
 		{
 			if (uid == 1)
 			{
-			
-				Vector3D rot = { 0.0f,3.14159f, 0.0f };
-				CameraPositionData cd;
-				cd.delta_rotation_y = rot.m_y;
-
-				//if (!camera->Update(&cd)) return false;
+				Vector3D rot = { 0.785398f,0, 0.0f };
 				if (!camera->Update_Rotation_Direct(rot)) return false;
 			}
 		}
@@ -274,40 +298,39 @@ bool TestGame::UpdateOnInit(std::unordered_map<unsigned short, Scene*>& SceneCon
 			Entity* Parent = nullptr;
 			for (auto& currEnt : entityContainer)
 			{
-				if (currEnt->Get_Entity_uID() == 1)
+				if (currEnt->Get_Entity_uID() == 1) //skybox
 				{
 					//skybox
 					Vector3D scale = { 1000.0f, 1000.0f, 1000.0f };
 					currEnt->Get_ModelData()->Update_Scaling(scale);
 				}
-
-
-
-
-
-				/*if (currEnt->Get_Entity_uID() == 0)
+				if (currEnt->Get_Entity_uID() == 2) //dragon
 				{
-					Parent = currEnt;
+					//dragon
+					Vector3D scale = { 35.0f, 35.0f, 35.0f };
+					currEnt->Get_ModelData()->Update_Scaling(scale);
 
-					Vector3D scaling = { 2.0f, 2.0f, 2.0f };
-					currEnt->Get_ModelData()->Update_Scaling(scaling);
-				}*/
+					Parent = currEnt; //to attach camera to dinosaur
+				}
+
 			}
 
-			/*for (auto& currEnt : entityContainer)
+			//DigiCam
+			for (auto& currEnt : entityContainer)
 			{
-				if (currEnt->Get_Entity_uID() == 1)
+				if (currEnt->Get_Entity_uID() == 3)
 				{
 					EntityAttachDetails ed;
-					ed.delta_offset_model_y = 8;
-					ed.delta_offset_model_z = 5;
-					if (!currEnt->Attach(Parent, &ed))
-						return false;
+					/*ed.delta_offset_model_y = 0.009;
+					ed.delta_offset_model_z = 0.02;*/
+					ed.delta_offset_model_y = 0.3;
+					ed.delta_offset_model_z = 0.4;
 
-					Vector3D scaling = { 0.5f, 0.5f,0.5f };
-					currEnt->Get_ModelData()->Update_Scaling(scaling);
+					NormalEntity* currentEntity = dynamic_cast<NormalEntity*>(currEnt);
+					if (!currentEntity->Attach(Parent, &ed))
+						return false;
 				}
-			}*/
+			}
 		}
 
 	}
@@ -393,10 +416,19 @@ bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene*
 				current_Rotation.m_y = current_Rotation.m_y + 0.01f * 0.5f;
 				if (!currentEntity->Get_ModelData()->Update_Rotation(current_Rotation)) return false;
 			}
-			/*if (currentEntity->Get_Entity_uID() == 1)
+
+			if (currentEntity->Get_Entity_uID() == 2)
 			{
-				currentEntity->UpdateAttached();
-			}*/
+				Vector3D current_Rotation = currentEntity->Get_ModelData()->Get_Rotation();
+				current_Rotation.m_y = current_Rotation.m_y + 0.01f * 0.5f;
+				if (!currentEntity->Get_ModelData()->Update_Rotation(current_Rotation)) return false;
+			}
+
+			//have to do for now
+			if (currentEntity->Get_Entity_uID() == 3)
+			{
+				currentEntity->Update();
+			}
 		}
 		else
 		{

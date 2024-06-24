@@ -24,12 +24,15 @@ FILEMAPS GetFileMaps()
     File_Map_Meshes.emplace(0, L"..\\AssetsAndLibs\\Assets\\Meshes\\asteroid.obj");
     File_Map_Meshes.emplace(1, L"..\\AssetsAndLibs\\Assets\\Meshes\\sphere.obj");
     File_Map_Meshes.emplace(2, L"..\\AssetsAndLibs\\Assets\\Meshes\\dragon.obj");
+    File_Map_Meshes.emplace(3, L"..\\AssetsAndLibs\\Assets\\Meshes\\Video_camera.obj");
+
 
     std::unordered_map<int, std::wstring> File_Map_Textures;
     File_Map_Textures.emplace(0, L"BBFBackBuffer");
     File_Map_Textures.emplace(1, L"..\\AssetsAndLibs\\Assets\\Textures\\asteroid.jpg");
     File_Map_Textures.emplace(2, L"..\\AssetsAndLibs\\Assets\\Textures\\stars_map.jpg");
-    //File_Map_Textures.emplace(3, L"..\\AssetsAndLibs\\Assets\\Textures\\BB-8.jpg");
+    File_Map_Textures.emplace(3, L"..\\AssetsAndLibs\\Assets\\Textures\\dragon.png");
+    File_Map_Textures.emplace(4, L"..\\AssetsAndLibs\\Assets\\Textures\\Video_camera.jpg");
     
 
     FILEMAPS fmaps;
@@ -48,7 +51,7 @@ int main()
     RenderData rData;
     rData.d3dInitData.BufferCount = 1;
     rData.d3dInitData.Windowed = true;
-    rData.d3dInitData.Window_Width = 1024;
+    rData.d3dInitData.Window_Width = 1366;
     rData.d3dInitData.Window_Height = 768;
 
     rData.graphi_API = RenderData::GRAPHIC_API::dx11;
