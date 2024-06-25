@@ -4,8 +4,12 @@
 #include<GraphicEngine/Engine/EngineCore/GraphicEngine.h>
 
 /*
-BB-8.obj
-BB-8.jpg
+wasd = movement
+esc = free mouse
+f = fullscreen(TODO)
+
+tab = switch camera  (toggle)
+insert = attach to dragon(digicam) (toggle)
 
 */
 
