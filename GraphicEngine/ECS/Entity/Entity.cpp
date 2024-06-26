@@ -13,7 +13,9 @@ Entity::Entity(Primitive* p_Primitive, EntityDesc* ent_desc)
 	Entity_Type(ent_desc->Entity_type),
 	Entity_uid(ent_desc->primitive_uid),
 	Entity_name(ent_desc->primitive_name),
-	pParentScene(ent_desc->Parent_Scene)
+	pParentScene(ent_desc->Parent_Scene),
+	isTerrainMesh(ent_desc->isTerrainMesh),
+	TerrainSize(ent_desc->TerrainSize)
 {
 	if (!p_Primitive || ent_desc->Scene_Id < 0 || ent_desc->Entity_type == ENTITY_TYPE::ENUM_UNKNOWN || !ent_desc->Parent_Scene)
 		throw NORMAL_EXCEPT("Entity contructor failed, Invalid Input;");
@@ -156,4 +158,14 @@ Scene* Entity::Get_Parent_Scene() const
 ModelData* Entity::Get_ModelData() const
 {
 	return pModelData;
+}
+
+bool Entity::Get_isTerrain() const
+{
+	return isTerrainMesh;
+}
+
+const Vector3D& Entity::Get_TerrainSize() const
+{
+	return TerrainSize;
 }

@@ -311,10 +311,19 @@ bool Camera::Update_default_Internal()
 	temp.setRotationZ(CamData.delta_rotation_z);
 	current_world_matrix *= temp;*/
 
+	if (turbo)
+	{
+		current_move_speed = move_speed * 2;
+	}
+	else
+	{
+		current_move_speed = move_speed;
+	}
+
 	//movement in relation to current camera's x,y,z direction
-	Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
-	new_pos = new_pos + current_world_matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
-	new_pos = new_pos + current_world_matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
+	Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (CamData.delta_translation_z * current_move_speed);
+	new_pos = new_pos + current_world_matrix.getXDirection() * (CamData.delta_translation_x * current_move_speed);
+	new_pos = new_pos + current_world_matrix.getYDirection() * (CamData.delta_translation_y * current_move_speed);
 
 	current_world_matrix.setTranslation(new_pos);
 	World_Matrix = current_world_matrix;
@@ -367,10 +376,20 @@ bool Camera::Update_default_Smooth_Internal()
 	temp.setRotationZ(smooth_rotation.m_z);
 	current_world_matrix *= temp;
 
+	if (turbo)
+	{
+		//current_move_speed = move_speed * 2;
+		current_move_speed += 0.2f;
+	}
+	else
+	{
+		current_move_speed = move_speed;
+	}
+
 	//movement in relation to current entity's x,y,z direction
-	Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (CamData.delta_translation_z * CamData.move_speed);
-	new_pos = new_pos + current_world_matrix.getXDirection() * (CamData.delta_translation_x * CamData.move_speed);
-	new_pos = new_pos + current_world_matrix.getYDirection() * (CamData.delta_translation_y * CamData.move_speed);
+	Vector3D new_pos = World_Matrix.getTranslation() + current_world_matrix.getZDirection() * (CamData.delta_translation_z * current_move_speed);
+	new_pos = new_pos + current_world_matrix.getXDirection() * (CamData.delta_translation_x * current_move_speed);
+	new_pos = new_pos + current_world_matrix.getYDirection() * (CamData.delta_translation_y * current_move_speed);
 
 	if (SmoothTranslation)
 	{
@@ -497,6 +516,11 @@ void Camera::onKeyDown(int key)
 		{
 			CamData.delta_translation_x = 1.0;
 		}
+
+		if (key == VK_SHIFT)
+		{
+			turbo = true;
+		}
 	}
 
 }
@@ -513,6 +537,10 @@ void Camera::onKeyUp(int key)
 		CamData.delta_translation_x = 0;
 		CamData.delta_translation_y = 0;
 		CamData.delta_translation_z = 0;
+	}
+	if (key == VK_SHIFT)
+	{
+		turbo = false;
 	}
 
 }

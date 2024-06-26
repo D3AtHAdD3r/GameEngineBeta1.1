@@ -161,6 +161,10 @@ public:
 public:
 	int mesh_uid = -1;
 	bool getMeshfromFile = true;
+
+	bool isTerrainMesh = false;
+	Vector3D TerrainSize;
+	int Terrain_Height_Map_uid = -1;
 	
 	bool isNormalMap = false;
 	std::vector<int> texture_uids;
@@ -239,4 +243,6 @@ struct constant
 	float m_light_radius = 4.0f;
 	float m_time = 0.0f;
 	float distortion_level = 1.0;
+	Vector3D TerrainSize;
+	float sizeHeightMap;
 };

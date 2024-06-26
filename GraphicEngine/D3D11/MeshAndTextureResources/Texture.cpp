@@ -133,3 +133,8 @@ ID3D11ShaderResourceView* Texture::GetShaderResourceView()
 {
 	return this->pShader_res_view;
 }
+
+RECT Texture::Get_Size() const
+{
+	return Size;
+}

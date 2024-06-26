@@ -1,6 +1,7 @@
 #include "MeshManager.h"
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Mesh.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/MeshManagerHelpers.h>
+#include<GraphicEngine/Utilities/Math/Vector2D.h>
 
 MeshManager::MeshManager(const std::unordered_map<int, std::wstring>& File_Map)
 	:
@@ -87,6 +88,99 @@ Mesh* MeshManager::CreateMesh(VertexMesh* vertex_list_data, unsigned int vertex_
 
 		return meshCurrent;
 	}
+}
+
+Mesh* MeshManager::CreateTerrainMesh(unsigned int w, unsigned int h, const int& u_id, std::wstring MeshName)
+{
+	if (!w || !h) return nullptr;
+	if (check_Exist(u_id))
+	{
+		MeshContainer[u_id]->incrementCounter();
+		return MeshContainer[u_id];
+	}
+	else
+	{
+		Mesh* meshCurrent = new Mesh(u_id, MeshName);
+
+		const unsigned int ww = w - 1; //quads
+		const unsigned int hh = h - 1;
+
+		meshCurrent->VertexAttributes.reserve(w * h);
+		meshCurrent->IndicesList.reserve(ww * hh * 6);
+
+		meshCurrent->VertexAttributes = std::vector<VertexMesh>(w * h, VertexMesh());
+		meshCurrent->IndicesList = std::vector<unsigned int>(ww * hh * 6, 0);
+
+		auto i = 0;
+		for (unsigned int x = 0; x < w; x++)
+		{
+			for (unsigned int y = 0; y < h; y++)
+			{
+				//VertexMesh mesh;
+				//Vertex attributes
+
+				int vertIndex = y * w + x;
+
+				meshCurrent->VertexAttributes[y * w + x] =
+				{
+					Vector3D((float)x / (float)ww, 0, ((float)y / (float)hh) /** -1.0f*/),  //world COORDINATES
+					Vector2D((float)x / (float)ww, ((float)y / (float)hh) /** -1.0f*/),      //TEX Coordinates
+					Vector3D(),             //Tangent, normal, binormal(not in order)
+					Vector3D(),
+					Vector3D()
+
+				};
+
+				//Index attributes
+				if (x < ww && y < hh)
+				{
+					//counterclockwise winding
+					{
+						/*meshCurrent->IndicesList[i] = (y + 1) * w + (x);
+						meshCurrent->IndicesList[i + 1] = (y) * w + (x);
+						meshCurrent->IndicesList[i + 2] = (y) * w + (x + 1);
+
+						meshCurrent->IndicesList[i + 3] = (y) * w + (x + 1);
+						meshCurrent->IndicesList[i + 4] = (y + 1) * w + (x + 1);
+						meshCurrent->IndicesList[i + 5] = (y + 1) * w + (x);*/
+					}
+
+
+					//clockwise winding
+					{
+						meshCurrent->IndicesList[i] = (y)*w + (x);
+						meshCurrent->IndicesList[i + 1] = (y + 1) * w + (x);
+						meshCurrent->IndicesList[i + 2] = (y)*w + (x + 1);
+
+						meshCurrent->IndicesList[i + 3] = (y + 1) * w + (x + 1);
+						meshCurrent->IndicesList[i + 4] = (y)*w + (x + 1);
+						meshCurrent->IndicesList[i + 5] = (y + 1) * w + (x);
+					}
+
+					i += 6;
+				}
+
+			}
+		}
+
+		MaterialSlot mt;
+		mt.material_id = 0;
+		mt.start_index = 0;
+		mt.num_indices = meshCurrent->IndicesList.size();
+
+		meshCurrent->MaterialCount = 1;
+		meshCurrent->MaterialList.push_back(mt);
+
+		meshCurrent->SizeVertices = meshCurrent->VertexAttributes.size();
+		meshCurrent->SizeIndices = meshCurrent->IndicesList.size();
+
+		meshCurrent->incrementCounter();
+		MeshContainer.emplace(u_id, meshCurrent);
+		ResourceCount++;
+
+		return meshCurrent;
+	}
+
 }
 
 void MeshManager::releaseAll()

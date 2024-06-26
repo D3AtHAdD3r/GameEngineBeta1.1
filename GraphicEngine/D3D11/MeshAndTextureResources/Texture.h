@@ -1,6 +1,6 @@
 #include<GraphicEngine/Utilities/Headers/HeadersD3D.h>
 #include<string>
-
+//#include<Windows.h>
 
 enum TextureType
 {
@@ -34,6 +34,7 @@ public:
 	ID3D11RenderTargetView* GetRenderTargetView();
 	ID3D11DepthStencilView* GetDepthStencilView();
 	ID3D11ShaderResourceView* GetShaderResourceView();
+	RECT Get_Size() const;
 private:
 	ID3D11Resource* pTexture = nullptr;
 	ID3D11RenderTargetView* pRTV = nullptr;
@@ -47,6 +48,7 @@ private:
 	int UserCounter = 0;
 	int uID = -1;
 	unsigned short BackBufferIndex = 0;
+	RECT Size;
 private:
 	friend class TextureManager;
 };

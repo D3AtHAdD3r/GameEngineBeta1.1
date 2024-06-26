@@ -9,7 +9,9 @@
 #include<GraphicEngine/ECS/Components/Camera.h>
 #include<GraphicEngine/Renderer/RendererHelpers/ECSToRendererData.h>
 #include<GraphicEngine/Window/WindowGlobals.h>
+#include<GraphicEngine/ECS/Entity/Primitive/Primitive.h>
 #include<sstream>
+
 
 RendererDX11* RendererDX11::pRenderer = nullptr;
 
@@ -53,6 +55,13 @@ void RendererDX11::UpdateConstantBuffer(Entity* currEntity, Camera* pcam)
 	cBuff.m_light_position = { 0,0,0,0 };
 	cBuff.m_light_direction = { 0.0f, 0.0f, -1.0f, 0.0f };
 	cBuff.distortion_level = 0.9f;
+
+	if (currEntity->Get_isTerrain()) //there is height map
+	{
+		cBuff.sizeHeightMap = currEntity->GetPrimitive()->GetHeightMap()->Get_Size().right;
+		cBuff.TerrainSize = currEntity->Get_TerrainSize();
+	}
+	
 
 	currEntity->setConstantBuffer(&cBuff);
 }
@@ -235,12 +244,13 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 	setRasterizerState(pData->FrontFaceCull);
 
 	pD3D11Core->pContext->UpdateSubresource(pData->cbuffer, NULL, NULL, pData->pCBuffer_data, NULL, NULL);
+	//setConstantBuffer(pData->cbuffer);
 
-	if (binded_cb != pData->cbuffer)
+	/*if (binded_cb != pData->cbuffer)
 	{
-		setConstantBuffer(pData->cbuffer); 
+		setConstantBuffer(pData->cbuffer);
 		binded_cb = pData->cbuffer;
-	}
+	}*/
 
 	if (binded_vs != pData->vShader)
 	{
@@ -252,6 +262,13 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 	{
 		setPixelShader(pData->pShader);
 		binded_ps = pData->pShader;
+	}
+
+	//setConstantBuffer(pData->cbuffer);
+	if (binded_cb != pData->cbuffer)
+	{
+		setConstantBuffer(pData->cbuffer);
+		binded_cb = pData->cbuffer;
 	}
 
 	setVertexBufferandLayout(pData->size_vertex, pData->vBuffer, pData->iLayout);

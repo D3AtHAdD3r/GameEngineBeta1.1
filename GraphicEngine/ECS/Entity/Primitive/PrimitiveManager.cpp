@@ -49,6 +49,15 @@ Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 			return nullptr;
 		}
 	}
+	else if (prim_desc->isTerrainMesh)
+	{
+		mesh_Data = pResourceManager->pMeshManager->CreateTerrainMesh(prim_desc->TerrainSize.m_x, prim_desc->TerrainSize.m_z, mesh_uid, prim_desc->primitive_name);
+		if (mesh_Data == nullptr)
+		{
+			releaseAll();
+			return nullptr;
+		}
+	}
 	else
 	{
 		mesh_Data = pResourceManager->pMeshManager->CreateMesh(
@@ -66,6 +75,18 @@ Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 
 	std::vector<Texture*> list_texture_data;
 	std::vector<Texture*> list_texture_data_normal;
+	Texture* HeightMap = nullptr;
+
+	if (prim_desc->isTerrainMesh)
+	{
+		HeightMap = pResourceManager->pTextureManager->CreateTexture(prim_desc->Terrain_Height_Map_uid);
+		if (HeightMap == nullptr)
+		{
+			releaseAll();
+			return nullptr;
+		}
+
+	}
 
 	if (prim_desc->texture_uids.size() > 0)
 	{
@@ -137,7 +158,7 @@ Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 		list_texture_data, list_texture_data_normal, 
 		prim_desc->isNormalMap, prim_desc->texture_uids.size(),
 		prim_desc->frontFaceCull, prim_desc->primitive_name, 
-		prim_desc->primitive_texture_type
+		prim_desc->primitive_texture_type, HeightMap
 	);
 
 	PrimitiveContainer.push_back(currPrimitive);

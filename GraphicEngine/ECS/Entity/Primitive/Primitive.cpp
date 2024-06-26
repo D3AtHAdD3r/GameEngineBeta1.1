@@ -5,7 +5,7 @@ Primitive::Primitive(Mesh* mesh_Data, int primitiveID,
 	VertexShader* vShad, PixelShader* pShad, VertexBuffer* vBuf, IndexBuffer* iBuf, 
 	ConstantBuffer* cBuf, void* c_Buff,
 	std::vector<Texture*>& listtextures, std::vector<Texture*>& listtexturesNormal, bool normalmap, unsigned int numberOftextures,
-	bool frontfaceculling, std::wstring primitiveName, Primitive_texture_Binding_type primitive_tex_Type)
+	bool frontfaceculling, std::wstring primitiveName, Primitive_texture_Binding_type primitive_tex_Type, Texture* Height_Map)
 	:
 	mesh_Data(mesh_Data),
 	primitive_id(primitiveID),
@@ -20,7 +20,8 @@ Primitive::Primitive(Mesh* mesh_Data, int primitiveID,
 	back_face_culling(!frontfaceculling),
 	primitive_Name(primitiveName),
 	normal_map(normalmap),
-	primitive_texture_Type(primitive_tex_Type)
+	primitive_texture_Type(primitive_tex_Type),
+	HeightMap(Height_Map)
 {
 
 	for (unsigned int i = 0; i < number_textures; ++i)
@@ -93,6 +94,11 @@ IndexBuffer* Primitive::GetIndexBuffer()
 ConstantBuffer* Primitive::GetConstantBuffer()
 {
     return constantBuffer;
+}
+
+Texture* Primitive::GetHeightMap() const
+{
+	return HeightMap;
 }
 
 const bool& Primitive::GetFrontFaceCulling()

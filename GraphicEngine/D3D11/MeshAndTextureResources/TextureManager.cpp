@@ -54,11 +54,17 @@ Texture* TextureManager::CreateTexture(const int& u_ID)
 		wstr.append(fileName); wstr.append(extensionName);
 
 		Texture* currTexture = new Texture(wstr, TextureType::NORMAL_TEXTURE, u_ID);
-		if (!LoadTextureFromFile(filePath.c_str(), currTexture->GetTextureResourcePP(), currTexture->GetShaderResourceViewPP(), currTexture->GetSamplerStatePP()))
+		if (!LoadTextureFromFile(filePath.c_str(), currTexture))
 		{
 			delete currTexture;
 			return nullptr;
 		}
+
+		/*if (!LoadTextureFromFile(filePath.c_str(), currTexture->GetTextureResourcePP(), currTexture->GetShaderResourceViewPP(), currTexture->GetSamplerStatePP()))
+		{
+			delete currTexture;
+			return nullptr;
+		}*/
 
 		currTexture->incrementCounter();
 		TextureContainer.emplace(u_ID, currTexture);
@@ -404,6 +410,7 @@ void TextureManager::deleteTexture_direct(Texture* pTex)
 
 bool TextureManager::LoadTextureFromFile(const wchar_t* full_path, ID3D11Resource** pTexture, ID3D11ShaderResourceView** pShader_res_view, ID3D11SamplerState** pSampler_State)
 {
+	if (!full_path) return false;
 	ID3D11Resource* m_texture = nullptr;
 	ID3D11ShaderResourceView* m_shader_res_view = nullptr;
 	ID3D11SamplerState* m_sampler_state = nullptr;
@@ -449,6 +456,58 @@ bool TextureManager::LoadTextureFromFile(const wchar_t* full_path, ID3D11Resourc
 	*pShader_res_view = m_shader_res_view;
 	*pSampler_State = m_sampler_state;
 
+	return true;
+}
+
+bool TextureManager::LoadTextureFromFile(const wchar_t* full_path, Texture* pTexture)
+{
+	if (!pTexture || !full_path) return false;
+	ID3D11Resource* m_texture = nullptr;
+	ID3D11ShaderResourceView* m_shader_res_view = nullptr;
+	ID3D11SamplerState* m_sampler_state = nullptr;
+
+	ID3D11Device* pDevice = D3D11Globals::Get()->GetDevice();
+
+	DirectX::ScratchImage image_data;
+
+	HRESULT hr = DirectX::LoadFromWICFile(full_path, DirectX::WIC_FLAGS_IGNORE_SRGB,
+		nullptr, image_data);
+
+	if (SUCCEEDED(hr))
+	{
+		hr = DirectX::CreateTexture(pDevice, image_data.GetImages(),
+			image_data.GetImageCount(), image_data.GetMetadata(), &m_texture);
+		if (!SUCCEEDED(hr))
+			throw WND_EXCEPT(hr);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC desc = {};
+		desc.Format = image_data.GetMetadata().format;
+		desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		desc.Texture2D.MipLevels = (UINT)image_data.GetMetadata().mipLevels;
+		desc.Texture2D.MostDetailedMip = 0;
+
+		D3D11_SAMPLER_DESC sampler_desc = {};
+		sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampler_desc.Filter = D3D11_FILTER_ANISOTROPIC;
+		sampler_desc.MinLOD = 0.0f;
+		sampler_desc.MaxLOD = (FLOAT)image_data.GetMetadata().mipLevels;
+
+		GFX_THROW_INFO(pDevice->CreateSamplerState(&sampler_desc, &m_sampler_state));
+
+		GFX_THROW_INFO(pDevice->CreateShaderResourceView(m_texture, &desc, &m_shader_res_view));
+	}
+	else
+	{
+		throw WND_EXCEPT(hr);
+	}
+
+	pTexture->pTexture = m_texture;
+	pTexture->pShader_res_view = m_shader_res_view;
+	pTexture->pSamplerState = m_sampler_state;
+	
+	pTexture->Size = { 0,0, (long)image_data.GetMetadata().width, (long)image_data.GetMetadata().height };
 	return true;
 }
 

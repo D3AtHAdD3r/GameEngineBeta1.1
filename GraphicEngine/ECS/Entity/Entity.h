@@ -30,7 +30,6 @@ public:
 public:
 	ModelData* Get_ModelData();
 
-
 public:
 	Primitive* GetPrimitive();
 	const std::wstring& Get_Entity_Name() const;
@@ -40,6 +39,10 @@ public:
 	const bool& Get_IsRenderable() const;
 	Scene* Get_Parent_Scene() const;
 	ModelData* Get_ModelData() const;
+
+public:
+	bool Get_isTerrain() const;
+	const Vector3D& Get_TerrainSize() const;
 public:
 	void setConstantBuffer(void* c_buffer);
 	void setConstantBuffer(constant* c_buffer);
@@ -51,6 +54,11 @@ protected:
 	ModelData* pModelData = nullptr;
 	//Camera* pCamera = nullptr;		//Not nedded yet
 	Light* pLight = nullptr;
+
+protected:
+	//should not be here, should be inside primitive
+	bool isTerrainMesh = false;
+	Vector3D TerrainSize;
 
 protected:
 	int scene_id = -1;

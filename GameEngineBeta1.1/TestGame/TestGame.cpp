@@ -204,7 +204,7 @@ bool TestGame::Create_Scene_And_Entity()
 	ed.size_constant_buffer = sizeof(constant);
 	ed.constant_buffer_uid = 0;
 
-	ed.primitive_name = L"statue";
+	ed.primitive_name = L"Asteroid";
 	ed.primitive_uid = 0;
 	ed.Scene_Id = 0;
 	ed_list.push_back(&ed);
@@ -235,7 +235,7 @@ bool TestGame::Create_Scene_And_Entity()
 	ed3.frontFaceCull = false;
 	ed3.pixel_Shader_uid = 0;
 	ed3.SmoothRotation = true;
-	ed_list.push_back(&ed3);
+	//ed_list.push_back(&ed3);
 
 	//DigiCam
 	EntityDesc ed4 = ed;
@@ -250,7 +250,38 @@ bool TestGame::Create_Scene_And_Entity()
 	ed4.model_initialRotation = { 4.71239 , 0, 0 };
 	ed4.frontFaceCull = false;
 	ed4.pixel_Shader_uid = 0;
-	ed_list.push_back(&ed4);
+	//ed_list.push_back(&ed4);
+
+
+	//Terrain
+	EntityDesc ed5;
+	ed5.getMeshfromFile = false;
+	ed5.isTerrainMesh = true;
+	ed5.mesh_uid = 111;
+	ed5.Terrain_Height_Map_uid = 5;
+	ed5.TerrainSize = { 3.0f, 3.0f, 3.0f }; //problem here, nope, maybe , dont know , problem in mesh creation function   512.0f, 512.0f, 50.0f
+
+	//ed5.primitive_texture_type = Primitive_texture_Binding_type::oneTexMap_perDrawCall;
+	ed5.primitive_texture_type = Primitive_texture_Binding_type::NoTextures;
+
+	ed5.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
+	ed5.model_initialPosition = { 0, 0, 0 };
+
+	ed5.vertex_Shader_uid = 1;
+	ed5.inLayout = layout;
+	ed5.sizeLayout = ARRAYSIZE(layout);
+	ed5.pixel_Shader_uid = 3;
+	
+	ed5.constant_buffer = cb;
+	ed5.size_constant_buffer = sizeof(constant);
+	ed5.constant_buffer_uid = 0;
+	
+	ed5.primitive_name = L"Terrain";
+	ed5.primitive_uid = 77;
+	ed5.Scene_Id = 0;
+	ed5.frontFaceCull = false;
+
+	ed_list.push_back(&ed5);
 
 	if (!CreateSceneAndEntity(sd_list, ed_list))
 	{

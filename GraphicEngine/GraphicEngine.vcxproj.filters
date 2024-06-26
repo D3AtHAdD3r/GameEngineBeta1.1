@@ -159,6 +159,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{253d0ec5-9271-4aa4-8fee-707925f3caa4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\TerrainShaders">
+      <UniqueIdentifier>{600b57d1-700c-4a03-a99b-eea50f69eeaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h">
@@ -470,6 +473,12 @@
     </FxCompile>
     <FxCompile Include="..\Shaders\pixelShader_No_Tex.hlsl">
       <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\pShader_Terrain.hlsl">
+      <Filter>Shaders\TerrainShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\vShader_Terrain.hlsl">
+      <Filter>Shaders\TerrainShaders</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

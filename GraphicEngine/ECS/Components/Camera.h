@@ -88,6 +88,7 @@ private:
 	bool SmoothRotaion = false;
 	bool SmoothTranslation = false;
 	float move_speed = 0.55f;
+	bool turbo = false;
 	float current_move_speed = 0;
 private:
 	float fov = 0;

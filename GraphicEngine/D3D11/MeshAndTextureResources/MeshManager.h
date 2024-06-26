@@ -19,6 +19,9 @@ public:
 		MaterialSlot* material_slot_list, unsigned int material_slot_list_size,
 		std::wstring MeshName, const int& u_id
 	);
+
+	//only supports 1 material(yet) //for testing
+	Mesh* CreateTerrainMesh(unsigned int w, unsigned int h, const int& u_id, std::wstring MeshName);
 	
 public:
 	void releaseAll();

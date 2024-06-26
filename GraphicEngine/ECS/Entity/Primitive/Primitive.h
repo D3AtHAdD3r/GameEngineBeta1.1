@@ -29,8 +29,14 @@ private:
 		VertexShader* vShad, PixelShader* pShad,
 		VertexBuffer* vBuf, IndexBuffer* iBuf, 
 		ConstantBuffer* cBuf, void* c_Buff,
-		std::vector<Texture*>& listtextures, std::vector<Texture*>& listtexturesNormal, bool normalmap, unsigned int numberOftextures,
-		bool frontfaceculling, std::wstring primitiveName, Primitive_texture_Binding_type primitive_tex_Type);
+		std::vector<Texture*>& listtextures, 
+		std::vector<Texture*>& listtexturesNormal, 
+		bool normalmap, 
+		unsigned int numberOftextures,
+		bool frontfaceculling, 
+		std::wstring primitiveName, 
+		Primitive_texture_Binding_type primitive_tex_Type,
+		Texture* Height_Map);
 
 	~Primitive();
 
@@ -44,6 +50,7 @@ public:
 	VertexBuffer* GetVertexBuffer();
 	IndexBuffer* GetIndexBuffer();
 	ConstantBuffer* GetConstantBuffer();
+	Texture* GetHeightMap() const;
 
 	const bool& GetFrontFaceCulling();
 	const Primitive_texture_Binding_type& Get_Primitive_texture_Type();
@@ -74,6 +81,7 @@ private:
 	std::vector<TextureDetails*> list_textures_normal;
 	std::vector<Texture*> direct_Texture_list;
 	std::vector<Texture*> direct_Texture_Normal_list;
+	Texture* HeightMap = nullptr;
 private:
 	std::wstring primitive_Name;
 	int primitive_id = 0;
