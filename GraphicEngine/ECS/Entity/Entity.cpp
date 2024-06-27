@@ -165,7 +165,7 @@ bool Entity::Get_isTerrain() const
 	return isTerrainMesh;
 }
 
-const Vector3D& Entity::Get_TerrainSize() const
+const Vector4D& Entity::Get_TerrainSize() const
 {
 	return TerrainSize;
 }

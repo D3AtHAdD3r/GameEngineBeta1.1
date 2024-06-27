@@ -1,0 +1,109 @@
+//Camera poisiton-update
+1. If Camera == attach to entity (fpc ot tpc), Camera will have an parent Entity pointer.
+2. In both of the cases Entity will update its position(based on logic or input), updated position will be used by camera to update its coordinates.
+3. If Camera == free, camera will update its position based on input or logic.
+
+flow of code ->
+1.Scene creation -> 
+-Camera creation initiated
+-On creation no isfpc or istpc flag required. 
+-Camera initial world pos(Vec3) is optional. 
+-fov,znear,zfar and other required attributes will be passed as argument.
+-Camera created and stored in the container in scene.
+
+Scene and Entities Creation completed.
+
+2. Before Rendering first frame->
+-Assign active camera per scene(if required). Atleast one camera is required for projection.
+-if camera == projecting, set respective bools.
+-set active camera mode. fpp or tpp = attach camera to an entity or active camera mode = free
+
+
+//Entity 
+1. Entity will have a camera component pointer initialized to null.
+2. Functions to attach and detach camera will be called from scene.
+
+In Scene->
+//camDetails = tpc or fpc, cam uid, camera position x,y,z-delta(delta position of camera relative to entity) 
+-AttachCamera(entity,camDetails)
+{
+-Get camera from respective scene.
+-fill camera attributes, from camdetails in camera class, and camera pointer in entity class
+-done
+} 
+
+-DetachCamera(entity)
+{
+//obvious
+}
+
+Notes -If Entity is LocalPlayer, it will get position update from user-input, else logic based. 
+
+
+//-----------------------------------------------------------------------------------------------------------------------//
+//Model-Position-Data:
+-Datamembers:
+current world position
+previous world position
+current rotaion
+previous rotation
+current scaling 
+previous scaling
+world matrix
+
+//position attributes are updated via two ways: 
+Direct - replaces old value with new ones
+Incremental - Increments or  decrements current attribute by a given value.
+
+//struct from which update function will get updated values
+struct-> modelupdatedata:
+rotx,roty,rotz = rotation values which will be directly/Incremental applied to model
+scalex,scaly,scalez = scaling values which will be directly/Incremental applied to model
+translation values = translation values which will be directly/Incremental applied to the model
+
+-functions:
+public:
+getter functions for all
+
+update_default() // rotation and scaling are Direct updated, translation is incremental updated 
+update_default_smooth()
+
+update_translation_direct() //translation is directly updated
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

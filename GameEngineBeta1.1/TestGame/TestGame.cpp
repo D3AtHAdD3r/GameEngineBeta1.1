@@ -259,13 +259,13 @@ bool TestGame::Create_Scene_And_Entity()
 	ed5.isTerrainMesh = true;
 	ed5.mesh_uid = 111;
 	ed5.Terrain_Height_Map_uid = 5;
-	ed5.TerrainSize = { 3.0f, 3.0f, 3.0f }; //problem here, nope, maybe , dont know , problem in mesh creation function   512.0f, 512.0f, 50.0f
+	ed5.TerrainSize = { 512.0f, 3.0f, 512.0f, 0.0f }; 
 
 	//ed5.primitive_texture_type = Primitive_texture_Binding_type::oneTexMap_perDrawCall;
 	ed5.primitive_texture_type = Primitive_texture_Binding_type::NoTextures;
 
 	ed5.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
-	ed5.model_initialPosition = { 0, 0, 0 };
+	ed5.model_initialPosition = { 0, -300, 0 };
 
 	ed5.vertex_Shader_uid = 1;
 	ed5.inLayout = layout;

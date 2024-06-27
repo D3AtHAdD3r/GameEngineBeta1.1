@@ -33,10 +33,10 @@ cbuffer constant : register(b0)
     float4 m_light_direction;
     float4 m_camera_position;
     float4 m_light_position;
+    float4 TerrainSize;
     float m_light_radius;
     float m_time;
     float distortion_level;
-    float3 TerrainSize;
     float sizeHeightMap;
 }
 
@@ -54,11 +54,11 @@ VS_OUTPUT vsmain(VS_INPUT input)
     float height = 0;
     
     //Update new world pos
-    //output.position = mul(float4(input.position.x * TerrainSize.x, height * TerrainSize.y, input.position.z * TerrainSize.z, 1), m_world);
-    output.position.x = input.position.x * TerrainSize.x;
-    output.position.y = height * TerrainSize.y;
-    output.position.z = input.position.z * (TerrainSize.z);
-    output.position.w = 1;
+    output.position = mul(float4(input.position.x * TerrainSize.x, height * TerrainSize.y, input.position.z * TerrainSize.z, 1), m_world);
+    //output.position.x = input.position.x * TerrainSize.x;
+    //output.position.y = height * TerrainSize.y;
+    //output.position.z = input.position.z * (TerrainSize.z);
+    //output.position.w = 1;
     
     
     //WORLD SPACE
@@ -80,6 +80,13 @@ VS_OUTPUT vsmain(VS_INPUT input)
     //output.tbn[0] = normalize(mul(input.tangent, m_world));
     //output.tbn[1] = normalize(mul(input.binormal, m_world));
     //output.tbn[2] = normalize(mul(input.normal, m_world));
+    
+    
+    //check
+    float m_lightradius = m_light_radius;
+    float distortionlevel = distortion_level;
+    float4 Terrain_Size = TerrainSize;
+    
     
     return output;
 }

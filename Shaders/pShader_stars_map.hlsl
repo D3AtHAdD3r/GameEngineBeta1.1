@@ -23,8 +23,11 @@ cbuffer constant : register(b0)
     float4 m_light_direction;
     float4 m_camera_position;
     float4 m_light_position;
+    float4 TerrainSize;
     float m_light_radius;
     float m_time;
+    float distortion_level;
+    float sizeHeightMap;
 };
 
 float4 psmain(PS_INPUT input) : SV_Target

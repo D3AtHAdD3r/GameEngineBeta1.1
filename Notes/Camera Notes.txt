@@ -1,0 +1,98 @@
+
+//Camera:
+Data members:
+
+current world position
+previous world position
+current rotaion
+previous rotation
+current scaling 
+previous scaling
+world matrix
+view Matrix
+Projection matrix
+fov,znear,zfar 
+Camera type == fpc,tpc, free
+Parent Entity*
+bool GetInput
+bool isactive
+bool isAttached
+
+Functions:
+Getter functions
+Setter functions
+
+Update() : same as ModelPositionData
+
+//-----------------------------------------------------------------------//
+
+Notes - 
+1. If Camera == attach to entity (fpc ot tpc), Camera will have an parent Entity pointer.
+2. In both of the cases Entity will update its position(based on logic or input), updated position will be used by camera to update its coordinates.
+3. 3. If Camera == free, camera will update its position based on input or userlogic.
+
+
+flow of code ->
+1.Scene creation -> 
+-Camera creation initiated
+-On creation no isfpc or istpc flag required. 
+-Camera initial world pos(Vec3) is optional. 
+-fov,znear,zfar and other required attributes will be passed as argument.
+-Camera created and stored in the container in scene.
+
+Scene and Entities Creation completed.
+2. Before Rendering first frame->
+-Assign active camera per scene(if required). Atleast one camera is required for projection.
+-if camera == projecting, set respective bools.
+-set active camera mode. fpp or tpp = attach camera to an entity or active camera mode = free
+
+
+//Entity 
+1. Entity will have a camera component pointer initialized to null.
+2. Functions to attach and detach camera will be called from scene.
+
+
+Notes -> onInit Camera type is Free. when attaching via function it changes.
+
+//-------------------------//
+UpdateFpc() / UpdateTpc() code flow ->
+- Get position data from entity
+- apply x,y,z translation offsets. lerp between model current position and previous pos, if required
+- update position
+
+
+
+//---------------------------------------//
+by default 
+camera type = free
+make changes on first update
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -42,7 +42,7 @@ public:
 
 public:
 	bool Get_isTerrain() const;
-	const Vector3D& Get_TerrainSize() const;
+	const Vector4D& Get_TerrainSize() const;
 public:
 	void setConstantBuffer(void* c_buffer);
 	void setConstantBuffer(constant* c_buffer);
@@ -58,7 +58,7 @@ protected:
 protected:
 	//should not be here, should be inside primitive
 	bool isTerrainMesh = false;
-	Vector3D TerrainSize;
+	Vector4D TerrainSize;
 
 protected:
 	int scene_id = -1;

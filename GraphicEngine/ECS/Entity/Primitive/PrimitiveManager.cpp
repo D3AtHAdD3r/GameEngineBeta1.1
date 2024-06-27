@@ -85,7 +85,6 @@ Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 			releaseAll();
 			return nullptr;
 		}
-
 	}
 
 	if (prim_desc->texture_uids.size() > 0)

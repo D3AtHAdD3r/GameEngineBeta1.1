@@ -163,7 +163,7 @@ public:
 	bool getMeshfromFile = true;
 
 	bool isTerrainMesh = false;
-	Vector3D TerrainSize;
+	Vector4D TerrainSize;
 	int Terrain_Height_Map_uid = -1;
 	
 	bool isNormalMap = false;
@@ -240,9 +240,17 @@ struct constant
 	Vector4D m_light_direction = Vector4D(0, 0, 1, 0);
 	Vector4D m_camera_position;
 	Vector4D m_light_position = Vector4D(0, 1, 0, 0);
+	Vector4D TerrainSize;
 	float m_light_radius = 4.0f;
 	float m_time = 0.0f;
 	float distortion_level = 1.0;
-	Vector3D TerrainSize;
 	float sizeHeightMap;
 };
+
+
+
+
+
+
+
+

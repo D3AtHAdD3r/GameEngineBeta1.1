@@ -16,7 +16,7 @@ PixelShader::PixelShader(std::wstring shaderfilename, std::string entryPointName
 	HRESULT hr;
 	ID3DBlob* errblob = nullptr;
 
-	if (FAILED(hr = D3DCompileFromFile(shaderfilename.c_str(), nullptr, nullptr, entryPointName.c_str(), shader_model.c_str(), NULL, NULL, &psblob, &errblob)))
+	if (FAILED(hr = D3DCompileFromFile(shaderfilename.c_str(), nullptr, nullptr, entryPointName.c_str(), shader_model.c_str(), D3DCOMPILE_DEBUG, NULL, &psblob, &errblob)))
 	{
 		if (errblob)
 			errblob->Release();

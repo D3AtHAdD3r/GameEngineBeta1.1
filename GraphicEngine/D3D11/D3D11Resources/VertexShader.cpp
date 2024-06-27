@@ -18,7 +18,7 @@ VertexShader::VertexShader(std::wstring shaderfilename, std::string entryPointNa
 
 	ID3DBlob* errblob = nullptr;
 
-	if (FAILED(hr = D3DCompileFromFile(shaderfilename.c_str(), nullptr, nullptr, entryPointName.c_str(), shader_model.c_str(), NULL, NULL, &vsblob, &errblob)))
+	if (FAILED(hr = D3DCompileFromFile(shaderfilename.c_str(), nullptr, nullptr, entryPointName.c_str(), shader_model.c_str(), D3DCOMPILE_DEBUG, NULL, &vsblob, &errblob)))
 	{
 		if (errblob)
 			errblob->Release();

@@ -52,7 +52,7 @@ void RendererDX11::UpdateConstantBuffer(Entity* currEntity, Camera* pcam)
 	cBuff.m_proj = pcam->Get_ProjectionMatrix();
 	
 	//get from light component
-	cBuff.m_light_position = { 0,0,0,0 };
+	cBuff.m_light_position = { 0.0f,0.0f,0.0f,0.0f };
 	cBuff.m_light_direction = { 0.0f, 0.0f, -1.0f, 0.0f };
 	cBuff.distortion_level = 0.9f;
 
@@ -241,16 +241,12 @@ bool RendererDX11::SetPreBinds(Renderer_PreBindData* pData)
 
 bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 {
-	setRasterizerState(pData->FrontFaceCull);
+
+	setVertexBufferandLayout(pData->size_vertex, pData->vBuffer, pData->iLayout);
+	setIndexBuffer(pData->pIndexbuffer);
 
 	pD3D11Core->pContext->UpdateSubresource(pData->cbuffer, NULL, NULL, pData->pCBuffer_data, NULL, NULL);
-	//setConstantBuffer(pData->cbuffer);
-
-	/*if (binded_cb != pData->cbuffer)
-	{
-		setConstantBuffer(pData->cbuffer);
-		binded_cb = pData->cbuffer;
-	}*/
+	setConstantBuffer(pData->cbuffer);
 
 	if (binded_vs != pData->vShader)
 	{
@@ -258,11 +254,14 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 		binded_vs = pData->vShader;
 	}
 
+	setRasterizerState(pData->FrontFaceCull);
+
 	if (binded_ps != pData->pShader)
 	{
 		setPixelShader(pData->pShader);
 		binded_ps = pData->pShader;
 	}
+
 
 	//setConstantBuffer(pData->cbuffer);
 	if (binded_cb != pData->cbuffer)
@@ -271,8 +270,10 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 		binded_cb = pData->cbuffer;
 	}
 
-	setVertexBufferandLayout(pData->size_vertex, pData->vBuffer, pData->iLayout);
-	setIndexBuffer(pData->pIndexbuffer);
+	
+
+	
+
 
 	//Textures
 	switch (pData->TexBindType)
