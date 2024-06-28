@@ -1,25 +1,20 @@
 #include<GraphicEngine/Utilities/Headers/HeadersD3D.h>
 #include<string>
-//#include<Windows.h>
+#include<GraphicEngine\D3D11\MeshAndTextureResources\Texture_Structs.h>
 
-enum TextureType
-{
-	NORMAL_TEXTURE = 0,		//concrete file
-	RTV_TEXTURE,			//framebuffer
-	BACK_BUFFER_TEXTURE		//backbuffer
-};
+
 
 
 class Texture
 {
 private:
-	Texture(std::wstring texture_name, TextureType texture_Type, const int& u_ID);
+	Texture(std::wstring texture_name, TEXTURE_TYPE texture_Type, const int& u_ID);
 	~Texture();
 
 public:
 	const std::wstring& GetTextureName();
 	const int& getTextureID();
-	const TextureType& getTextureType();
+	const TEXTURE_TYPE& getTextureType();
 public:
 	void incrementCounter();
 	void decrementCounter();
@@ -44,10 +39,10 @@ private:
 
 private:
 	std::wstring textureName;
-	TextureType textureType;
+	TEXTURE_TYPE textureType;
 	int UserCounter = 0;
 	int uID = -1;
-	unsigned short BackBufferIndex = 0;
+	short BackBufferIndex = 0;
 	RECT Size;
 private:
 	friend class TextureManager;

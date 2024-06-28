@@ -79,6 +79,9 @@ private:
 	void setTextureResourceVertexShader(std::vector<Texture*> TextureList);
 	void setTextureResourcePixelShader(std::vector<Texture*> TextureList);
 
+	void setTextureResourceVertexShader_arrayed(std::vector<Texture*> TextureList);
+	void setTextureResourcePixelShader_arrayed(std::vector<Texture*> TextureList);
+
 	//oneTexMap_perDrawCall
 	void setTextureResourceVertexShader(Texture* pTexture);
 	void setTextureResourcePixelShader(Texture* pTexture);

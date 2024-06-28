@@ -189,7 +189,8 @@ bool TestGame::Create_Scene_And_Entity()
 	ed.mesh_uid = 0;
 	ed.getMeshfromFile = true;
 	ed.texture_uids.push_back(1);
-	ed.primitive_texture_type = Primitive_texture_Binding_type::oneTexMap_perDrawCall;
+	ed.texture_uids.push_back(2);
+	ed.primitive_texture_type = Primitive_texture_Binding_type::allTexMaps_perDrawCall;
 	ed.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
 	ed.model_initialPosition = { 0,30,100.0f };
 	//ed.model_initialScaling = { 7.0f,7.0f,7.0f };
@@ -198,7 +199,7 @@ bool TestGame::Create_Scene_And_Entity()
 	ed.inLayout = layout;
 	ed.sizeLayout = ARRAYSIZE(layout);
 
-	ed.pixel_Shader_uid = 0;
+	ed.pixel_Shader_uid = 4;
 
 	ed.constant_buffer = cb;
 	ed.size_constant_buffer = sizeof(constant);
@@ -280,8 +281,7 @@ bool TestGame::Create_Scene_And_Entity()
 	ed5.primitive_uid = 77;
 	ed5.Scene_Id = 0;
 	ed5.frontFaceCull = false;
-
-	ed_list.push_back(&ed5);
+	//ed_list.push_back(&ed5);
 
 	if (!CreateSceneAndEntity(sd_list, ed_list))
 	{

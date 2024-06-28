@@ -32,6 +32,7 @@ enum Primitive_texture_Binding_type
 	oneTexMap_OneNormalMap_perDrawCall = 0,		//1 tex-Map, 1NormalMap- binded per draw call (normal maps required)
 	oneTexMap_perDrawCall,						//1 tex-map binded per draw call
 	allTexMaps_perDrawCall,						//all tex-maps binded per draw call
+	allTexMaps_arrayed_perDrawCall,
 	NoTextures,
 	unknown
 };

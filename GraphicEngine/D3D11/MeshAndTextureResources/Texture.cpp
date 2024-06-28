@@ -3,7 +3,7 @@
 
 
 
-Texture::Texture(std::wstring texture_name, TextureType texture_Type, const int& u_ID)
+Texture::Texture(std::wstring texture_name, TEXTURE_TYPE texture_Type, const int& u_ID)
 	:
 	textureName(texture_name),
 	textureType(texture_Type),
@@ -54,7 +54,7 @@ const int& Texture::getTextureID()
 	return uID;
 }
 
-const TextureType& Texture::getTextureType()
+const TEXTURE_TYPE& Texture::getTextureType()
 {
 	return this->textureType;
 }

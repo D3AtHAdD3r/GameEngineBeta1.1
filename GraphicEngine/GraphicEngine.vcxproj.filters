@@ -335,6 +335,9 @@
     <ClInclude Include="Interface\IApplication\IApplication.h">
       <Filter>Interface\IApplication</Filter>
     </ClInclude>
+    <ClInclude Include="D3D11\MeshAndTextureResources\Texture_Structs.h">
+      <Filter>D3D11\MeshAndTextureResources\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D11\D3D11Resources\ConstantBuffer.cpp">
@@ -479,6 +482,9 @@
     </FxCompile>
     <FxCompile Include="..\Shaders\vShader_Terrain.hlsl">
       <Filter>Shaders\TerrainShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\pShader_Test_Asteroid.hlsl">
+      <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

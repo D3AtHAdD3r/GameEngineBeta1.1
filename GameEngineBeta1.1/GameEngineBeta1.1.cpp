@@ -17,13 +17,14 @@ FILEMAPS GetFileMaps()
 {
     std::unordered_map<int, std::wstring> File_Map_VertexShader;
     File_Map_VertexShader.emplace(0, L"..\\Shaders\\vertexShader.hlsl");
-    File_Map_VertexShader.emplace(1, L"..\\Shaders\\vShader_Terrain.hlsl");
+    File_Map_VertexShader.emplace(1, L"..\\Shaders\\vShader_Terrain.hlsl");  
 
     std::unordered_map<int, std::wstring> File_Map_PixelShader;
     File_Map_PixelShader.emplace(0, L"..\\Shaders\\pixelShader_DL.hlsl");  //pShader_stars_map.hlsl  pixelShader_No_Tex.hlsl
     File_Map_PixelShader.emplace(1, L"..\\Shaders\\pShader_stars_map.hlsl");
     File_Map_PixelShader.emplace(2, L"..\\Shaders\\pixelShader_No_Tex.hlsl");
     File_Map_PixelShader.emplace(3, L"..\\Shaders\\pShader_Terrain.hlsl");
+    File_Map_PixelShader.emplace(4, L"..\\Shaders\\pShader_Test_Asteroid.hlsl");
 
 
     std::unordered_map<int, std::wstring> File_Map_Meshes;

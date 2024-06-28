@@ -313,6 +313,7 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 		UINT start_index_location = (UINT)(pData->Material_Draw_Details[0].first);
 		UINT index_count = (UINT)(pData->Material_Draw_Details[0].second);
 		drawIndexedTriangleList(index_count, 0, start_index_location);
+		break;
 	}
 
 	case Primitive_texture_Binding_type::NoTextures:
@@ -446,6 +447,15 @@ void RendererDX11::setTextureResourcePixelShader(std::vector<Texture*> TextureLi
 	}
 	pD3D11Core->pContext->PSSetShaderResources(startslot, numviews, list_res);
 	pD3D11Core->pContext->PSSetSamplers(0, numviews, list_sampler);
+}
+
+void RendererDX11::setTextureResourceVertexShader_arrayed(std::vector<Texture*> TextureList)
+{
+	
+}
+
+void RendererDX11::setTextureResourcePixelShader_arrayed(std::vector<Texture*> TextureList)
+{
 }
 
 void RendererDX11::setTextureResourceVertexShader(Texture* pTexture)
