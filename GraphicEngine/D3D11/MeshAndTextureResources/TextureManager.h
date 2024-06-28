@@ -39,7 +39,8 @@ private:
 	void deleteTexture_Unsafe(Texture* pTex);
 
 private:
-	bool LoadTextureFromFile(const wchar_t* full_path, Texture* pTexture);
+	bool LoadTextureFromFile(const wchar_t* full_path, ID3D11Resource** pTexture, ID3D11ShaderResourceView** pShader_res_view, ID3D11SamplerState** pSampler_State); // outdated
+	bool LoadTextureFromFile(const wchar_t* full_path, Texture* pTexture); //use this
 
 private:
 	bool CreateRenderTargetView(ID3D11Texture2D** p_texture, ID3D11RenderTargetView** p_RenderTargetView, const unsigned int& width, const unsigned int& height);

@@ -27,16 +27,13 @@ enum ENTITY_TYPE
 	ENUM_UNKNOWN
 };
 
-enum Primitive_texture_Binding_type
+enum Entity_Texture_Type
 {
-	oneTexMap_OneNormalMap_perDrawCall = 0,		//1 tex-Map, 1NormalMap- binded per draw call (normal maps required)
-	oneTexMap_perDrawCall,						//1 tex-map binded per draw call
-	allTexMaps_perDrawCall,						//all tex-maps binded per draw call
-	allTexMaps_arrayed_perDrawCall,
-	NoTextures,
-	unknown
+	Tex_Default = 0,
+	Tex_Normal_Map = 1,
+	Tex_Height_Map = 2,
+	Tex_Unknown
 };
-
 
 struct ModelInitData
 {
@@ -171,7 +168,6 @@ public:
 	std::vector<int> texture_uids;
 	std::vector<int> texture_normals_uids;
 	
-	Primitive_texture_Binding_type primitive_texture_type = Primitive_texture_Binding_type::unknown;
 	ENTITY_TYPE Entity_type = ENTITY_TYPE::ENUM_UNKNOWN;
 public:
 	bool Is_Renderable = true;

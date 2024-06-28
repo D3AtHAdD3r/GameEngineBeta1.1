@@ -1,5 +1,6 @@
 #include<vector>
 #include<string>
+#include<unordered_map>
 #include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 
 
@@ -77,11 +78,17 @@ private:
 	IndexBuffer* indexBuffer = nullptr;
 	ConstantBuffer* constantBuffer = nullptr;
 private:
-	std::vector<TextureDetails*> list_textures;
-	std::vector<TextureDetails*> list_textures_normal;
-	std::vector<Texture*> direct_Texture_list;
-	std::vector<Texture*> direct_Texture_Normal_list;
-	Texture* HeightMap = nullptr;
+	//std::vector<TextureDetails*> list_textures;
+	//std::vector<TextureDetails*> list_textures_normal;
+	//td::vector<Texture*> direct_Texture_list;
+	//d::vector<Texture*> direct_Texture_Normal_list;
+	//Texture* HeightMap = nullptr;
+
+private:
+	//new
+	std::unordered_map<int, Texture*> list_textures_Default;
+	std::unordered_map<int, Texture*> list_textures_Normal_Map;
+	std::unordered_map<int, Texture*> list_textures_Height_Map;
 private:
 	std::wstring primitive_Name;
 	int primitive_id = 0;
