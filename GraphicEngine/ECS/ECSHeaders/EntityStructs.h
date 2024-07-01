@@ -5,6 +5,7 @@
 #include<string>
 #include<vector>
 
+
 class VertexMesh;
 struct MaterialSlot;
 struct D3D11_INPUT_ELEMENT_DESC;
@@ -18,6 +19,9 @@ namespace HARDCODINGS
 	static std::wstring BackBuffer_NAME_START = L"BBF"; //lol
 	static std::string World_config_loc = "..\\GameDataConfigs\\WorldData";
 	static std::string world_name = "world_spaceship";
+	static int Texture_Default_Register_Index = 0;
+	static int Texture_Normal_Map_Register_Index = 30;
+	static int Texture_Height_Map_Register_Index = 70;
 }
 
 enum ENTITY_TYPE
@@ -159,19 +163,19 @@ public:
 public:
 	int mesh_uid = -1;
 	bool getMeshfromFile = true;
-
 	bool isTerrainMesh = false;
 	Vector4D TerrainSize;
-	int Terrain_Height_Map_uid = -1;
 	
-	bool isNormalMap = false;
-	std::vector<int> texture_uids;
-	std::vector<int> texture_normals_uids;
-	
+public:
+	std::vector<std::pair<Entity_Texture_Type, int>> Texture_Concrete_uIDs;
+
+public:
 	ENTITY_TYPE Entity_type = ENTITY_TYPE::ENUM_UNKNOWN;
+
 public:
 	bool Is_Renderable = true;
 	bool frontFaceCull = false;
+
 public:
 	//vertex shader requirements
 	int vertex_Shader_uid = -1;
@@ -238,6 +242,7 @@ struct constant
 	Vector4D m_camera_position;
 	Vector4D m_light_position = Vector4D(0, 1, 0, 0);
 	Vector4D TerrainSize;
+	int Material_id = -1;
 	float m_light_radius = 4.0f;
 	float m_time = 0.0f;
 	float distortion_level = 1.0;

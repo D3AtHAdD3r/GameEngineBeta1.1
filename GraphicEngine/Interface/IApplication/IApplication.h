@@ -24,10 +24,10 @@ protected:
 
 public:
 	//engine to user
-	virtual void onInit() = 0;
-	virtual void onBeginFrame() = 0;
-	virtual void onEndFrame() = 0;
-	virtual void onShutdown() = 0;
+	virtual bool onInit() = 0;
+	virtual bool onBeginFrame() = 0;
+	virtual bool onEndFrame() = 0;
+	virtual bool onShutdown() = 0;
 
 
 public:

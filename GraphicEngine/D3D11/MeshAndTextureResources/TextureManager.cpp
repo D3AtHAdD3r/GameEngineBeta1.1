@@ -6,6 +6,7 @@
 #include<GraphicEngine\D3D11\MeshAndTextureResources\Texture_Structs.h>
 
 #include <DirectXTex.h>
+//#include<AssetsAndLibs\Libs\DirectXTex\include\DirectXTex.h>
 
 
 TextureManager::TextureManager(const std::unordered_map<int, std::wstring>& File_Map)
@@ -32,7 +33,7 @@ TextureManager::~TextureManager()
 
 Texture* TextureManager::CreateTexture(Texture_Creation_Details* tex_creation_data)
 {
-	if (tex_creation_data->u_ID < 0 || !tex_creation_data->tex_type == TEXTURE_TYPE::Unknown_Texture)
+	if (tex_creation_data->u_ID < 0)
 		return nullptr;
 
 	switch (tex_creation_data->tex_type)
@@ -50,6 +51,17 @@ Texture* TextureManager::CreateTexture(Texture_Creation_Details* tex_creation_da
 	case TEXTURE_TYPE::BackBuffer:
 	{
 		return CreateTextureFromBackBuffer(tex_creation_data->tex_name, tex_creation_data->buffer_index, tex_creation_data->u_ID);
+		break;
+	}
+	case TEXTURE_TYPE::Unknown_Texture:
+	{
+		//check if exist, else ...
+		Texture* pTex = getTexturebyUID(tex_creation_data->u_ID);
+		if (pTex)
+			return pTex;
+		else
+			return CreateTextureConcrete(tex_creation_data->u_ID);
+
 		break;
 	}
 
@@ -110,7 +122,7 @@ Texture* TextureManager::CreateTextureConcrete(const int& u_ID)
 
 Texture* TextureManager::CreateTextureFromResourceViews(std::wstring tex_name, const unsigned int& width, const unsigned int& height, const int& u_ID)
 {
-	if (u_ID < 0 || tex_name.empty() || !width || !height) return nullptr;
+	if (u_ID < 0) return nullptr;
 
 	if (TextureContainer_FrameBuffer.find(u_ID) != TextureContainer_FrameBuffer.end())
 	{
@@ -127,6 +139,8 @@ Texture* TextureManager::CreateTextureFromResourceViews(std::wstring tex_name, c
 	}
 	else
 	{
+		if (!width || !height || tex_name.empty()) return nullptr;
+
 		Texture* currTexture = new Texture(tex_name, TEXTURE_TYPE::FrameBuffer, u_ID);
 
 		ID3D11Texture2D* ptexture2D = nullptr;
@@ -173,7 +187,7 @@ Texture* TextureManager::CreateTextureFromResourceViews(std::wstring tex_name, c
 
 Texture* TextureManager::CreateTextureFromBackBuffer(std::wstring tex_name, const short& buffer_index, const int& u_ID)
 {
-	if (u_ID < 0 || tex_name.empty()) return nullptr;
+	if (u_ID < 0) return nullptr;
 
 	if (TextureContainer_BackBuffer.find(u_ID) != TextureContainer_BackBuffer.end())
 	{
@@ -190,6 +204,8 @@ Texture* TextureManager::CreateTextureFromBackBuffer(std::wstring tex_name, cons
 	}
 	else
 	{
+		if (tex_name.empty()) return nullptr;
+
 		Texture* currTexture = new Texture(tex_name, TEXTURE_TYPE::BackBuffer, u_ID);
 		ID3D11RenderTargetView* pRenderTargetView = nullptr;
 		ID3D11DepthStencilView* pDepthStencilView = nullptr;
@@ -404,6 +420,8 @@ bool TextureManager::check_Exist(const int& u_id)
 		return true;
 	if (TextureContainer_BackBuffer.find(u_id) != TextureContainer_BackBuffer.end())
 		return true;
+
+	return false;
 }
 
 bool TextureManager::freeTexture(Texture* pTex)

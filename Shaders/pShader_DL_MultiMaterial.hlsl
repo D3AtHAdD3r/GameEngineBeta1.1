@@ -1,6 +1,4 @@
-
-
-Texture2D Texture : register(t0);
+Texture2D Texture_Default[30] : register(t0);
 sampler TextureSampler : register(s0);
 
 
@@ -13,7 +11,6 @@ struct PS_INPUT
     float3 direction_to_camera : TEXCOORD2; //needed for directional light
     row_major float3x3 tbn : TEXCOORD3;
 };
-
 
 cbuffer constant : register(b0)
 {
@@ -31,7 +28,15 @@ cbuffer constant : register(b0)
     float sizeHeightMap;
 };
 
+
+
 float4 psmain(PS_INPUT input) : SV_Target
 {
-    return Texture.Sample(TextureSampler, input.texcoord);
+    
+    return float4(0, 0, 0, 0);
+
 }
+
+
+
+

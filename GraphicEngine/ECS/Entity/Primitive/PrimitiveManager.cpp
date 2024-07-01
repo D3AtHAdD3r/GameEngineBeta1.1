@@ -1,6 +1,6 @@
 #include "PrimitiveManager.h"
 #include<GraphicEngine/Utilities/Headers/Headers.h>
-#include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
+//#include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Mesh.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/ResourceManager.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/MeshManager.h>
@@ -19,6 +19,7 @@
 #include<GraphicEngine/D3D11/D3D11Resources/ConstantBuffer.h>
 #include<GraphicEngine/D3D11/D3D11Resources/ConstantBufferManager.h>
 #include<GraphicEngine/ECS/Entity/Primitive/Primitive.h>
+#include<GraphicEngine\D3D11\MeshAndTextureResources\Texture_Structs.h>
 
 PrimitiveManager::PrimitiveManager(D3D11Manager* p_D3DManager, ResourceManager* p_ResourceManager)
 	:
@@ -36,6 +37,7 @@ PrimitiveManager::~PrimitiveManager()
 
 Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 {
+	//----------------Mesh------------------//
 	Mesh* mesh_Data = nullptr;
 	int mesh_uid, vBuffer_uid, iBuffer_uid;
 	mesh_uid = vBuffer_uid = iBuffer_uid = prim_desc->mesh_uid;
@@ -73,44 +75,26 @@ Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 		}
 	}
 
-	std::vector<Texture*> list_texture_data;
-	std::vector<Texture*> list_texture_data_normal;
-	Texture* HeightMap = nullptr;
+	//---------------------Textures--------------------------//
 
-	if (prim_desc->isTerrainMesh)
+	Texture_Creation_Details texDetails;
+	std::vector<std::pair<Entity_Texture_Type, Texture*>> Texture_List;
+
+	
+	for (auto& [Tex_Type, uID] : prim_desc->Texture_Concrete_uIDs)
 	{
-		HeightMap = pResourceManager->pTextureManager->CreateTexture(prim_desc->Terrain_Height_Map_uid);
-		if (HeightMap == nullptr)
+		texDetails = Texture_Creation_Details();
+		texDetails.u_ID = uID;
+		texDetails.tex_type = TEXTURE_TYPE::Unknown_Texture; // well, type doesnt gets passed, so this is the workaround
+		Texture* currTex = pResourceManager->pTextureManager->CreateTexture(&texDetails);
+		if (!currTex)
 		{
 			releaseAll();
 			return nullptr;
 		}
+		Texture_List.push_back({ Tex_Type, currTex });
 	}
-
-	if (prim_desc->texture_uids.size() > 0)
-	{
-		for (unsigned int i = 0; i < prim_desc->texture_uids.size(); ++i)
-		{
-			Texture* texture_data = pResourceManager->pTextureManager->CreateTexture(prim_desc->texture_uids[i]);
-			if (texture_data == nullptr)
-			{
-				releaseAll();
-				return nullptr;
-			}
-			list_texture_data.push_back(texture_data);
-			
-			if (prim_desc->isNormalMap)
-			{
-				Texture* texture_data = pResourceManager->pTextureManager->CreateTexture(prim_desc->texture_normals_uids[i]);
-				if (texture_data == nullptr)
-				{
-					releaseAll();
-					return nullptr;
-				}
-				list_texture_data_normal.push_back(texture_data);
-			}
-		}
-	}
+	//------------------------------------------------------//
 
 	
 	VertexShader* vShader = pD3DManager->pVShaderManager->CreateVertexShader(prim_desc->vshader_entry_point, prim_desc->vshader_version, prim_desc->vertex_Shader_uid);
@@ -151,13 +135,12 @@ Primitive* PrimitiveManager::CreatePrimitive(EntityDesc* prim_desc)
 		return nullptr;
 	}
 
-	Primitive* currPrimitive = new Primitive(mesh_Data, prim_desc->primitive_uid,
+	Primitive* currPrimitive = new Primitive(
+		mesh_Data, prim_desc->primitive_uid,
 		vShader, pShader, vBuffer, iBuffer, 
-		cBuffer, prim_desc->constant_buffer, 
-		list_texture_data, list_texture_data_normal, 
-		prim_desc->isNormalMap, prim_desc->texture_uids.size(),
+		cBuffer, prim_desc->constant_buffer,
 		prim_desc->frontFaceCull, prim_desc->primitive_name, 
-		prim_desc->primitive_texture_type, HeightMap
+		Texture_List
 	);
 
 	PrimitiveContainer.push_back(currPrimitive);
@@ -181,53 +164,19 @@ std::vector<Primitive*>& PrimitiveManager::GetPrimitiveContainer()
 	return PrimitiveContainer;
 }
 
-bool PrimitiveManager::add_texture(Texture* new_tex, std::wstring primitive_Name)
-{
-	if (primitive_Name.empty() || !new_tex) return false;
 
-	Primitive* prim = getPrimitive(primitive_Name);
+bool PrimitiveManager::Add_texture(Entity_Texture_Type Texture_Type, Texture* new_tex)
+{
+	if (!new_tex) return false;
+
+	Primitive* prim = getPrimitive(new_tex->getTextureID());
 	if (!prim) return false;
 
-	prim->addTexture(new_tex);
+	if (!prim->AddTexture(Texture_Type, new_tex)) return false;
 
 	return true;
 }
 
-bool PrimitiveManager::add_texture(Texture* new_tex, const int& uid)
-{
-	if (uid < 0 || !new_tex) return false;
-
-	Primitive* prim = getPrimitive(uid);
-	if (!prim) return false;
-
-	prim->addTexture(new_tex);
-
-	return true;
-}
-
-bool PrimitiveManager::fill_texture(Texture* new_tex, std::wstring primitive_Name)
-{
-	if (primitive_Name.empty() || !new_tex) return false;
-
-	Primitive* prim = getPrimitive(primitive_Name);
-	if (!prim) return false;
-
-	if (!prim->fillTexture(new_tex, new_tex->GetTextureName())) return false;
-
-	return true;
-}
-
-bool PrimitiveManager::fill_texture(Texture* new_tex, const int& uid)
-{
-	if (uid < 0 || !new_tex) return false;
-
-	Primitive* prim = getPrimitive(uid);
-	if (!prim) return false;
-
-	if (!prim->fillTexture(new_tex, new_tex->GetTextureName())) return false;
-
-	return true;
-}
 
 Primitive* PrimitiveManager::getPrimitive(std::wstring primitive_Name)
 {
@@ -271,15 +220,22 @@ bool PrimitiveManager::DeletePrimitive(Primitive* pPrim)
 
 	if (!pResourceManager->pMeshManager->freeMesh(pPrim->mesh_Data)) return false;
 
-	for (short i = 0; i < pPrim->list_textures.size(); ++i)
+	for (short i = 0; i < pPrim->list_textures_Default.size(); ++i)
 	{
-		if (!pResourceManager->pTextureManager->freeTexture(pPrim->list_textures[i]->pTexture)) return false;
+		if (!pResourceManager->pTextureManager->freeTexture(pPrim->list_textures_Default[i])) return false;
 	}
 
-	for (short i = 0; i < pPrim->list_textures_normal.size(); ++i)
+	for (short i = 0; i < pPrim->list_textures_Normal_Map.size(); ++i)
 	{
-		if (!pResourceManager->pTextureManager->freeTexture(pPrim->list_textures_normal[i]->pTexture)) return false;
+		if (!pResourceManager->pTextureManager->freeTexture(pPrim->list_textures_Normal_Map[i])) return false;
 	}
+
+	for (short i = 0; i < pPrim->list_textures_Normal_Map.size(); ++i)
+	{
+		if (!pResourceManager->pTextureManager->freeTexture(pPrim->list_textures_Height_Map[i])) return false;
+	}
+
+
 
 	if (!pD3DManager->pConstantBufferManager->freeConstantBuffer(pPrim->constantBuffer)) return false;
 	if (!pD3DManager->pIndexBufferManager->freeIndexBuffer(pPrim->indexBuffer)) return false;

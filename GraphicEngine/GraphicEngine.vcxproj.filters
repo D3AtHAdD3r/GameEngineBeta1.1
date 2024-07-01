@@ -162,6 +162,9 @@
     <Filter Include="Shaders\TerrainShaders">
       <UniqueIdentifier>{600b57d1-700c-4a03-a99b-eea50f69eeaa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\New">
+      <UniqueIdentifier>{07ef7ccd-8a2c-45b2-8806-02d93164c9ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h">
@@ -485,6 +488,9 @@
     </FxCompile>
     <FxCompile Include="..\Shaders\pShader_Test_Asteroid.hlsl">
       <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\pShader_DL_MultiMaterial.hlsl">
+      <Filter>Shaders\New</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

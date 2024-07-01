@@ -64,8 +64,6 @@ bool ECSToRendererData::fill_Renderer_MainBindData(Primitive* pPrim, Renderer_Bi
 	pBindData->size_vertex = pPrim->GetMesh()->getVertexSize();
 
 	pBindData->FrontFaceCull = pPrim->GetFrontFaceCulling();
-	pBindData->TexBindType = (Primitive_texture_Binding_type)(pPrim->Get_Primitive_texture_Type());
-
 	pBindData->MaterialCount = pPrim->GetMesh()->GetMaterialCount();
 
 	for (size_t m = 0; m < pPrim->GetMesh()->GetMaterialCount(); ++m)
@@ -75,8 +73,9 @@ bool ECSToRendererData::fill_Renderer_MainBindData(Primitive* pPrim, Renderer_Bi
 		pBindData->Material_Draw_Details.push_back({ start_index_location , index_count });
 	}
 
-	pBindData->list_textures = pPrim->Get_Texture_List();
-	pBindData->list_textures_normal = pPrim->Get_Texture_Normal_List();
+	pBindData->list_textures_Default = pPrim->Get_Texture_List_Default();
+	pBindData->list_textures_Normal_Map = pPrim->Get_Texture_List_Normal_Map();
+	pBindData->list_textures_Height_Map = pPrim->Get_Texture_List_Height_Map();
 
 	return true;
 }

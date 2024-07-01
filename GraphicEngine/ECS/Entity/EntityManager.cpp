@@ -28,12 +28,11 @@ EntityManager::~EntityManager()
 	{
 		for (auto& currEnt : EntityConatiner)
 		{
-			delete currEnt;
+			DeleteEntity(currEnt);
 		}
 	}
 
 	delete pPrimitiveManager;
-
 }
 
 Entity* EntityManager::CreateEntity(EntityDesc* ent_desc)
@@ -86,6 +85,12 @@ const std::unordered_map<std::type_index, std::vector<Entity*>>& EntityManager::
 
 bool EntityManager::DeleteEntity(Entity* pEnt)
 {
+	/*
+	TODO : Check if entity getting erased from main container - EntityContainer
+	  - currEntContainer.erase(currEntContainer.begin() + i); // is it working!!
+	*/
+	if (!pEnt) return false;
+
 	if (EntityContainer.find(typeid(*pEnt)) != EntityContainer.end())
 	{
 		std::vector<Entity*>& currEntContainer = EntityContainer[typeid(*pEnt)];
@@ -96,7 +101,7 @@ bool EntityManager::DeleteEntity(Entity* pEnt)
 			{
 				if (pPrimitiveManager->DeletePrimitive(pEnt->pPrimitive))
 				{
-					//EntityContainer[typeid(*pEnt)].erase(EntityContainer[typeid(*pEnt)].begin() + i);
+					//EntityContainer[typeid(*pEnt)].erase(EntityContainer[typeid(*pEnt)].begin() + i);  //this 
 					currEntContainer.erase(currEntContainer.begin() + i);
 					NumberOfEntities--;
 					delete pEnt;

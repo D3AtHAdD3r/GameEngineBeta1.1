@@ -12,10 +12,10 @@ public:
 	~TestGame();
 public:
 	//engine to user
-	virtual void onInit() override;
-	virtual void onBeginFrame() override;
-	virtual void onEndFrame() override;
-	virtual void onShutdown()override;
+	virtual bool onInit() override;
+	virtual bool onBeginFrame() override;
+	virtual bool onEndFrame() override;
+	virtual bool onShutdown()override;
 
 	//InputHandling
 	virtual void onKeyDown(int key) override;

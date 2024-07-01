@@ -28,6 +28,7 @@ cbuffer constant : register(b0)
     float4 m_camera_position;
     float4 m_light_position;
     float4 TerrainSize;
+    int Material_id;
     float m_light_radius;
     float m_time;
     float distortion_level;

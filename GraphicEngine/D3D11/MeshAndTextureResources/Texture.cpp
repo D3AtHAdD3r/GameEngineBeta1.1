@@ -134,6 +134,11 @@ ID3D11ShaderResourceView* Texture::GetShaderResourceView()
 	return this->pShader_res_view;
 }
 
+ID3D11SamplerState* Texture::GetSamplerState()
+{
+	return pSamplerState;
+}
+
 RECT Texture::Get_Size() const
 {
 	return Size;

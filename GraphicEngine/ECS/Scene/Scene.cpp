@@ -45,16 +45,25 @@ Scene::Scene(D3D11Manager* p_D3DManager, ResourceManager* p_ResourceManager, Sce
 	this->width = (unsigned int)width;
 	this->height = (unsigned int)height;
 
+	Texture_Creation_Details texData;
+	texData.u_ID = this->scene_texture_uid;
+	texData.tex_name = this->sceneName;
+
 	//either scene will be drawn directly on backbuffer or other buffer
 	if (sd->connect_backbuffer)
 	{
-		scene_texture = presManager->pTextureManager->CreateTextureFromBackBuffer(this->sceneName, sd->BackBuffer_Index, this->scene_texture_uid);
+		texData.buffer_index = sd->BackBuffer_Index;
+		texData.tex_type = TEXTURE_TYPE::BackBuffer;
+		scene_texture = presManager->pTextureManager->CreateTexture(&texData);
 		if (!scene_texture)
 			throw NORMAL_EXCEPT("Texture creation failed in Scene constructor ...\n");
 	}
 	else
 	{
-		scene_texture = presManager->pTextureManager->CreateTextureFromResourceViews(this->sceneName, this->width, this->height, this->scene_texture_uid);
+		texData.width = this->width;
+		texData.height = this->height;
+		texData.tex_type = TEXTURE_TYPE::FrameBuffer;
+		scene_texture = presManager->pTextureManager->CreateTexture(&texData);
 		if (!scene_texture)
 			throw NORMAL_EXCEPT("Texture creation failed in Scene constructor ...\n");
 	}
@@ -271,7 +280,7 @@ bool Scene::DeleteEntity(Entity* pEnt)
 
 bool Scene::UpdateTextureOnResize(unsigned int width, unsigned int height)
 {
-	return presManager->pTextureManager->UpdateTextureOnResize(scene_texture_uid, width, height, scene_texture);
+	return presManager->pTextureManager->UpdateTextureOnResize(scene_texture_uid, width, height);
 }
 
 Camera* Scene::CreateCamera(CameraInitData* pCD)

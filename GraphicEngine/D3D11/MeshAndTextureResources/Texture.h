@@ -29,6 +29,7 @@ public:
 	ID3D11RenderTargetView* GetRenderTargetView();
 	ID3D11DepthStencilView* GetDepthStencilView();
 	ID3D11ShaderResourceView* GetShaderResourceView();
+	ID3D11SamplerState* GetSamplerState();
 	RECT Get_Size() const;
 private:
 	ID3D11Resource* pTexture = nullptr;

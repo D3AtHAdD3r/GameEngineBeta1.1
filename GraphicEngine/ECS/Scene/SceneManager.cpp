@@ -157,32 +157,17 @@ bool SceneManager::check_Entity_desc(EntityDesc* EntityDesc)
 
     if (!EntityDesc->constant_buffer || !EntityDesc->size_constant_buffer) return false;
 
-    if (EntityDesc->primitive_texture_type == Primitive_texture_Binding_type::unknown)
-        return false;
-
     if (EntityDesc->Scene_Id < 0) return false;
     if (!checkSceneExist(EntityDesc->Scene_Id)) return false;
-
-
-    //1 normal map per 1 tex map required  
-    if (EntityDesc->isNormalMap)
-    {
-        if (EntityDesc->primitive_texture_type != Primitive_texture_Binding_type::oneTexMap_OneNormalMap_perDrawCall) return false;
-        if (EntityDesc->texture_uids.size() != EntityDesc->texture_normals_uids.size()) return false;
-    }
-
-    
 
     if (EntityDesc->getMeshfromFile)
     {
         if (EntityDesc->mesh_uid < 0) return false;
     }
     
-
     if (EntityDesc->isTerrainMesh)
     {
         if (EntityDesc->getMeshfromFile) return false;
-        if (EntityDesc->Terrain_Height_Map_uid < 0) return false;
         if (!EntityDesc->TerrainSize.m_x || !EntityDesc->TerrainSize.m_y || !EntityDesc->TerrainSize.m_z) return false;
     }
 

@@ -192,7 +192,8 @@ void GraphicEngine::Check_File_Exists(RenderData* p_RenderData)
 
 void GraphicEngine::Run()
 {
-	iApp->onInit();
+	if (!iApp->onInit())
+		throw NORMAL_EXCEPT("UserCallback, iApp->onInit() Failed. Check User-Side errors")
 
 	while (true)
 	{
@@ -201,7 +202,8 @@ void GraphicEngine::Run()
 		InputSystem::get()->update();
 		MessagePump();
 
-		iApp->onBeginFrame();
+		if (!iApp->onBeginFrame())
+			throw NORMAL_EXCEPT("UserCallback, iApp->onBeginFrame() Failed. Check User-Side errors")
 
 		while (!RenderFlag)
 		{
@@ -214,7 +216,8 @@ void GraphicEngine::Run()
 			throw NORMAL_EXCEPT("pRenderer->DrawFrame() failed");
 		}
 
-		iApp->onEndFrame();
+		if (!iApp->onEndFrame())
+			throw NORMAL_EXCEPT("UserCallback, iApp->onEndFrame() Failed. Check User-Side errors");
 	}
 
 	iApp->onShutdown();

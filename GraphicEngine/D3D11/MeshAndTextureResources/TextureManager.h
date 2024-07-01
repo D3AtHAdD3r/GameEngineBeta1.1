@@ -2,7 +2,9 @@
 #include<string>
 #include<unordered_map>
 
+
 class Texture;
+struct Texture_Creation_Details;
 
 class TextureManager
 {

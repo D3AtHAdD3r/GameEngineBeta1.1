@@ -19,12 +19,12 @@ TestGame::~TestGame()
 	
 }
 
-void TestGame::onInit()
+bool TestGame::onInit()
 {
 	if (!Create_Scene_And_Entity())
 	{
 		printf("Create_Scene_And_Entity failed");
-		//return false;
+		return false;
 	}
 		
 
@@ -32,36 +32,49 @@ void TestGame::onInit()
 	if (SceneContainer.empty())
 	{
 		printf("Scene container is empty\n");
-		//return false;
+		return false;
 	}
 		
 
 	if (!UpdateOnInit(SceneContainer))
 	{
 		printf("UpdateOnInit(SceneContainer) failed\n");
-		//return false;
+		return false;
 	}
 
-	//return true;
+	return true;
 }
 
-void TestGame::onBeginFrame()
+bool TestGame::onBeginFrame()
 {
 	SceneContainer.clear();
 	SceneContainer = GetSceneContainer();
 	if (SceneContainer.empty())
+	{
 		printf("Scene container is empty\n");
+		return false;
+	}
+		
 
 	if (!Update())
+	{
 		printf("TestGame::Update Failed\n");
+		return false;
+	}
+		
+	return true;
 }
 
-void TestGame::onEndFrame()
+bool TestGame::onEndFrame()
 {
+
+	return true;
 }
 
-void TestGame::onShutdown()
+bool TestGame::onShutdown()
 {
+
+	return true;
 }
 
 void TestGame::onKeyDown(int key)
@@ -115,180 +128,6 @@ void TestGame::onRightMouseDown(const Point& mouse_pos)
 
 void TestGame::onRightMouseUp(const Point& mouse_pos)
 {
-}
-
-bool TestGame::Create_Scene_And_Entity()
-{
-	std::vector<Scene_descriptor*> sd_list;
-	std::vector<EntityDesc*> ed_list;
-
-	cb = new constant();
-
-	static D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		//SEMANTIC NAME - SEMANTIC INDEX - FORMAT - INPUT SLOT - ALIGNED BYTE OFFSET - INPUT SLOT CLASS - INSTANCE DATA STEP RATE
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{"TEXCOORD", 0,  DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA ,0},
-		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
-	};
-
-	Scene_descriptor sd;
-	sd.scene_name = L"Scene1";
-	sd.scene_id = 0;
-	sd.scene_texture_uid = 0;
-	sd.connect_backbuffer = true;
-	sd.BackBuffer_Index = 0;
-	sd.window_client_width = 0;
-	sd.window_client_height = 0;
-	sd.width_ratio = 1;
-	sd.height_ratio = 1;
-	sd.clearRenderTargetView = true;
-	sd.useDepthStencil = true;
-	sd.clearDepthStencil = true;
-
-
-	float fov = 0.785398f;
-	float zNear = 0.1f;
-	float zFar = 5000.0f;
-	float aspectRatio = Get_AspectRatio();
-	
-	CameraInitData cd;
-	cd.GetInput = true;
-	cd.isProjecting = true;
-	cd.uID = 0;
-	cd.fov = fov;
-	cd.zNear = zNear;
-	cd.zFar = zFar;
-	cd.aspect_ratio = aspectRatio;
-	cd.SmoothRotation = true;
-	cd.SmoothTranslation = true;
-	
-	CameraInitData cd1;
-	cd1.GetInput = false;
-	cd1.isProjecting = false;
-	cd1.uID = 1;
-	cd1.fov = fov;
-	cd1.zNear = zNear;
-	cd1.zFar = zFar;
-	cd1.aspect_ratio = aspectRatio;
-	cd1.world_pos = { 0,100,-20.0f };
-	cd1.SmoothRotation = true;
-	cd1.SmoothTranslation = true;
-
-	sd.camData.push_back(&cd);
-	sd.camData.push_back(&cd1);
-	sd.NumberofCams = sd.camData.size();
-
-	sd_list.push_back(&sd);
-	//----------------------------------------------------//
-
-	//Asteroid
-	EntityDesc ed;
-	ed.mesh_uid = 0;
-	ed.getMeshfromFile = true;
-	ed.texture_uids.push_back(1);
-	ed.texture_uids.push_back(2);
-	ed.primitive_texture_type = Primitive_texture_Binding_type::allTexMaps_perDrawCall;
-	ed.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
-	ed.model_initialPosition = { 0,30,100.0f };
-	//ed.model_initialScaling = { 7.0f,7.0f,7.0f };
-
-	ed.vertex_Shader_uid = 0;
-	ed.inLayout = layout;
-	ed.sizeLayout = ARRAYSIZE(layout);
-
-	ed.pixel_Shader_uid = 4;
-
-	ed.constant_buffer = cb;
-	ed.size_constant_buffer = sizeof(constant);
-	ed.constant_buffer_uid = 0;
-
-	ed.primitive_name = L"Asteroid";
-	ed.primitive_uid = 0;
-	ed.Scene_Id = 0;
-	ed_list.push_back(&ed);
-
-
-	//Skybox
-	EntityDesc ed2 = ed;
-	ed2.texture_uids.clear();
-	ed2.texture_normals_uids.clear();
-	ed2.primitive_uid = 1;
-	ed2.primitive_name = L"skybox";
-	ed2.mesh_uid = 1;
-	ed2.texture_uids.push_back(2);
-	ed2.model_initialPosition = { 0,0,0 };
-	ed2.frontFaceCull = true;
-	ed2.pixel_Shader_uid = 1;
-	ed_list.push_back(&ed2);
-
-	//Dragon
-	EntityDesc ed3 = ed;
-	ed3.texture_uids.clear();
-	ed3.texture_normals_uids.clear();
-	ed3.primitive_uid = 2;
-	ed3.primitive_name = L"Dragon";
-	ed3.mesh_uid = 2;
-	ed3.texture_uids.push_back(3);
-	ed3.model_initialPosition = { 0,20,40 };
-	ed3.frontFaceCull = false;
-	ed3.pixel_Shader_uid = 0;
-	ed3.SmoothRotation = true;
-	//ed_list.push_back(&ed3);
-
-	//DigiCam
-	EntityDesc ed4 = ed;
-	ed4.texture_uids.clear();
-	ed4.texture_normals_uids.clear();
-	ed4.primitive_uid = 3;
-	ed4.primitive_name = L"DigiCam";
-	ed4.mesh_uid = 3;
-	ed4.texture_uids.push_back(4);
-	ed4.model_initialPosition = { 0,0,20 };
-	ed4.model_initialScaling = { 0.3,0.3,0.3 };
-	ed4.model_initialRotation = { 4.71239 , 0, 0 };
-	ed4.frontFaceCull = false;
-	ed4.pixel_Shader_uid = 0;
-	//ed_list.push_back(&ed4);
-
-
-	//Terrain
-	EntityDesc ed5;
-	ed5.getMeshfromFile = false;
-	ed5.isTerrainMesh = true;
-	ed5.mesh_uid = 111;
-	ed5.Terrain_Height_Map_uid = 5;
-	ed5.TerrainSize = { 512.0f, 3.0f, 512.0f, 0.0f }; 
-
-	//ed5.primitive_texture_type = Primitive_texture_Binding_type::oneTexMap_perDrawCall;
-	ed5.primitive_texture_type = Primitive_texture_Binding_type::NoTextures;
-
-	ed5.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
-	ed5.model_initialPosition = { 0, -300, 0 };
-
-	ed5.vertex_Shader_uid = 1;
-	ed5.inLayout = layout;
-	ed5.sizeLayout = ARRAYSIZE(layout);
-	ed5.pixel_Shader_uid = 3;
-	
-	ed5.constant_buffer = cb;
-	ed5.size_constant_buffer = sizeof(constant);
-	ed5.constant_buffer_uid = 0;
-	
-	ed5.primitive_name = L"Terrain";
-	ed5.primitive_uid = 77;
-	ed5.Scene_Id = 0;
-	ed5.frontFaceCull = false;
-	//ed_list.push_back(&ed5);
-
-	if (!CreateSceneAndEntity(sd_list, ed_list))
-	{
-		return false;
-	}
-
-	return true;
 }
 
 
@@ -468,6 +307,193 @@ bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene*
 			printf("dynamic_casting in TestGame::UpdateNORMALENTITY failed\n ");
 			return false;
 		}
+	}
+
+	return true;
+}
+
+
+
+bool TestGame::Create_Scene_And_Entity()
+{
+	std::vector<Scene_descriptor*> sd_list;
+	std::vector<EntityDesc*> ed_list;
+
+	cb = new constant();
+
+	static D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		//SEMANTIC NAME - SEMANTIC INDEX - FORMAT - INPUT SLOT - ALIGNED BYTE OFFSET - INPUT SLOT CLASS - INSTANCE DATA STEP RATE
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{"TEXCOORD", 0,  DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA ,0},
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	Scene_descriptor sd;
+	sd.scene_name = L"Scene1";
+	sd.scene_id = 0;
+	sd.scene_texture_uid = 0;
+	sd.connect_backbuffer = true;
+	sd.BackBuffer_Index = 0;
+	sd.window_client_width = 0;
+	sd.window_client_height = 0;
+	sd.width_ratio = 1;
+	sd.height_ratio = 1;
+	sd.clearRenderTargetView = true;
+	sd.useDepthStencil = true;
+	sd.clearDepthStencil = true;
+
+
+	float fov = 0.785398f;
+	float zNear = 0.1f;
+	float zFar = 5000.0f;
+	float aspectRatio = Get_AspectRatio();
+
+	CameraInitData cd;
+	cd.GetInput = true;
+	cd.isProjecting = true;
+	cd.uID = 0;
+	cd.fov = fov;
+	cd.zNear = zNear;
+	cd.zFar = zFar;
+	cd.aspect_ratio = aspectRatio;
+	cd.SmoothRotation = true;
+	cd.SmoothTranslation = true;
+
+	CameraInitData cd1;
+	cd1.GetInput = false;
+	cd1.isProjecting = false;
+	cd1.uID = 1;
+	cd1.fov = fov;
+	cd1.zNear = zNear;
+	cd1.zFar = zFar;
+	cd1.aspect_ratio = aspectRatio;
+	cd1.world_pos = { 0,100,-20.0f };
+	cd1.SmoothRotation = true;
+	cd1.SmoothTranslation = true;
+
+	sd.camData.push_back(&cd);
+	sd.camData.push_back(&cd1);
+	sd.NumberofCams = sd.camData.size();
+
+	sd_list.push_back(&sd);
+	//----------------------------------------------------//
+
+	//Asteroid
+	EntityDesc ed;
+	ed.mesh_uid = 0;
+	ed.getMeshfromFile = true;
+
+	ed.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Default, 1 });
+	ed.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Default, 2 });
+	ed.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
+	ed.model_initialPosition = { 0,30,100.0f };
+	//ed.model_initialScaling = { 7.0f,7.0f,7.0f };
+
+	ed.vertex_Shader_uid = 0;
+	ed.inLayout = layout;
+	ed.sizeLayout = ARRAYSIZE(layout);
+	ed.pixel_Shader_uid = 0;
+
+	ed.constant_buffer = cb;
+	ed.size_constant_buffer = sizeof(constant);
+	ed.constant_buffer_uid = 0;
+
+	ed.primitive_name = L"Asteroid";
+	ed.primitive_uid = 0;
+	ed.Scene_Id = 0;
+	ed_list.push_back(&ed);
+
+
+	//Skybox
+	EntityDesc ed2;
+	ed2.mesh_uid = 1;
+	ed2.getMeshfromFile = true;
+	ed2.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Default, 2 });
+	ed2.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
+
+	ed2.vertex_Shader_uid = 0;
+	ed2.inLayout = layout;
+	ed2.sizeLayout = ARRAYSIZE(layout);
+	ed2.pixel_Shader_uid = 1;
+	ed2.constant_buffer = cb;
+	ed2.size_constant_buffer = sizeof(constant);
+	ed2.constant_buffer_uid = 0;
+
+	ed2.frontFaceCull = true;
+	ed2.primitive_uid = 1;
+	ed2.Scene_Id = 0;
+	ed2.primitive_name = L"skybox";
+	ed_list.push_back(&ed2);
+
+
+
+
+
+	//Dragon
+	/*EntityDesc ed3 = ed;
+	ed3.texture_uids.clear();
+	ed3.texture_normals_uids.clear();
+	ed3.primitive_uid = 2;
+	ed3.primitive_name = L"Dragon";
+	ed3.mesh_uid = 2;
+	ed3.texture_uids.push_back(3);
+	ed3.model_initialPosition = { 0,20,40 };
+	ed3.frontFaceCull = false;
+	ed3.pixel_Shader_uid = 0;
+	ed3.SmoothRotation = true;*/
+	//ed_list.push_back(&ed3);
+
+	//DigiCam
+	/*EntityDesc ed4 = ed;
+	ed4.texture_uids.clear();
+	ed4.texture_normals_uids.clear();
+	ed4.primitive_uid = 3;
+	ed4.primitive_name = L"DigiCam";
+	ed4.mesh_uid = 3;
+	ed4.texture_uids.push_back(4);
+	ed4.model_initialPosition = { 0,0,20 };
+	ed4.model_initialScaling = { 0.3,0.3,0.3 };
+	ed4.model_initialRotation = { 4.71239 , 0, 0 };
+	ed4.frontFaceCull = false;
+	ed4.pixel_Shader_uid = 0;*/
+	//ed_list.push_back(&ed4);
+
+
+	//Terrain
+	//EntityDesc ed5;
+	//ed5.getMeshfromFile = false;
+	//ed5.isTerrainMesh = true;
+	//ed5.mesh_uid = 111;
+	//ed5.Terrain_Height_Map_uid = 5;
+	//ed5.TerrainSize = { 512.0f, 3.0f, 512.0f, 0.0f }; 
+
+	////ed5.primitive_texture_type = Primitive_texture_Binding_type::oneTexMap_perDrawCall;
+	//ed5.primitive_texture_type = Primitive_texture_Binding_type::NoTextures;
+
+	//ed5.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
+	//ed5.model_initialPosition = { 0, -300, 0 };
+
+	//ed5.vertex_Shader_uid = 1;
+	//ed5.inLayout = layout;
+	//ed5.sizeLayout = ARRAYSIZE(layout);
+	//ed5.pixel_Shader_uid = 3;
+	//
+	//ed5.constant_buffer = cb;
+	//ed5.size_constant_buffer = sizeof(constant);
+	//ed5.constant_buffer_uid = 0;
+	//
+	//ed5.primitive_name = L"Terrain";
+	//ed5.primitive_uid = 77;
+	//ed5.Scene_Id = 0;
+	//ed5.frontFaceCull = false;
+	//ed_list.push_back(&ed5);
+
+	if (!CreateSceneAndEntity(sd_list, ed_list))
+	{
+		return false;
 	}
 
 	return true;

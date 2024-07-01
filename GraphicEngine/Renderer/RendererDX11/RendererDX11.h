@@ -74,21 +74,11 @@ private:
 	void setConstantBuffer(ID3D11Buffer* cbuffer);
 
 private:
-	//binder functions Textures
-	//allTexMaps_perDrawCall,
-	void setTextureResourceVertexShader(std::vector<Texture*> TextureList);
-	void setTextureResourcePixelShader(std::vector<Texture*> TextureList);
-
-	void setTextureResourceVertexShader_arrayed(std::vector<Texture*> TextureList);
-	void setTextureResourcePixelShader_arrayed(std::vector<Texture*> TextureList);
-
-	//oneTexMap_perDrawCall
-	void setTextureResourceVertexShader(Texture* pTexture);
-	void setTextureResourcePixelShader(Texture* pTexture);
-
-	//oneTexMap_OneNormalMap_perDrawCall
-	void setTextureResourceVertexShader_normal_included(Texture* pTextureMap, Texture* pTextureNormalMap);
-	void setTextureResourcePixelShader_normal_included(Texture* pTextureMap, Texture* pTextureNormalMap);
+	void Set_TextureResources_VertexShader(int startslot, int numViews, ID3D11ShaderResourceView* list_res[128], ID3D11SamplerState* list_sampler[128]);
+	void Set_TextureResources_PixelShader(int startslot, int numViews, ID3D11ShaderResourceView* list_res[128], ID3D11SamplerState* list_sampler[128]);
+	void Set_TextureResources_VertexShader(std::unordered_map<int, Texture*>& list_textures, int start_slot);
+	void Set_TextureResources_PixelShader(std::unordered_map<int, Texture*>& list_textures, int start_slot);
+	void Set_TextureResources_Vertex_Pixel_Shader(std::unordered_map<int, Texture*>& list_textures, int start_slot);
 
 private:
 	void initRasterizerState();

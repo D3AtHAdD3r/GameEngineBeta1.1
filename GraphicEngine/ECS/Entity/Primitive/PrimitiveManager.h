@@ -1,6 +1,6 @@
 #include<vector>
 #include<string>
-
+#include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 
 class D3D11Manager;
 class ResourceManager;
@@ -23,10 +23,7 @@ public:
 
 public:
 	std::vector<Primitive*>& GetPrimitiveContainer();
-	bool add_texture(Texture* new_tex, std::wstring primitive_Name);
-	bool add_texture(Texture* new_tex, const int& uid);
-	bool fill_texture(Texture* new_tex, std::wstring primitive_Name);
-	bool fill_texture(Texture* new_tex, const int& uid);
+	bool Add_texture(Entity_Texture_Type Texture_Type, Texture* new_tex);
 	Primitive* getPrimitive(std::wstring primitive_Name);
 	Primitive* getPrimitive(const int& uid);
 

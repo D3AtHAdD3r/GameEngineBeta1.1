@@ -1,11 +1,15 @@
 #include "Primitive.h"
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
+#include<sstream>
+#include<GraphicEngine\Utilities\UtilitiyFuncs\utilityFunctions.h>
 
 Primitive::Primitive(Mesh* mesh_Data, int primitiveID,
-	VertexShader* vShad, PixelShader* pShad, VertexBuffer* vBuf, IndexBuffer* iBuf, 
+	VertexShader* vShad, PixelShader* pShad,
+	VertexBuffer* vBuf, IndexBuffer* iBuf,
 	ConstantBuffer* cBuf, void* c_Buff,
-	std::vector<Texture*>& listtextures, std::vector<Texture*>& listtexturesNormal, bool normalmap, unsigned int numberOftextures,
-	bool frontfaceculling, std::wstring primitiveName, Primitive_texture_Binding_type primitive_tex_Type, Texture* Height_Map)
+	bool frontfaceculling,
+	std::wstring primitiveName,
+	const std::vector<std::pair<Entity_Texture_Type, Texture*>>& TextureList)
 	:
 	mesh_Data(mesh_Data),
 	primitive_id(primitiveID),
@@ -15,50 +19,55 @@ Primitive::Primitive(Mesh* mesh_Data, int primitiveID,
 	indexBuffer(iBuf),
 	constantBuffer(cBuf),
 	cBuff(c_Buff),
-	number_textures(numberOftextures),
 	front_face_culling(frontfaceculling),
 	back_face_culling(!frontfaceculling),
-	primitive_Name(primitiveName),
-	normal_map(normalmap),
-	primitive_texture_Type(primitive_tex_Type),
-	HeightMap(Height_Map)
+	primitive_Name(primitiveName)
+	
 {
-
-	for (unsigned int i = 0; i < number_textures; ++i)
+	for (auto& [TextureType, pTex] : TextureList)
 	{
-		TextureDetails* td = new TextureDetails();
-		td->pTexture = listtextures[i];
-		td->tex_name = td->pTexture->GetTextureName();
-		list_textures.push_back(td);
-		direct_Texture_list.push_back(td->pTexture);
-	}
-
-	if (normalmap)
-	{
-		for (unsigned int i = 0; i < number_textures; ++i)
+		switch (TextureType)
 		{
-			TextureDetails* td = new TextureDetails();
-			td->pTexture = listtexturesNormal[i];
-			td->tex_name = listtexturesNormal[i]->GetTextureName();
-			list_textures_normal.push_back(td);
-			direct_Texture_Normal_list.push_back(td->pTexture);
+		case Entity_Texture_Type::Tex_Default:
+		{
+			list_textures_Default.emplace(pTex->getTextureID(), pTex);
+			break;
+		}
+		case Entity_Texture_Type::Tex_Normal_Map:
+		{
+			list_textures_Normal_Map.emplace(pTex->getTextureID(), pTex);
+			break;
+		}
+		case Entity_Texture_Type::Tex_Height_Map:
+		{
+			list_textures_Height_Map.emplace(pTex->getTextureID(), pTex);
+			break;
+		}
+		case Entity_Texture_Type::Tex_Unknown:
+		{
+			std::ostringstream oss;
+			oss << "Primitive constructor failed, Entity_Texture_Type::Tex_Unknown, Entiy uid, name:  "
+				<< primitiveID << " " << UtilityFuncs::unicodeToMultibyte(primitiveName) << "\n";
+			throw NORMAL_EXCEPT(oss.str());
+			break;
+		}
+		default:
+		{
+			std::ostringstream oss;
+			oss << "Primitive constructor failed, Entity_Texture_Type::Tex_Unknown, Entiy uid, name:  "
+				<< primitiveID << " " << UtilityFuncs::unicodeToMultibyte(primitiveName) << "\n";
+			throw NORMAL_EXCEPT(oss.str());
+			break;
+		}
+
 		}
 	}
+	
 }
 
 Primitive::~Primitive()
 {
-	if (!list_textures.empty())
-	{
-		for (TextureDetails* cur : list_textures)
-			delete cur;
-	}
-
-	if (!list_textures_normal.empty())
-	{
-		for (TextureDetails* cur : list_textures_normal)
-			delete cur;
-	}
+	
 }
 
 Mesh* Primitive::GetMesh()
@@ -96,99 +105,87 @@ ConstantBuffer* Primitive::GetConstantBuffer()
     return constantBuffer;
 }
 
-Texture* Primitive::GetHeightMap() const
-{
-	return HeightMap;
-}
-
-const bool& Primitive::GetFrontFaceCulling()
+bool Primitive::GetFrontFaceCulling()
 {
     return front_face_culling;
 }
 
-const Primitive_texture_Binding_type& Primitive::Get_Primitive_texture_Type()
+const std::unordered_map<int, Texture*>& Primitive::Get_Texture_List_Default()
 {
-    return primitive_texture_Type;
+	return list_textures_Default;
 }
 
-const std::vector<Texture*>& Primitive::Get_Texture_List()
+const std::unordered_map<int, Texture*>& Primitive::Get_Texture_List_Normal_Map()
 {
-    return direct_Texture_list;
+	return list_textures_Normal_Map;
 }
 
-const std::vector<Texture*>& Primitive::Get_Texture_Normal_List()
+const std::unordered_map<int, Texture*>& Primitive::Get_Texture_List_Height_Map()
 {
-    return direct_Texture_Normal_list;
+	return list_textures_Height_Map;
 }
+
 
 void Primitive::setConstantBuffer(void* c_buffer)
 {
 	cBuff = c_buffer;
 }
 
-bool Primitive::addTexture(Texture* newTex)
+
+bool Primitive::AddTexture(Entity_Texture_Type Texture_Type, Texture* newTex)
 {
-	if (!newTex) return false;
+	if (!newTex || Texture_Type == Entity_Texture_Type::Tex_Unknown) return false;
 
-	TextureDetails* td = new TextureDetails();
-	td->pTexture = newTex;
-	td->tex_name = newTex->GetTextureName();
-
-	list_textures.push_back(td);
-
-	number_textures = list_textures.size();
+	switch (Texture_Type)
+	{
+	case Entity_Texture_Type::Tex_Default:
+	{
+		list_textures_Default.emplace(newTex->getTextureID(), newTex);
+		break;
+	}
+	case Entity_Texture_Type::Tex_Normal_Map:
+	{
+		list_textures_Normal_Map.emplace(newTex->getTextureID(), newTex);
+		break;
+	}
+	case Entity_Texture_Type::Tex_Height_Map:
+	{
+		list_textures_Height_Map.emplace(newTex->getTextureID(), newTex);
+		break;
+	}
+	default:
+	{
+		return false;
+	}
+	}
+	
+	
 	return true;
 }
 
-bool Primitive::deleteTexture(std::wstring tex_name)
+bool Primitive::DeleteTexture(const int& uid)
 {
-	if (tex_name.empty()) return false;
+	if (uid < 0) return false;
 
-	for (int i = 0; i < list_textures.size(); ++i)
+	if (list_textures_Default.find(uid) != list_textures_Default.end())
 	{
-		if (list_textures[i]->tex_name == tex_name)
-		{
-			delete list_textures[i];
-			list_textures.erase(list_textures.begin() + i);
+		list_textures_Default.erase(uid);
+		return true;
+	}
 
-			number_textures = list_textures.size();
-			return true;
-		}
+	if (list_textures_Normal_Map.find(uid) != list_textures_Normal_Map.end())
+	{
+		list_textures_Normal_Map.erase(uid);
+		return true;
+	}
+
+	if (list_textures_Normal_Map.find(uid) != list_textures_Normal_Map.end())
+	{
+		list_textures_Normal_Map.erase(uid);
+		return true;
 	}
 
 	return false;
 }
 
-bool Primitive::fillTexture(Texture* newTex, std::wstring tex_name)
-{
-	if (tex_name.empty() || !newTex) return false;
 
-	for (int i = 0; i < list_textures.size(); ++i)
-	{
-		if (list_textures[i]->tex_name == tex_name)
-		{
-			list_textures[i]->tex_name = tex_name;
-			list_textures[i]->pTexture = newTex;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-bool Primitive::replaceTexture(Texture* newTex, std::wstring tex_name)
-{
-	if (tex_name.empty() || !newTex) return false;
-
-	for (int i = 0; i < list_textures.size(); ++i)
-	{
-		if (list_textures[i]->tex_name == tex_name)
-		{
-			list_textures[i]->tex_name = tex_name;
-			list_textures[i]->pTexture = newTex;
-			return true;
-		}
-	}
-
-	return false;
-}

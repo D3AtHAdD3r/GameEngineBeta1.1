@@ -15,7 +15,7 @@ enum TEXTURE_TYPE
 
 struct Texture_Creation_Details
 {
-	const int& u_ID = 1;
+	int u_ID = -1;
 	std::wstring tex_name;
 	unsigned int width = 0;
 	unsigned int height = 0;
