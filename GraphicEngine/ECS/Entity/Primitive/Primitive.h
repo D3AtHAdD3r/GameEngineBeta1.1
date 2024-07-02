@@ -42,10 +42,10 @@ public:
 	bool GetFrontFaceCulling();
 
 public:
-	
-	const std::unordered_map<int, Texture*>& Get_Texture_List_Default();
-	const std::unordered_map<int, Texture*>& Get_Texture_List_Normal_Map();
-	const std::unordered_map<int, Texture*>& Get_Texture_List_Height_Map();
+	const std::unordered_map<int, Texture*>& Get_Texture_List_Material() const;
+	const std::unordered_map<int, Texture*>& Get_Texture_List_Custom() const;
+	const std::unordered_map<int, Texture*>& Get_Texture_List_Normal_Map() const;
+	const std::unordered_map<int, Texture*>& Get_Texture_List_Height_Map() const;
 
 private:
 	void setConstantBuffer(void* c_buffer);
@@ -67,7 +67,8 @@ private:
 
 private:
 	//new texture storage
-	std::unordered_map<int, Texture*> list_textures_Default;
+	std::unordered_map<int, Texture*> list_textures_Material;
+	std::unordered_map<int, Texture*> list_textures_Custom;
 	std::unordered_map<int, Texture*> list_textures_Normal_Map;
 	std::unordered_map<int, Texture*> list_textures_Height_Map;
 private:

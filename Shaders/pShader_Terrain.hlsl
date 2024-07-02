@@ -19,6 +19,7 @@ cbuffer constant : register(b0)
     float4 m_camera_position;
     float4 m_light_position;
     float4 TerrainSize;
+    int Material_id;
     float m_light_radius;
     float m_time;
     float distortion_level;
@@ -28,5 +29,37 @@ cbuffer constant : register(b0)
 
 float4 psmain(PS_INPUT input) : SV_Target
 {
-    return float4(1, 1, 1, 1);
+    //return float4(1, 1, 1, 1);
+    
+    float4 texColor = float4(1, 1, 1, 1);
+    
+   
+    //Ambient light
+    float ka = 0.6; //ambient light coefficient
+    float3 ia = float3(1.0, 1.0, 1.0); //surrounding color approx rgb value
+    ia *= (texColor.rgb);
+    float3 ambient_light = ka * ia;
+    
+    //Diffuse light
+    float kd = 1.5;
+    float3 id = float3(1.0, 1.0, 1.0);
+    id *= (texColor.rgb);
+    float ammount_diffuse_light = max(0.0, dot(m_light_direction.xyz, input.normal));
+    float3 diffuse_light = kd * ammount_diffuse_light * id;
+    
+    
+    //Specular light
+    float ks = 0.2;
+    float3 is = float3(1.0, 1.0, 1.0);
+    //is *= (texColor.rgb);
+    float shininess = 30.0;
+    float3 reflected_light = reflect(m_light_direction.xyz, input.normal);
+    
+    float amount_specular_light = pow(max(0.0, dot(reflected_light, input.direction_to_camera)), shininess);
+    float3 specular_light = ks * amount_specular_light * is;
+    
+    
+    float3 final_light = ambient_light + diffuse_light + specular_light;
+    return float4(final_light, 1.0);
+
 }

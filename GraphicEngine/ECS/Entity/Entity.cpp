@@ -133,8 +133,6 @@ void Entity::setConstantBuffer(constant* c_buffer)
 
 
 
-
-
 Primitive* Entity::GetPrimitive()
 {
 	return pPrimitive;

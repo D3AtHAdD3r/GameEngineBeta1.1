@@ -19,7 +19,8 @@ namespace HARDCODINGS
 	static std::wstring BackBuffer_NAME_START = L"BBF"; //lol
 	static std::string World_config_loc = "..\\GameDataConfigs\\WorldData";
 	static std::string world_name = "world_spaceship";
-	static int Texture_Default_Register_Index = 0;
+	static int Texture_Material_Register_Index = 0;
+	static int Texture_Custom_Register_Index = 1;
 	static int Texture_Normal_Map_Register_Index = 30;
 	static int Texture_Height_Map_Register_Index = 70;
 }
@@ -33,9 +34,10 @@ enum ENTITY_TYPE
 
 enum Entity_Texture_Type
 {
-	Tex_Default = 0,
-	Tex_Normal_Map = 1,
-	Tex_Height_Map = 2,
+	Tex_Material = 0,
+	Tex_Custom = 1,
+	Tex_Normal_Map = 2,
+	Tex_Height_Map = 3,
 	Tex_Unknown
 };
 

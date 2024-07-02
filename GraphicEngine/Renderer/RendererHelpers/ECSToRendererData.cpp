@@ -73,7 +73,8 @@ bool ECSToRendererData::fill_Renderer_MainBindData(Primitive* pPrim, Renderer_Bi
 		pBindData->Material_Draw_Details.push_back({ start_index_location , index_count });
 	}
 
-	pBindData->list_textures_Default = pPrim->Get_Texture_List_Default();
+	pBindData->list_textures_Material = pPrim->Get_Texture_List_Material();
+	pBindData->list_textures_Custom = pPrim->Get_Texture_List_Custom();
 	pBindData->list_textures_Normal_Map = pPrim->Get_Texture_List_Normal_Map();
 	pBindData->list_textures_Height_Map = pPrim->Get_Texture_List_Height_Map();
 

@@ -386,8 +386,8 @@ bool TestGame::Create_Scene_And_Entity()
 	ed.mesh_uid = 0;
 	ed.getMeshfromFile = true;
 
-	ed.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Default, 1 });
-	ed.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Default, 2 });
+	ed.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Material, 1 });
+	ed.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Custom, 2 });
 	ed.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
 	ed.model_initialPosition = { 0,30,100.0f };
 	//ed.model_initialScaling = { 7.0f,7.0f,7.0f };
@@ -411,7 +411,7 @@ bool TestGame::Create_Scene_And_Entity()
 	EntityDesc ed2;
 	ed2.mesh_uid = 1;
 	ed2.getMeshfromFile = true;
-	ed2.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Default, 2 });
+	ed2.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Material, 2 });
 	ed2.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
 
 	ed2.vertex_Shader_uid = 0;
@@ -428,68 +428,81 @@ bool TestGame::Create_Scene_And_Entity()
 	ed2.primitive_name = L"skybox";
 	ed_list.push_back(&ed2);
 
-
-
-
-
 	//Dragon
-	/*EntityDesc ed3 = ed;
-	ed3.texture_uids.clear();
-	ed3.texture_normals_uids.clear();
+	EntityDesc ed3;
+	ed3.mesh_uid = 2;
+	ed3.getMeshfromFile = true;
+	ed3.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Material , 3 });
+	ed3.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
+
+	ed3.vertex_Shader_uid = 0;
+	ed3.inLayout = layout;
+	ed3.sizeLayout = ARRAYSIZE(layout);
+	ed3.pixel_Shader_uid = 0;
+	ed3.constant_buffer = cb;
+	ed3.size_constant_buffer = sizeof(constant);
+	ed3.constant_buffer_uid = 0;
+
+	ed3.frontFaceCull = false;
 	ed3.primitive_uid = 2;
 	ed3.primitive_name = L"Dragon";
-	ed3.mesh_uid = 2;
-	ed3.texture_uids.push_back(3);
+	ed3.Scene_Id = 0;
+
 	ed3.model_initialPosition = { 0,20,40 };
-	ed3.frontFaceCull = false;
-	ed3.pixel_Shader_uid = 0;
-	ed3.SmoothRotation = true;*/
-	//ed_list.push_back(&ed3);
+	ed3.SmoothRotation = true;
+	ed_list.push_back(&ed3);
 
 	//DigiCam
-	/*EntityDesc ed4 = ed;
-	ed4.texture_uids.clear();
-	ed4.texture_normals_uids.clear();
+	EntityDesc ed4;
+	ed4.mesh_uid = 3;
+	ed4.getMeshfromFile = true;
+	ed4.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Material , 4 });
+	ed4.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
+
+	ed4.vertex_Shader_uid = 0;
+	ed4.inLayout = layout;
+	ed4.sizeLayout = ARRAYSIZE(layout);
+	ed4.pixel_Shader_uid = 0;
+	ed4.constant_buffer = cb;
+	ed4.size_constant_buffer = sizeof(constant);
+	ed4.constant_buffer_uid = 0;
+
+	ed4.frontFaceCull = false;
 	ed4.primitive_uid = 3;
 	ed4.primitive_name = L"DigiCam";
-	ed4.mesh_uid = 3;
-	ed4.texture_uids.push_back(4);
+	ed4.Scene_Id = 0;
+
 	ed4.model_initialPosition = { 0,0,20 };
 	ed4.model_initialScaling = { 0.3,0.3,0.3 };
 	ed4.model_initialRotation = { 4.71239 , 0, 0 };
-	ed4.frontFaceCull = false;
-	ed4.pixel_Shader_uid = 0;*/
-	//ed_list.push_back(&ed4);
+	ed4.SmoothRotation = true;
+	ed_list.push_back(&ed4);
 
 
 	//Terrain
-	//EntityDesc ed5;
-	//ed5.getMeshfromFile = false;
-	//ed5.isTerrainMesh = true;
-	//ed5.mesh_uid = 111;
-	//ed5.Terrain_Height_Map_uid = 5;
-	//ed5.TerrainSize = { 512.0f, 3.0f, 512.0f, 0.0f }; 
+	EntityDesc ed5;
+	ed5.getMeshfromFile = false;
+	ed5.isTerrainMesh = true;
+	ed5.mesh_uid = 111;
+	ed5.TerrainSize = { 512.0f, 100.0f, 512.0f, 0.0f }; 
+	ed5.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Height_Map, 5 });
+	ed5.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
+	ed5.model_initialPosition = { 0, -300, 0 };
 
-	////ed5.primitive_texture_type = Primitive_texture_Binding_type::oneTexMap_perDrawCall;
-	//ed5.primitive_texture_type = Primitive_texture_Binding_type::NoTextures;
-
-	//ed5.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
-	//ed5.model_initialPosition = { 0, -300, 0 };
-
-	//ed5.vertex_Shader_uid = 1;
-	//ed5.inLayout = layout;
-	//ed5.sizeLayout = ARRAYSIZE(layout);
-	//ed5.pixel_Shader_uid = 3;
-	//
-	//ed5.constant_buffer = cb;
-	//ed5.size_constant_buffer = sizeof(constant);
-	//ed5.constant_buffer_uid = 0;
-	//
-	//ed5.primitive_name = L"Terrain";
-	//ed5.primitive_uid = 77;
-	//ed5.Scene_Id = 0;
-	//ed5.frontFaceCull = false;
-	//ed_list.push_back(&ed5);
+	ed5.vertex_Shader_uid = 1;
+	ed5.inLayout = layout;
+	ed5.sizeLayout = ARRAYSIZE(layout);
+	ed5.pixel_Shader_uid = 3;
+	
+	ed5.constant_buffer = cb;
+	ed5.size_constant_buffer = sizeof(constant);
+	ed5.constant_buffer_uid = 0;
+	
+	ed5.primitive_name = L"Terrain";
+	ed5.primitive_uid = 77;
+	ed5.Scene_Id = 0;
+	ed5.frontFaceCull = false;
+	ed_list.push_back(&ed5);
 
 	if (!CreateSceneAndEntity(sd_list, ed_list))
 	{

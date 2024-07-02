@@ -269,13 +269,19 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 		binded_cb = pData->cbuffer;
 	}
 
+
+
+	//-----------------------------------------------------------//
+	//-----------Static-Binding-All-Entity-Textures--------------//
+	//-----------------------------------------------------------//
+
 	//Textures
 	//1. bind all the textures to their respective registers 
 	//2. Update Constant buffer with material id, Draw material wise, 
 
-	{
-		int startSlot = HARDCODINGS::Texture_Default_Register_Index;
-		Set_TextureResources_Vertex_Pixel_Shader(pData->list_textures_Default, startSlot);
+	/*{
+		int startSlot = HARDCODINGS::Texture_Material_Register_Index;
+		Set_TextureResources_Vertex_Pixel_Shader(pData->list_textures_Material, startSlot);
 	}
 	{
 		int startSlot = HARDCODINGS::Texture_Normal_Map_Register_Index;
@@ -291,6 +297,58 @@ bool RendererDX11::BindToPipeLine(Renderer_BindingData* pData)
 		constant* constBuffer = (constant*)(pData->pCBuffer_data);
 		constBuffer->Material_id = m;
 		pD3D11Core->pContext->UpdateSubresource(pData->cbuffer, NULL, NULL, pData->pCBuffer_data, NULL, NULL);
+
+		UINT start_index_location = (UINT)(pData->Material_Draw_Details[m].first);
+		UINT index_count = (UINT)(pData->Material_Draw_Details[m].second);
+		drawIndexedTriangleList(index_count, 0, start_index_location);
+	}*/
+
+	//-----------------------------------------------------------//
+	//-----------------Material-wise-Binding---------------------//
+	//-----------------------------------------------------------//
+
+	//Textures
+	//1. bind all the textures except material-textures/material-normals, to their respective registers 
+	{
+		int startSlot = HARDCODINGS::Texture_Custom_Register_Index;
+		if (!pData->list_textures_Custom.empty())
+			Set_TextureResources_Vertex_Pixel_Shader(pData->list_textures_Custom, startSlot);
+		
+	}
+	{
+		int startSlot = HARDCODINGS::Texture_Height_Map_Register_Index;
+		if (!pData->list_textures_Height_Map.empty())
+			Set_TextureResources_Vertex_Pixel_Shader(pData->list_textures_Height_Map, startSlot);
+		
+	}
+	//2.bind material-textures, material-wise and draw.
+	int Material_Tex_Count = pData->list_textures_Material.size();
+	int Material_Normal_Count = pData->list_textures_Normal_Map.size();
+
+	auto itr_material = pData->list_textures_Material.begin();
+	auto itr_normal = pData->list_textures_Normal_Map.begin();
+	
+	for (size_t m = 0; m < pData->MaterialCount; ++m)
+	{
+		constant* constBuffer = (constant*)(pData->pCBuffer_data);
+		constBuffer->Material_id = m;
+		pD3D11Core->pContext->UpdateSubresource(pData->cbuffer, NULL, NULL, pData->pCBuffer_data, NULL, NULL);
+
+		//if texture is available for current material
+		if (Material_Tex_Count > m)
+		{
+			ID3D11ShaderResourceView* pSRV = itr_material->second->GetShaderResourceView();
+			ID3D11SamplerState* pSampler = itr_material->second->GetSamplerState();
+			Set_TextureResources_Vertex_Pixel_Shader(HARDCODINGS::Texture_Material_Register_Index, 1, pSRV, pSampler);
+			itr_material++;
+		}
+		if (Material_Normal_Count > m)
+		{
+			ID3D11ShaderResourceView* pSRV = itr_normal->second->GetShaderResourceView();
+			ID3D11SamplerState* pSampler = itr_normal->second->GetSamplerState();
+			Set_TextureResources_Vertex_Pixel_Shader(HARDCODINGS::Texture_Normal_Map_Register_Index, 1, pSRV, pSampler);
+			itr_normal++;
+		}
 
 		UINT start_index_location = (UINT)(pData->Material_Draw_Details[m].first);
 		UINT index_count = (UINT)(pData->Material_Draw_Details[m].second);
@@ -386,7 +444,7 @@ void RendererDX11::setConstantBuffer(ID3D11Buffer* cbuffer)
 void RendererDX11::Set_TextureResources_VertexShader(int startslot, int numViews, ID3D11ShaderResourceView* list_res[128], ID3D11SamplerState* list_sampler[128])
 {
 	pD3D11Core->pContext->VSSetShaderResources(startslot, numViews, list_res);
-	pD3D11Core->pContext->VSSetSamplers(startslot, numViews, list_sampler);
+	pD3D11Core->pContext->VSSetSamplers(0, numViews, list_sampler);
 }
 
 void RendererDX11::Set_TextureResources_PixelShader(int startslot, int numViews, ID3D11ShaderResourceView* list_res[128], ID3D11SamplerState* list_sampler[128])
@@ -397,6 +455,9 @@ void RendererDX11::Set_TextureResources_PixelShader(int startslot, int numViews,
 
 void RendererDX11::Set_TextureResources_VertexShader(std::unordered_map<int, Texture*>& list_textures, int start_slot)
 {
+	if (list_textures.empty())
+		throw NORMAL_EXCEPT("InValid Input,list_textures is empty");
+
 	UINT startslot = start_slot;
 	UINT numviews = list_textures.size();
 	ID3D11ShaderResourceView* list_res[128];
@@ -411,11 +472,14 @@ void RendererDX11::Set_TextureResources_VertexShader(std::unordered_map<int, Tex
 	}
 
 	pD3D11Core->pContext->VSSetShaderResources(startslot, numviews, list_res);
-	pD3D11Core->pContext->VSSetSamplers(startslot, numviews, list_sampler);
+	pD3D11Core->pContext->VSSetSamplers(0, numviews, list_sampler);
 }
 
 void RendererDX11::Set_TextureResources_PixelShader(std::unordered_map<int, Texture*>& list_textures, int start_slot)
 {
+	if (list_textures.empty())
+		throw NORMAL_EXCEPT("InValid Input,list_textures is empty");
+
 	UINT startslot = start_slot;
 	UINT numviews = list_textures.size();
 	ID3D11ShaderResourceView* list_res[128];
@@ -435,7 +499,8 @@ void RendererDX11::Set_TextureResources_PixelShader(std::unordered_map<int, Text
 
 void RendererDX11::Set_TextureResources_Vertex_Pixel_Shader(std::unordered_map<int, Texture*>& list_textures, int start_slot)
 {
-	if (list_textures.empty()) return;
+	if (list_textures.empty()) 
+		throw NORMAL_EXCEPT("InValid Input, list_textures is empty");
 
 	UINT startslot = start_slot;
 	UINT numviews = list_textures.size();
@@ -451,10 +516,22 @@ void RendererDX11::Set_TextureResources_Vertex_Pixel_Shader(std::unordered_map<i
 	}
 
 	pD3D11Core->pContext->VSSetShaderResources(startslot, numviews, list_res);
-	pD3D11Core->pContext->VSSetSamplers(startslot, numviews, list_sampler);
+	pD3D11Core->pContext->VSSetSamplers(0, numviews, list_sampler);
 
 	pD3D11Core->pContext->PSSetShaderResources(startslot, numviews, list_res);
 	pD3D11Core->pContext->PSSetSamplers(0, numviews, list_sampler);
+}
+
+void RendererDX11::Set_TextureResources_Vertex_Pixel_Shader(int startslot, int numViews, ID3D11ShaderResourceView* pSRV, ID3D11SamplerState* pSampler)
+{
+	if (!pSRV || !pSampler)
+		throw NORMAL_EXCEPT("InValid Input, ShaderResource View or Sampler is nullptr");
+
+	pD3D11Core->pContext->VSSetShaderResources(startslot, numViews, &pSRV);
+	pD3D11Core->pContext->VSSetSamplers(0, numViews, &pSampler);
+
+	pD3D11Core->pContext->PSSetShaderResources(startslot, numViews, &pSRV);
+	pD3D11Core->pContext->PSSetSamplers(0, numViews, &pSampler);
 }
 
 

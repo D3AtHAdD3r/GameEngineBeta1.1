@@ -28,9 +28,14 @@ Primitive::Primitive(Mesh* mesh_Data, int primitiveID,
 	{
 		switch (TextureType)
 		{
-		case Entity_Texture_Type::Tex_Default:
+		case Entity_Texture_Type::Tex_Material:
 		{
-			list_textures_Default.emplace(pTex->getTextureID(), pTex);
+			list_textures_Material.emplace(pTex->getTextureID(), pTex);
+			break;
+		}
+		case Entity_Texture_Type::Tex_Custom:
+		{
+			list_textures_Custom.emplace(pTex->getTextureID(), pTex);
 			break;
 		}
 		case Entity_Texture_Type::Tex_Normal_Map:
@@ -110,17 +115,22 @@ bool Primitive::GetFrontFaceCulling()
     return front_face_culling;
 }
 
-const std::unordered_map<int, Texture*>& Primitive::Get_Texture_List_Default()
+const std::unordered_map<int, Texture*>& Primitive::Get_Texture_List_Material() const
 {
-	return list_textures_Default;
+	return list_textures_Material;
 }
 
-const std::unordered_map<int, Texture*>& Primitive::Get_Texture_List_Normal_Map()
+const std::unordered_map<int, Texture*>& Primitive::Get_Texture_List_Custom() const
+{
+	return list_textures_Custom;
+}
+
+const std::unordered_map<int, Texture*>& Primitive::Get_Texture_List_Normal_Map() const
 {
 	return list_textures_Normal_Map;
 }
 
-const std::unordered_map<int, Texture*>& Primitive::Get_Texture_List_Height_Map()
+const std::unordered_map<int, Texture*>& Primitive::Get_Texture_List_Height_Map() const
 {
 	return list_textures_Height_Map;
 }
@@ -138,9 +148,14 @@ bool Primitive::AddTexture(Entity_Texture_Type Texture_Type, Texture* newTex)
 
 	switch (Texture_Type)
 	{
-	case Entity_Texture_Type::Tex_Default:
+	case Entity_Texture_Type::Tex_Material:
 	{
-		list_textures_Default.emplace(newTex->getTextureID(), newTex);
+		list_textures_Material.emplace(newTex->getTextureID(), newTex);
+		break;
+	}
+	case Entity_Texture_Type::Tex_Custom:
+	{
+		list_textures_Custom.emplace(newTex->getTextureID(), newTex);
 		break;
 	}
 	case Entity_Texture_Type::Tex_Normal_Map:
@@ -167,9 +182,15 @@ bool Primitive::DeleteTexture(const int& uid)
 {
 	if (uid < 0) return false;
 
-	if (list_textures_Default.find(uid) != list_textures_Default.end())
+	if (list_textures_Material.find(uid) != list_textures_Material.end())
 	{
-		list_textures_Default.erase(uid);
+		list_textures_Material.erase(uid);
+		return true;
+	}
+
+	if (list_textures_Custom.find(uid) != list_textures_Custom.end())
+	{
+		list_textures_Custom.erase(uid);
 		return true;
 	}
 

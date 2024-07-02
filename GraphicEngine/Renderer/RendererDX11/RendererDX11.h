@@ -79,6 +79,7 @@ private:
 	void Set_TextureResources_VertexShader(std::unordered_map<int, Texture*>& list_textures, int start_slot);
 	void Set_TextureResources_PixelShader(std::unordered_map<int, Texture*>& list_textures, int start_slot);
 	void Set_TextureResources_Vertex_Pixel_Shader(std::unordered_map<int, Texture*>& list_textures, int start_slot);
+	void Set_TextureResources_Vertex_Pixel_Shader(int startslot, int numViews, ID3D11ShaderResourceView* pSRV, ID3D11SamplerState* pSampler);
 
 private:
 	void initRasterizerState();

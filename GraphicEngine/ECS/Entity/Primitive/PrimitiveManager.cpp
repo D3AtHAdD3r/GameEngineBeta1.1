@@ -220,9 +220,14 @@ bool PrimitiveManager::DeletePrimitive(Primitive* pPrim)
 
 	if (!pResourceManager->pMeshManager->freeMesh(pPrim->mesh_Data)) return false;
 
-	for (short i = 0; i < pPrim->list_textures_Default.size(); ++i)
+	for (short i = 0; i < pPrim->list_textures_Material.size(); ++i)
 	{
-		if (!pResourceManager->pTextureManager->freeTexture(pPrim->list_textures_Default[i])) return false;
+		if (!pResourceManager->pTextureManager->freeTexture(pPrim->list_textures_Material[i])) return false;
+	}
+
+	for (short i = 0; i < pPrim->list_textures_Custom.size(); ++i)
+	{
+		if (!pResourceManager->pTextureManager->freeTexture(pPrim->list_textures_Custom[i])) return false;
 	}
 
 	for (short i = 0; i < pPrim->list_textures_Normal_Map.size(); ++i)

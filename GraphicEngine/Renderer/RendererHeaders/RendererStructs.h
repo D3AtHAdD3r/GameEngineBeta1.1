@@ -56,7 +56,8 @@ struct Renderer_BindingData
 	SIZE_T MaterialCount = 0;
 	std::vector<std::pair<SIZE_T, SIZE_T>> Material_Draw_Details; // start_index, num_indices
 
-	std::unordered_map<int, Texture*> list_textures_Default;
+	std::unordered_map<int, Texture*> list_textures_Material;
+	std::unordered_map<int, Texture*> list_textures_Custom;
 	std::unordered_map<int, Texture*> list_textures_Normal_Map;
 	std::unordered_map<int, Texture*> list_textures_Height_Map;
 };

@@ -30,16 +30,16 @@ FILEMAPS GetFileMaps()
     std::unordered_map<int, std::wstring> File_Map_Meshes;
     File_Map_Meshes.emplace(0, L"..\\AssetsAndLibs\\Assets\\Meshes\\asteroid.obj");
     File_Map_Meshes.emplace(1, L"..\\AssetsAndLibs\\Assets\\Meshes\\sphere.obj");
-    /*File_Map_Meshes.emplace(2, L"..\\AssetsAndLibs\\Assets\\Meshes\\dragon.obj");
-    File_Map_Meshes.emplace(3, L"..\\AssetsAndLibs\\Assets\\Meshes\\Video_camera.obj");*/
+    File_Map_Meshes.emplace(2, L"..\\AssetsAndLibs\\Assets\\Meshes\\dragon.obj");
+    File_Map_Meshes.emplace(3, L"..\\AssetsAndLibs\\Assets\\Meshes\\Video_camera.obj");
 
     
     std::unordered_map<int, std::wstring> File_Map_Textures;
     File_Map_Textures.emplace(0, L"BBFBackBuffer");
     File_Map_Textures.emplace(1, L"..\\AssetsAndLibs\\Assets\\Textures\\asteroid.jpg");
     File_Map_Textures.emplace(2, L"..\\AssetsAndLibs\\Assets\\Textures\\stars_map.jpg");
-    //File_Map_Textures.emplace(3, L"..\\AssetsAndLibs\\Assets\\Textures\\dragon.png");
-    //File_Map_Textures.emplace(4, L"..\\AssetsAndLibs\\Assets\\Textures\\Video_camera.jpg");
+    File_Map_Textures.emplace(3, L"..\\AssetsAndLibs\\Assets\\Textures\\dragon.png");
+    File_Map_Textures.emplace(4, L"..\\AssetsAndLibs\\Assets\\Textures\\Video_camera.jpg");
     File_Map_Textures.emplace(5, L"..\\AssetsAndLibs\\Assets\\Textures\\height_map.png");   //GreyScaleElevation  height_map
     
 

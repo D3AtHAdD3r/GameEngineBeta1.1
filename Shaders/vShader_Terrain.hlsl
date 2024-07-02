@@ -1,4 +1,4 @@
-Texture2D HeightMap : register(t0);
+Texture2D HeightMap : register(t70);
 sampler HeightMapSampler : register(s0);
 sampler HeightMapSampler1 : register(s01);
 
@@ -34,6 +34,7 @@ cbuffer constant : register(b0)
     float4 m_camera_position;
     float4 m_light_position;
     float4 TerrainSize;
+    int Material_id;
     float m_light_radius;
     float m_time;
     float distortion_level;
@@ -50,16 +51,20 @@ VS_OUTPUT vsmain(VS_INPUT input)
     float texelSize = 1.0 / sizeHeightMap;
     
     //Get Y(Height) of current vertex 
-    //float height = HeightMap.SampleLevel(HeightMapSampler, float2(input.texcoord.x, 1.0f - input.texcoord.y), 0).r;
-    float height = 0;
+    float height = HeightMap.SampleLevel(HeightMapSampler, float2(input.texcoord.x, 1.0f - input.texcoord.y), 0).r;
+    //float height = 0;
     
     //Update new world pos
-    output.position = mul(float4(input.position.x * TerrainSize.x, height * TerrainSize.y, input.position.z * TerrainSize.z, 1), m_world);
+    //output.position = mul(float4(input.position.x * TerrainSize.x, height * TerrainSize.y, input.position.z * TerrainSize.z, 1), m_world);
     //output.position.x = input.position.x * TerrainSize.x;
     //output.position.y = height * TerrainSize.y;
     //output.position.z = input.position.z * (TerrainSize.z);
     //output.position.w = 1;
     
+    //output.position.x = input.position.x * 512.0f;
+    //output.position.y = height * 200.0f;
+    //output.position.z = input.position.z * 512.0f;
+    output.position = mul(float4(input.position.x * 512.0f, height * 200.0f, input.position.z * 512.0f, 1), m_world);
     
     //WORLD SPACE
     //output.position = mul(input.position, m_world);
