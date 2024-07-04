@@ -61,7 +61,7 @@ protected:
 	Light* pLight = nullptr;
 
 protected:
-	//should not be here, should be inside primitive
+	//TODO should not be here, should be inside primitive
 	bool isTerrainMesh = false;
 
 

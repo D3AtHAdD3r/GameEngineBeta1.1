@@ -51,7 +51,7 @@ void RendererDX11::UpdateConstantBuffer(Entity* currEntity, Camera* pcam)
 	cBuff.m_view = pcam->Get_ViewMatrix();
 	cBuff.m_proj = pcam->Get_ProjectionMatrix();
 	
-	//get from light component
+	//TODO get from light component
 	cBuff.m_light_position = { 0.0f,0.0f,0.0f,0.0f };
 	cBuff.m_light_direction = { 0.0f, 0.0f, -1.0f, 0.0f };
 	cBuff.distortion_level = 0.9f;
