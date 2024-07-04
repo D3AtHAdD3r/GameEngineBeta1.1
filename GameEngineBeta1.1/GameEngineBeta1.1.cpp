@@ -8,8 +8,8 @@ wasd = movement
 esc = free mouse
 f = fullscreen(TODO)
 
-tab = switch camera  (toggle)
-insert = attach to dragon(digicam) (toggle)
+tab = switch camera  (toggle, press twice first time- TODO - fix) 
+insert = attach camera to dragon(fpc) (toggle)
 
 */
 

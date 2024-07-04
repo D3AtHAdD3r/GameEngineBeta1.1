@@ -52,8 +52,8 @@ VS_OUTPUT vsmain(VS_INPUT input)
     
     //Get Y(Height) of current vertex 
     float height = HeightMap.SampleLevel(HeightMapSampler, float2(input.texcoord.x, input.texcoord.y), 0).r;
-    //float height = 0;
-    
+   
+   
     //Update new world pos
     output.position = mul(float4(input.position.x * TerrainSize.x, height * TerrainSize.y, input.position.z * TerrainSize.z, 1), m_world);  
     output.position = mul(output.position, m_view);

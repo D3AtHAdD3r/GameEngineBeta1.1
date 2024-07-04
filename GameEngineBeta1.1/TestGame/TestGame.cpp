@@ -183,6 +183,11 @@ bool TestGame::UpdateOnInit(std::unordered_map<unsigned short, Scene*>& SceneCon
 
 					Parent = currEnt; //to attach camera to dinosaur
 				}
+				if (currEnt->Get_Entity_uID() == 77) //terrain
+				{
+					currEnt->TerrainHeight_Max = currEnt->TerrainSize.m_y;
+					currEnt->TerrainSize.m_y = 0;
+				}
 
 			}
 
@@ -301,6 +306,14 @@ bool TestGame::Update_NormalEntity(std::vector<Entity*>& EntityContainer, Scene*
 			{
 				currentEntity->Update();
 			}
+
+			//Terrain
+			if (currentEntity->Get_Entity_uID() == 77)
+			{
+				if(currentEntity->TerrainSize.m_y < currentEntity->TerrainHeight_Max)
+					currentEntity->TerrainSize.m_y += 0.20;
+				
+			}
 		}
 		else
 		{
@@ -361,6 +374,7 @@ bool TestGame::Create_Scene_And_Entity()
 	cd.aspect_ratio = aspectRatio;
 	cd.SmoothRotation = true;
 	cd.SmoothTranslation = true;
+	cd.world_pos = { 0, 0,-600 };
 
 	CameraInitData cd1;
 	cd1.GetInput = false;

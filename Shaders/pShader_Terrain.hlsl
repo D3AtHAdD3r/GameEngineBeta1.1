@@ -27,14 +27,13 @@ cbuffer constant : register(b0)
     float m_light_radius;
     float m_time;
     float distortion_level;
-    
 };
 
 
 float4 psmain(PS_INPUT input) : SV_Target
 {
-    float4 grassColor = grass.Sample(Sampler, input.texcoord * 30);
-    float4 cliffColor = cliff.Sample(Sampler, input.texcoord * 30);
+    float4 grassColor = grass.Sample(Sampler, input.texcoord * 10);
+    float4 cliffColor = cliff.Sample(Sampler, input.texcoord * 7);
     
     float4 texColor = grassColor;
     

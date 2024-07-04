@@ -50,7 +50,9 @@ public:
 	bool Get_isTerrain() const;
 	const Vector4D& Get_TerrainSize() const;
 	const Vector2D Get_SizeHeightMap() const;
-
+	Vector4D TerrainSize;
+	int TerrainHeight_Max;
+	
 protected:
 	Scene* pParentScene = nullptr;
 	Primitive* pPrimitive = nullptr;
@@ -61,7 +63,7 @@ protected:
 protected:
 	//should not be here, should be inside primitive
 	bool isTerrainMesh = false;
-	Vector4D TerrainSize;
+
 
 protected:
 	int scene_id = -1;
