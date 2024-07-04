@@ -1,4 +1,7 @@
+Texture2D grass : register(t0);
+sampler Sampler : register(s0);
 
+Texture2D cliff : register(t1);
 
 
 struct PS_INPUT
@@ -19,29 +22,41 @@ cbuffer constant : register(b0)
     float4 m_camera_position;
     float4 m_light_position;
     float4 TerrainSize;
+    float sizeHeightMap;
     int Material_id;
     float m_light_radius;
     float m_time;
     float distortion_level;
-    float sizeHeightMap;
+    
 };
 
 
 float4 psmain(PS_INPUT input) : SV_Target
 {
-    //return float4(1, 1, 1, 1);
+    float4 grassColor = grass.Sample(Sampler, input.texcoord * 30);
+    float4 cliffColor = cliff.Sample(Sampler, input.texcoord * 30);
     
-    float4 texColor = float4(1, 1, 1, 1);
+    float4 texColor = grassColor;
     
-   
+    float angle = abs(dot(input.normal, float3(0, 1, 0)));
+    
+    float minAngle = 0.5;
+    float maxAngle = 0.6;
+    
+    if(angle >= minAngle && angle <=maxAngle)
+        texColor = lerp(cliffColor, grassColor, (angle - minAngle) * (1.0 / (maxAngle - minAngle)));
+    
+    if(angle < minAngle)
+        texColor = cliffColor;
+    
     //Ambient light
-    float ka = 0.6; //ambient light coefficient
+    float ka = 1.0; //ambient light coefficient
     float3 ia = float3(1.0, 1.0, 1.0); //surrounding color approx rgb value
     ia *= (texColor.rgb);
     float3 ambient_light = ka * ia;
     
     //Diffuse light
-    float kd = 1.5;
+    float kd = 0.7;
     float3 id = float3(1.0, 1.0, 1.0);
     id *= (texColor.rgb);
     float ammount_diffuse_light = max(0.0, dot(m_light_direction.xyz, input.normal));
@@ -49,7 +64,7 @@ float4 psmain(PS_INPUT input) : SV_Target
     
     
     //Specular light
-    float ks = 0.2;
+    float ks = 0;
     float3 is = float3(1.0, 1.0, 1.0);
     //is *= (texColor.rgb);
     float shininess = 30.0;

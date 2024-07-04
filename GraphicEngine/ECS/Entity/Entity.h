@@ -1,6 +1,7 @@
 #pragma once
 #include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 #include<string>
+#include<GraphicEngine\Utilities\Math\Vector2D.h>
 
 #ifdef PROJ_EXPORT
 #define ATT_Ent __declspec(dllexport)
@@ -41,12 +42,14 @@ public:
 	ModelData* Get_ModelData() const;
 
 public:
-	bool Get_isTerrain() const;
-	const Vector4D& Get_TerrainSize() const;
-public:
 	void setConstantBuffer(void* c_buffer);
 	void setConstantBuffer(constant* c_buffer);
 
+public:
+	//temp
+	bool Get_isTerrain() const;
+	const Vector4D& Get_TerrainSize() const;
+	const Vector2D Get_SizeHeightMap() const;
 
 protected:
 	Scene* pParentScene = nullptr;

@@ -7,6 +7,7 @@
 
 class Texture
 {
+	friend class TextureManager;
 private:
 	Texture(std::wstring texture_name, TEXTURE_TYPE texture_Type, const int& u_ID);
 	~Texture();
@@ -45,6 +46,4 @@ private:
 	int uID = -1;
 	short BackBufferIndex = 0;
 	RECT Size;
-private:
-	friend class TextureManager;
 };

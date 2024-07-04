@@ -172,7 +172,7 @@ bool TestGame::UpdateOnInit(std::unordered_map<unsigned short, Scene*>& SceneCon
 				if (currEnt->Get_Entity_uID() == 1) //skybox
 				{
 					//skybox
-					Vector3D scale = { 1000.0f, 1000.0f, 1000.0f };
+					Vector3D scale = { 4000.0f, 4000.0f, 4000.0f };
 					currEnt->Get_ModelData()->Update_Scaling(scale);
 				}
 				if (currEnt->Get_Entity_uID() == 2) //dragon
@@ -348,7 +348,7 @@ bool TestGame::Create_Scene_And_Entity()
 
 	float fov = 0.785398f;
 	float zNear = 0.1f;
-	float zFar = 5000.0f;
+	float zFar = 10000.0f;
 	float aspectRatio = Get_AspectRatio();
 
 	CameraInitData cd;
@@ -486,8 +486,11 @@ bool TestGame::Create_Scene_And_Entity()
 	ed5.mesh_uid = 111;
 	ed5.TerrainSize = { 512.0f, 100.0f, 512.0f, 0.0f }; 
 	ed5.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Height_Map, 5 });
+	ed5.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Material, 6 });
+	ed5.Texture_Concrete_uIDs.push_back({ Entity_Texture_Type::Tex_Custom, 7 });
 	ed5.Entity_type = ENTITY_TYPE::ENUM_NORMAL_ENTITY;
-	ed5.model_initialPosition = { 0, -300, 0 };
+	ed5.model_initialPosition = { -500, -300, 0 };
+	ed5.model_initialScaling = { 4,4,4 };
 
 	ed5.vertex_Shader_uid = 1;
 	ed5.inLayout = layout;

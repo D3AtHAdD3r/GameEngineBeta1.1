@@ -283,6 +283,16 @@ bool Scene::UpdateTextureOnResize(unsigned int width, unsigned int height)
 	return presManager->pTextureManager->UpdateTextureOnResize(scene_texture_uid, width, height);
 }
 
+bool Scene::UpdateCamerasOnResize(unsigned int width, unsigned int height)
+{
+	for (auto itr = CameraContainer.begin(); itr != CameraContainer.end(); ++itr)
+	{
+		itr->second->Update_AspectRatio(width, height);
+	}
+
+	return true;
+}
+
 Camera* Scene::CreateCamera(CameraInitData* pCD)
 {
 	Camera* p_Cam = new Camera(pCD);

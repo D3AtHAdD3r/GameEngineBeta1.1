@@ -244,11 +244,12 @@ struct constant
 	Vector4D m_camera_position;
 	Vector4D m_light_position = Vector4D(0, 1, 0, 0);
 	Vector4D TerrainSize;
+	float sizeHeightMap;
 	int Material_id = -1;
 	float m_light_radius = 4.0f;
 	float m_time = 0.0f;
 	float distortion_level = 1.0;
-	float sizeHeightMap;
+	
 };
 
 

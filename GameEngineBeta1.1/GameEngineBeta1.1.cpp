@@ -41,7 +41,8 @@ FILEMAPS GetFileMaps()
     File_Map_Textures.emplace(3, L"..\\AssetsAndLibs\\Assets\\Textures\\dragon.png");
     File_Map_Textures.emplace(4, L"..\\AssetsAndLibs\\Assets\\Textures\\Video_camera.jpg");
     File_Map_Textures.emplace(5, L"..\\AssetsAndLibs\\Assets\\Textures\\height_map.png");   //GreyScaleElevation  height_map
-    
+    File_Map_Textures.emplace(6, L"..\\AssetsAndLibs\\Assets\\Textures\\grass.jpg");
+    File_Map_Textures.emplace(7, L"..\\AssetsAndLibs\\Assets\\Textures\\ground.jpg");
 
     FILEMAPS fmaps;
     fmaps.File_Map_Meshes = File_Map_Meshes;

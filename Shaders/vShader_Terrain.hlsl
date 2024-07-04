@@ -34,11 +34,11 @@ cbuffer constant : register(b0)
     float4 m_camera_position;
     float4 m_light_position;
     float4 TerrainSize;
+    float sizeHeightMap;
     int Material_id;
     float m_light_radius;
     float m_time;
     float distortion_level;
-    float sizeHeightMap;
 }
 
 
@@ -48,49 +48,36 @@ VS_OUTPUT vsmain(VS_INPUT input)
     VS_OUTPUT output = (VS_OUTPUT) 0;
     
     //Displace vertices through the usage  of height map
-    float texelSize = 1.0 / sizeHeightMap;
+    float texelSize = 1.0 / /*600.0*/sizeHeightMap;
     
     //Get Y(Height) of current vertex 
-    float height = HeightMap.SampleLevel(HeightMapSampler, float2(input.texcoord.x, 1.0f - input.texcoord.y), 0).r;
+    float height = HeightMap.SampleLevel(HeightMapSampler, float2(input.texcoord.x, input.texcoord.y), 0).r;
     //float height = 0;
     
     //Update new world pos
-    //output.position = mul(float4(input.position.x * TerrainSize.x, height * TerrainSize.y, input.position.z * TerrainSize.z, 1), m_world);
-    //output.position.x = input.position.x * TerrainSize.x;
-    //output.position.y = height * TerrainSize.y;
-    //output.position.z = input.position.z * (TerrainSize.z);
-    //output.position.w = 1;
+    output.position = mul(float4(input.position.x * TerrainSize.x, height * TerrainSize.y, input.position.z * TerrainSize.z, 1), m_world);  
+    output.position = mul(output.position, m_view);
+    output.position = mul(output.position, m_proj);
+    output.texcoord = input.texcoord;
     
-    //output.position.x = input.position.x * 512.0f;
-    //output.position.y = height * 200.0f;
-    //output.position.z = input.position.z * 512.0f;
-    output.position = mul(float4(input.position.x * 512.0f, height * 200.0f, input.position.z * 512.0f, 1), m_world);
+    //central difference approximation method , for calculating normal
+    //calc top, bottom,left,right
+    float t = HeightMap.SampleLevel(HeightMapSampler, float2(input.texcoord.x, (input.texcoord.y - texelSize)), 0).r;
+    float b = HeightMap.SampleLevel(HeightMapSampler, float2(input.texcoord.x, (input.texcoord.y + texelSize)), 0).r;
+    float l = HeightMap.SampleLevel(HeightMapSampler, float2((input.texcoord.x - texelSize), input.texcoord.y), 0).r;
+    float r = HeightMap.SampleLevel(HeightMapSampler, float2((input.texcoord.x + texelSize), input.texcoord.y), 0).r;
     
-    //WORLD SPACE
-    //output.position = mul(input.position, m_world);
+    t *= TerrainSize.y;
+    b *= TerrainSize.y;
+    l *= TerrainSize.y;
+    r *= TerrainSize.y;
+    
+    float3 normal = float3((r - l) * 0.5, 1, (b - t) * 0.5);
+    normal *= -1.0f;        //somehow normal is inverted
+    output.normal = normalize(mul(normal, (float3x3) m_world));
+    
     output.world_pos = output.position.xyz;
     output.direction_to_camera = normalize(output.position.xyz - m_camera_position.xyz);
-    
-    //VIEW SPACE
-    output.position = mul(output.position, m_view);
-    //SCREEN SPACE
-    output.position = mul(output.position, m_proj);
-    
-    output.texcoord = input.texcoord;
-    //output.normal = normalize(mul(float4(input.normal, 0), m_world));
-    //output.normal = normalize(mul(float4(input.normal, 1), m_world));
-    output.normal = normalize(mul(input.normal, /*(float3x3)*/m_world));
-    
-    
-    //output.tbn[0] = normalize(mul(input.tangent, m_world));
-    //output.tbn[1] = normalize(mul(input.binormal, m_world));
-    //output.tbn[2] = normalize(mul(input.normal, m_world));
-    
-    
-    //check
-    float m_lightradius = m_light_radius;
-    float distortionlevel = distortion_level;
-    float4 Terrain_Size = TerrainSize;
     
     
     return output;

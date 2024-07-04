@@ -75,7 +75,7 @@ private:
 	Entity* AddEntity(EntityDesc* pED);
 	bool DeleteEntity(Entity* pEnt);
 	bool UpdateTextureOnResize(unsigned int width, unsigned int height);
-
+	bool UpdateCamerasOnResize(unsigned int width, unsigned int height);
 private:
 	Camera* CreateCamera(CameraInitData* pCD);
 

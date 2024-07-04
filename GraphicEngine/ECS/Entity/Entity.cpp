@@ -2,6 +2,7 @@
 #include<GraphicEngine/Utilities/Headers/Headers.h>
 #include<GraphicEngine/ECS/Entity/Primitive/Primitive.h>
 #include<GraphicEngine/ECS/Components/ModelData.h>
+#include<GraphicEngine\D3D11\MeshAndTextureResources\Texture.h>
 #include<sstream>
 
 
@@ -166,4 +167,19 @@ bool Entity::Get_isTerrain() const
 const Vector4D& Entity::Get_TerrainSize() const
 {
 	return TerrainSize;
+}
+
+const Vector2D Entity::Get_SizeHeightMap() const
+{
+	if (!pPrimitive->list_textures_Height_Map.empty())
+	{
+		auto itr = pPrimitive->list_textures_Height_Map.begin();
+		RECT rc = itr->second->Get_Size();
+		Vector2D ret;
+		ret.m_x = rc.right;
+		ret.m_y = rc.bottom;
+		return ret;
+	}
+	else
+		return Vector2D();
 }

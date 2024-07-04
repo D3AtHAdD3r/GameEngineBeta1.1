@@ -240,6 +240,11 @@ bool Camera::Update(CameraPositionData* cam_update_data)
 	}
 }
 
+void Camera::Update_AspectRatio(unsigned int width, unsigned int height)
+{
+	aspect_ratio = (float)width / (float)height;
+}
+
 bool Camera::Update_Translation_Direct(const Vector3D& newVal)
 {
 	Previous_Translation = Current_Translation;

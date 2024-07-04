@@ -60,6 +60,7 @@ void RendererDX11::UpdateConstantBuffer(Entity* currEntity, Camera* pcam)
 	{
 		//cBuff.sizeHeightMap = currEntity->GetPrimitive()->GetHeightMap()->Get_Size().right;
 		cBuff.TerrainSize = currEntity->Get_TerrainSize();
+		cBuff.sizeHeightMap = currEntity->Get_SizeHeightMap().m_x;
 	}
 	
 

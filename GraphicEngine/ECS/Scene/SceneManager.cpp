@@ -185,11 +185,20 @@ bool SceneManager::checkSceneExist(short SceneID)
         return false;
 }
 
+
 void SceneManager::ReloadAllResourceBuffers()
 {
     for (auto& [SceneID, CurrentScene] : sceneContainer)
     {
-        if (!CurrentScene->UpdateOnResize(WindowGlobals::Get()->Get_WindowWidth(), WindowGlobals::Get()->Get_WindowHeight()))
-            throw NORMAL_EXCEPT("ReloadAllResourceBuffers failed on Reszie");
+        unsigned int width = WindowGlobals::Get()->Get_WindowWidth();
+        unsigned int height = WindowGlobals::Get()->Get_WindowHeight();
+        if (!width || !height)
+            return;
+
+        if (!CurrentScene->UpdateOnResize(width, height))
+            throw NORMAL_EXCEPT("ReloadAllResourceBuffers failed on Resize");
+
+        if (!CurrentScene->UpdateCamerasOnResize(width, height))
+            throw NORMAL_EXCEPT("UpdateCamerasOnResize() failed on Resize");
     }
 }

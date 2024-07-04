@@ -42,6 +42,7 @@ public:
 public:
 	bool Update();
 	bool Update(CameraPositionData* cam_update);
+	void Update_AspectRatio(unsigned int width, unsigned int height);
 
 public:
 	bool Update_Translation_Direct(const Vector3D& newVal);
