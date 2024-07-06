@@ -28,8 +28,6 @@ private:
 		);
 
 	~Primitive();
-
-
 public:
 	//getter functions
 	Mesh* GetMesh();
