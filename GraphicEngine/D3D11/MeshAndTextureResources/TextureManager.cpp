@@ -2,8 +2,8 @@
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
 #include<GraphicEngine/D3D11/D3D11Globals/D3D11Globals.h>
 #include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
-#include<GraphicEngine/Window/WindowGlobals.h>
 #include<GraphicEngine\D3D11\MeshAndTextureResources\Texture_Structs.h>
+#include<GraphicEngine\Renderer\RendererDX11\RendererDX11.h>
 
 #include <DirectXTex.h>
 //#include<AssetsAndLibs\Libs\DirectXTex\include\DirectXTex.h>
@@ -213,8 +213,8 @@ Texture* TextureManager::CreateTextureFromBackBuffer(std::wstring tex_name, cons
 		if (!CreateRenderTargetView_BackBuffer(&pRenderTargetView, buffer_index))
 			return nullptr;
 
-		unsigned int Width = WindowGlobals::Get()->Get_WindowWidth();
-		unsigned int height = WindowGlobals::Get()->Get_WindowHeight();
+		unsigned int Width = RendererDX11::Get()->Get_WindowWidth();
+		unsigned int height = RendererDX11::Get()->Get_WindowHeight();
 
 		if (!CreatedepthStensilView(&pDepthStencilView, Width, height))
 		{
@@ -268,7 +268,7 @@ bool TextureManager::UpdateTextureOnResize(const int& u_ID, const unsigned int& 
 			pTexture->pDSV = nullptr;
 		}
 
-		GFX_THROW_INFO(D3D11Globals::Get()->GetSwapChain()->ResizeBuffers(1, WindowGlobals::Get()->Get_WindowWidth(), WindowGlobals::Get()->Get_WindowHeight(), DXGI_FORMAT_R8G8B8A8_UNORM, 0));
+		GFX_THROW_INFO(D3D11Globals::Get()->GetSwapChain()->ResizeBuffers(1, RendererDX11::Get()->Get_WindowWidth(), RendererDX11::Get()->Get_WindowHeight(), DXGI_FORMAT_R8G8B8A8_UNORM, 0));
 
 		ID3D11RenderTargetView* pRenderTargetView = nullptr;
 		ID3D11DepthStencilView* p_DepthStencilView = nullptr;
@@ -276,7 +276,7 @@ bool TextureManager::UpdateTextureOnResize(const int& u_ID, const unsigned int& 
 		if (!CreateRenderTargetView_BackBuffer(&pRenderTargetView, pTexture->BackBufferIndex))
 			return false;
 
-		if (!CreatedepthStensilView(&p_DepthStencilView, WindowGlobals::Get()->Get_WindowWidth(), WindowGlobals::Get()->Get_WindowHeight()))
+		if (!CreatedepthStensilView(&p_DepthStencilView, RendererDX11::Get()->Get_WindowWidth(), RendererDX11::Get()->Get_WindowHeight()))
 		{
 			if (pRenderTargetView)
 			{

@@ -69,14 +69,8 @@
     <Filter Include="Renderer">
       <UniqueIdentifier>{a1b7d5f0-ae5a-4b79-a674-a9fee2eb7048}</UniqueIdentifier>
     </Filter>
-    <Filter Include="D3D11\D3D11Headers">
-      <UniqueIdentifier>{7f313935-8c25-42e3-afbd-d4c4f55f93ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Renderer\RendererDX11">
       <UniqueIdentifier>{11ab69ed-47a4-44cb-babb-9f2bd2aaef78}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Renderer\RendererHeaders">
-      <UniqueIdentifier>{b60459ef-969a-4994-a9c0-a028596fa3fa}</UniqueIdentifier>
     </Filter>
     <Filter Include="ECS">
       <UniqueIdentifier>{95f129a9-3f9d-42a8-8825-e7f7d9e29fbc}</UniqueIdentifier>
@@ -87,12 +81,6 @@
     <Filter Include="ECS\Scene">
       <UniqueIdentifier>{b8c8ef22-158f-434e-8250-d179a697adf1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine">
-      <UniqueIdentifier>{0802dd1f-b6c2-4e3e-9493-9386d55b7624}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Core">
-      <UniqueIdentifier>{ffafa153-0cf2-443d-a5a8-a44e129732c7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ECS\Primitive">
       <UniqueIdentifier>{9ac66eff-7637-4ff5-b8fb-867f99d62014}</UniqueIdentifier>
     </Filter>
@@ -101,9 +89,6 @@
     </Filter>
     <Filter Include="ECS\Components">
       <UniqueIdentifier>{aa652fb5-937a-45ad-b47d-a0ab7ae6f16b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Headers">
-      <UniqueIdentifier>{ed79160f-acc1-4133-ba1a-1f2ef60092b3}</UniqueIdentifier>
     </Filter>
     <Filter Include="ECS\Components\ModelData">
       <UniqueIdentifier>{4a9130a1-6e72-4452-8387-18178cdf7896}</UniqueIdentifier>
@@ -120,12 +105,6 @@
     <Filter Include="ECS\Entity\EntityChilds\NormalEntity">
       <UniqueIdentifier>{8a1db49b-6d2d-4ee5-a2dd-ad160f3dfd32}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Window">
-      <UniqueIdentifier>{83c28869-e817-486d-8914-36df0d7f146b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Window\WindowGlobals">
-      <UniqueIdentifier>{e260829f-a318-4e76-9c48-1ecd69fc6499}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ECS\ECSCore">
       <UniqueIdentifier>{178d362c-9296-467c-8b32-4b0441685b86}</UniqueIdentifier>
     </Filter>
@@ -135,26 +114,14 @@
     <Filter Include="Renderer\RendererHelpers\ECSToRenderData">
       <UniqueIdentifier>{8fee1bff-5add-49f4-807e-86e3a93ba318}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Window\WindowListener">
-      <UniqueIdentifier>{fb16dc03-d5df-4995-b61e-d4228c4da3ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="InputHandling">
       <UniqueIdentifier>{b4192c7a-4346-47dd-bad4-a4419cc7f7f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Window\Window">
-      <UniqueIdentifier>{8810ec82-2b7a-4b48-bb86-598f0509f90f}</UniqueIdentifier>
     </Filter>
     <Filter Include="ECS\Components\Light">
       <UniqueIdentifier>{77c64db3-b2a8-4791-9530-269d934e3aa5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Renderer\RendererBaseClass">
-      <UniqueIdentifier>{1daedb61-59ee-4d10-9efa-00ca43b483e4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Interface">
       <UniqueIdentifier>{252b8d6b-8f22-4c40-88be-7b9c4338fffa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Interface\IApplication">
-      <UniqueIdentifier>{a39acf2b-4a5e-4de1-b121-9de636436fe2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{253d0ec5-9271-4aa4-8fee-707925f3caa4}</UniqueIdentifier>
@@ -164,6 +131,12 @@
     </Filter>
     <Filter Include="Shaders\New">
       <UniqueIdentifier>{07ef7ccd-8a2c-45b2-8806-02d93164c9ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{63d1789c-e9fa-4a51-a086-439748b11afa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface\IRenderer">
+      <UniqueIdentifier>{e44d1ba2-63a4-49c8-9b2d-bb6eb19ddb68}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -254,23 +227,14 @@
     <ClInclude Include="D3D11\D3D11Core\D3D11Core.h">
       <Filter>D3D11\D3D11Core</Filter>
     </ClInclude>
-    <ClInclude Include="D3D11\D3D11Headers\D3D11Structs.h">
-      <Filter>D3D11\D3D11Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\RendererDX11\RendererDX11.h">
       <Filter>Renderer\RendererDX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\RendererHeaders\RendererStructs.h">
-      <Filter>Renderer\RendererHeaders</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Entity\Entity.h">
       <Filter>ECS\Entity</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Scene\Scene.h">
       <Filter>ECS\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\EngineCore\GraphicEngine.h">
-      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Entity\Primitive\Primitive.h">
       <Filter>ECS\Primitive</Filter>
@@ -280,9 +244,6 @@
     </ClInclude>
     <ClInclude Include="ECS\Entity\Primitive\PrimitiveManager.h">
       <Filter>ECS\Primitive</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Headers\EngineStructs.h">
-      <Filter>Engine\Headers</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Components\ModelData.h">
       <Filter>ECS\Components\ModelData</Filter>
@@ -302,17 +263,11 @@
     <ClInclude Include="ECS\Scene\SceneManager.h">
       <Filter>ECS\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Window\WindowGlobals.h">
-      <Filter>Window\WindowGlobals</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\ECSCore.h">
       <Filter>ECS\ECSCore</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\RendererHelpers\ECSToRendererData.h">
       <Filter>Renderer\RendererHelpers\ECSToRenderData</Filter>
-    </ClInclude>
-    <ClInclude Include="Window\WindowListener.h">
-      <Filter>Window\WindowListener</Filter>
     </ClInclude>
     <ClInclude Include="InputHandling\InputListener.h">
       <Filter>InputHandling</Filter>
@@ -323,23 +278,20 @@
     <ClInclude Include="InputHandling\InputSystem.h">
       <Filter>InputHandling</Filter>
     </ClInclude>
-    <ClInclude Include="Window\Window.h">
-      <Filter>Window\Window</Filter>
-    </ClInclude>
     <ClInclude Include="Utilities\Math\MathUtils.h">
       <Filter>Utilities\Math</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Components\Light.h">
       <Filter>ECS\Components\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Renderer.h">
-      <Filter>Renderer\RendererBaseClass</Filter>
-    </ClInclude>
-    <ClInclude Include="Interface\IApplication\IApplication.h">
-      <Filter>Interface\IApplication</Filter>
-    </ClInclude>
     <ClInclude Include="D3D11\MeshAndTextureResources\Texture_Structs.h">
       <Filter>D3D11\MeshAndTextureResources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\RendererDx11Headers.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IRenderer\IRenderer.h">
+      <Filter>Interface\IRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -415,9 +367,6 @@
     <ClCompile Include="ECS\Scene\Scene.cpp">
       <Filter>ECS\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\EngineCore\GraphicEngine.cpp">
-      <Filter>Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\Entity\Primitive\Primitive.cpp">
       <Filter>ECS\Primitive</Filter>
     </ClCompile>
@@ -442,9 +391,6 @@
     <ClCompile Include="ECS\Scene\SceneManager.cpp">
       <Filter>ECS\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Window\WindowGlobals.cpp">
-      <Filter>Window\WindowGlobals</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\ECSCore.cpp">
       <Filter>ECS\ECSCore</Filter>
     </ClCompile>
@@ -454,17 +400,11 @@
     <ClCompile Include="InputHandling\InputSystem.cpp">
       <Filter>InputHandling</Filter>
     </ClCompile>
-    <ClCompile Include="Window\Window.cpp">
-      <Filter>Window\Window</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\Components\Light.cpp">
       <Filter>ECS\Components\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Renderer.cpp">
-      <Filter>Renderer\RendererBaseClass</Filter>
-    </ClCompile>
-    <ClCompile Include="Interface\IApplication\IApplication.cpp">
-      <Filter>Interface\IApplication</Filter>
+    <ClCompile Include="Interface\IRenderer\IRenderer.cpp">
+      <Filter>Interface\IRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

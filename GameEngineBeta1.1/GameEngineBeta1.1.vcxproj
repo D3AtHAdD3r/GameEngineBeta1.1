@@ -145,9 +145,12 @@
   <ItemGroup>
     <ClCompile Include="GameEngineBeta1.1.cpp" />
     <ClCompile Include="TestGame\TestGame.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="RendererDx11Structs.h" />
     <ClInclude Include="TestGame\TestGame.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Readme.txt" />

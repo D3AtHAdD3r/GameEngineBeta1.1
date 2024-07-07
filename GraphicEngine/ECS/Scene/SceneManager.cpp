@@ -3,7 +3,7 @@
 #include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 #include<GraphicEngine/ECS/Scene/Scene.h>
 #include<GraphicEngine/ECS/Entity/Entity.h>
-#include<GraphicEngine/Window/WindowGlobals.h>
+#include<GraphicEngine\Renderer\RendererDX11\RendererDX11.h>
 
 
 SceneManager::SceneManager(D3D11Manager* p_d3dManager, ResourceManager* p_resManager)
@@ -120,8 +120,8 @@ bool SceneManager::check_scene_descriptor(Scene_descriptor* sd)
     if (sd->connect_backbuffer)
     {
         sd->height_ratio = sd->width_ratio = 1;
-        sd->window_client_width = WindowGlobals::Get()->Get_WindowWidth();
-        sd->window_client_height = WindowGlobals::Get()->Get_WindowHeight();
+        sd->window_client_width = RendererDX11::Get()->Get_WindowWidth();
+        sd->window_client_height = RendererDX11::Get()->Get_WindowHeight();
     }
     else
     {
@@ -134,8 +134,8 @@ bool SceneManager::check_scene_descriptor(Scene_descriptor* sd)
 
     if (sd->window_client_width == 0 || sd->window_client_height == 0)
     {
-        sd->window_client_width = WindowGlobals::Get()->Get_WindowWidth();
-        sd->window_client_height = WindowGlobals::Get()->Get_WindowHeight();
+        sd->window_client_width = RendererDX11::Get()->Get_WindowWidth();
+        sd->window_client_height = RendererDX11::Get()->Get_WindowHeight();
     }
 
     if (sd->useDepthStencil == false)
@@ -190,8 +190,8 @@ void SceneManager::ReloadAllResourceBuffers()
 {
     for (auto& [SceneID, CurrentScene] : sceneContainer)
     {
-        unsigned int width = WindowGlobals::Get()->Get_WindowWidth();
-        unsigned int height = WindowGlobals::Get()->Get_WindowHeight();
+        unsigned int width = RendererDX11::Get()->Get_WindowWidth();
+        unsigned int height = RendererDX11::Get()->Get_WindowHeight();
         if (!width || !height)
             return;
 

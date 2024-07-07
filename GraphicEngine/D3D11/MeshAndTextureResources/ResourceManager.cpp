@@ -1,7 +1,7 @@
 #include "ResourceManager.h"
 #include<GraphicEngine/D3D11/MeshAndTextureResources/MeshManager.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/TextureManager.h>
-#include<GraphicEngine/Engine/Headers/EngineStructs.h>
+#include<GraphicEngine\Headers\RendererDx11Headers.h>
 
 
 

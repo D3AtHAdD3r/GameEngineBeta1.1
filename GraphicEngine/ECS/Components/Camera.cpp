@@ -1,12 +1,10 @@
 #include "Camera.h"
-//#include<GraphicEngine/ECS/ECSHeaders/EntityStructs.h>
 #include<GraphicEngine/InputHandling/InputSystem.h>
-#include<GraphicEngine/Window/Window.h>
-#include<GraphicEngine/Window/WindowGlobals.h>
 #include<GraphicEngine/Utilities/Math/MathUtils.h>
 #include<GraphicEngine/Utilities/ErrorChecking/CustomException.h>
 #include<GraphicEngine/ECS/Components/ModelData.h>
 #include<GraphicEngine/ECS/Entity/Entity.h>
+#include<GraphicEngine\Renderer\RendererDX11\RendererDX11.h>
 
 
 Camera::Camera(CameraInitData* camInitData)
@@ -20,7 +18,6 @@ Camera::Camera(CameraInitData* camInitData)
 	Set_DataMembers_On_Init(camInitData);
 
 	InputSystem::get()->addListener(this);
-	Window::get()->addListner(this);
 }
 
 Camera::~Camera()
@@ -115,10 +112,10 @@ bool Camera::Set_CamData_From_Parent_Entity()
 bool Camera::Set_Camera_Rotations_From_Input(const Point& mouse_pos)
 {
 	Point pt_client = mouse_pos;
-	ScreenToClient(Window::get()->getHwnd(), (LPPOINT)&pt_client);
+	ScreenToClient(RendererDX11::Get()->Get_WindowHandle(), (LPPOINT)&pt_client);
 
-	float mouse_x_client_center = WindowGlobals::Get()->Get_WindowWidth() / 2.0f;
-	float mouse_y_client_center = WindowGlobals::Get()->Get_WindowHeight() / 2.0f;
+	float mouse_x_client_center = RendererDX11::Get()->Get_WindowWidth() / 2.0f;
+	float mouse_y_client_center = RendererDX11::Get()->Get_WindowHeight() / 2.0f;
 
 	float temp_delta = 1.0f / 60.0f;
 

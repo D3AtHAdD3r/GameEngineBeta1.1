@@ -2,14 +2,13 @@
 #include <GraphicEngine/Utilities/Headers/Headers.h>
 #include<GraphicEngine/ECS/Scene/Scene.h>
 #include<GraphicEngine/ECS/Entity/Primitive/Primitive.h>
-#include<GraphicEngine/Renderer/RendererHeaders/RendererStructs.h>
-
 #include<GraphicEngine/D3D11/D3D11Resources/VertexShader.h>
 #include<GraphicEngine/D3D11/D3D11Resources/PixelShader.h>
 #include<GraphicEngine/D3D11/D3D11Resources/IndexBuffer.h>
 #include<GraphicEngine/D3D11/D3D11Resources/ConstantBuffer.h>
 #include<GraphicEngine/D3D11/D3D11Resources/VertexBuffer.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Mesh.h>
+#include<GraphicEngine\Headers\RendererDx11Headers.h>
 
 ECSToRendererData* ECSToRendererData::pECSToRender = nullptr;
 

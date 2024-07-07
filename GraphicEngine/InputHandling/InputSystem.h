@@ -7,14 +7,13 @@
 
 class InputSystem
 {
-	friend class GraphicEngine;
 private:
 	InputSystem();
 	~InputSystem();
 
-private:
+public:
 	static void Create();
-
+	static InputSystem* get();
 public:
 	void update();
 	void addListener(InputListener* listener);
@@ -23,13 +22,8 @@ public:
 	//Helper, utility funcs
 	void setCursorPosition(const Point& pos);
 	void showCursor(bool show);
-
-public:
-	static InputSystem* get();
-
 private:
 	static InputSystem* pInputSystem;
-
 private:
 	std::unordered_set<InputListener*> m_set_listeners;
 	std::unordered_set<InputListener*> m_set_listenersPaused;

@@ -1,7 +1,6 @@
 //#include<GraphicEngine/Renderer/RendererHeaders/RendererStructs.h>
 #include<Windows.h>
 #include<d3d11.h>
-#include<GraphicEngine/Renderer/Renderer.h>
 #include<unordered_map>
 
 class D3D11Core;
@@ -18,26 +17,31 @@ struct Renderer_BindingData;
 class ECSToRendererData;
 
 
-class RendererDX11 : public Renderer
+class RendererDX11
 {
 	friend class GraphicEngine;
 private:
 	RendererDX11(); 
 	~RendererDX11();
 public:
-	virtual bool DrawFrame() override;
-	virtual void OnResize() override;
+	bool DrawFrame();
+	bool OnResize(unsigned int width, unsigned int height);
+	void OnShutDown();
 
 public:
-	virtual bool CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list) override;
-	virtual Entity* CreateEntity(EntityDesc* pED, bool check_ent_desc = true) override;
-	virtual bool DeleteEntity(Entity* pEnt, Scene* pScene = nullptr) override;
-	virtual const std::unordered_map<unsigned short, Scene*>& GetSceneContainer() override;
+	bool CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list);
+	Entity* CreateEntity(EntityDesc* pED, bool check_ent_desc = true);
+	bool DeleteEntity(Entity* pEnt, Scene* pScene = nullptr);
+	const std::unordered_map<unsigned short, Scene*>& GetSceneContainer();
 
-private:
+public:
 	static bool Create(RenderData* pRenderData);
 	static RendererDX11* Get();
 
+public:
+	unsigned int Get_WindowWidth();
+	unsigned int Get_WindowHeight();
+	HWND Get_WindowHandle();
 private:
 	bool Initialize(RenderData* pRenderData);
 private:
@@ -49,6 +53,7 @@ private:
 	bool CheckRenderData(RenderData* pRenderData); 
 	bool CheckPreBindData(Renderer_PreBindData* pData);
 	bool CheckMainBindData(Renderer_BindingData* pData);
+	void Check_File_Exists(RenderData* p_RenderData);
 
 private:
 	bool SetPreBinds(Renderer_PreBindData* pData);
@@ -85,15 +90,11 @@ private:
 	void initRasterizerState();
 	void setRasterizerState(bool cull_front);
 	void SetFullScreenMode(bool fullscreen);
-
-
 private:
 	void UpdateConstantBuffer(Entity* currEntity, Camera* pcam);
-
 private:
 	Renderer_PreBindData* pRenderer_PreBindData = nullptr;
 	Renderer_BindingData* pRenderer_BindingData = nullptr;
-	
 private:
 	D3D11Core* pD3D11Core = nullptr;
 	ECSCore* pECSCore = nullptr;
@@ -101,13 +102,14 @@ private:
 private:
 	ID3D11RasterizerState* cull_front_state = nullptr;
 	ID3D11RasterizerState* cull_back_state = nullptr;
-
 private:
 	ID3D11Buffer* binded_cb = nullptr;
 	ID3D11PixelShader* binded_ps = nullptr;
 	ID3D11VertexShader* binded_vs = nullptr;
-
-
 private:
 	static RendererDX11* pRenderer;
+private:
+	HWND pWnd = nullptr;
+	unsigned int WindowHeight = 0;
+	unsigned int WindowWidth = 0;
 };

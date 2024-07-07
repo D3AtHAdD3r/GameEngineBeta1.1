@@ -1,5 +1,4 @@
 #include "RendererDX11.h"
-#include<GraphicEngine/Renderer/RendererHeaders/RendererStructs.h>
 #include<GraphicEngine/D3D11/D3D11Core/D3D11Core.h>
 #include<GraphicEngine/D3D11/MeshAndTextureResources/Texture.h>
 #include<GraphicEngine/ECS/ECSCore.h>
@@ -8,8 +7,10 @@
 #include<GraphicEngine/ECS/Entity/Entity.h>
 #include<GraphicEngine/ECS/Components/Camera.h>
 #include<GraphicEngine/Renderer/RendererHelpers/ECSToRendererData.h>
-#include<GraphicEngine/Window/WindowGlobals.h>
 #include<GraphicEngine/ECS/Entity/Primitive/Primitive.h>
+#include<GraphicEngine/Utilities/UtilitiyFuncs/utilityFunctions.h>
+#include<GraphicEngine\Headers\RendererDx11Headers.h>
+#include<GraphicEngine/InputHandling/InputSystem.h>
 #include<sstream>
 
 
@@ -42,8 +43,8 @@ void RendererDX11::UpdateConstantBuffer(Entity* currEntity, Camera* pcam)
 
 	constant cBuff;
 
-	float width = (float)(WindowGlobals::Get()->Get_WindowWidth());
-	float height = (float)(WindowGlobals::Get()->Get_WindowHeight());
+	float width = (float)WindowWidth;
+	float height = (float)WindowHeight;
 	float aspectRatio = width / height;
 
 	cBuff.m_camera_position = pcam->Get_Current_World_Pos();
@@ -104,9 +105,19 @@ bool RendererDX11::DrawFrame()
 	return true;
 }
 
-void RendererDX11::OnResize()
+bool RendererDX11::OnResize(unsigned int width, unsigned int height)
 {
+	if (!width || !height) return false;
+	this->WindowWidth = width;
+	this->WindowHeight = height;
 	pECSCore->OnResize();
+
+	return true;
+}
+
+void RendererDX11::OnShutDown()
+{
+	//bye bye
 }
 
 bool RendererDX11::CreateSceneAndEntity(std::vector<Scene_descriptor*> sd_list, std::vector<EntityDesc*> ed_list)
@@ -144,9 +155,32 @@ RendererDX11* RendererDX11::Get()
 	return pRenderer;
 }
 
+unsigned int RendererDX11::Get_WindowWidth()
+{
+	return WindowWidth;
+}
+
+unsigned int RendererDX11::Get_WindowHeight()
+{
+	return WindowHeight;
+}
+
+HWND RendererDX11::Get_WindowHandle()
+{
+	return pWnd;
+}
+
 bool RendererDX11::Initialize(RenderData* pRenderData)
 {
 	if (!CheckRenderData(pRenderData)) return false;
+	Check_File_Exists(pRenderData);
+
+	this->pWnd = pRenderData->pHandle;
+	this->WindowWidth = pRenderData->WindowWidth;
+	this->WindowHeight = pRenderData->WindowHeight;
+
+	InputSystem::Create();
+
 	pD3D11Core = new D3D11Core(&(pRenderData->d3dInitData), &(pRenderData->file_maps));
 	initRasterizerState();
 	pECSCore = new ECSCore(pD3D11Core->pD3D11Manager, pD3D11Core->pResourceManager);
@@ -183,6 +217,9 @@ bool RendererDX11::CheckRenderData(RenderData* pRenderData)
 	if (!pRenderData->d3dInitData.Window_Height || !pRenderData->d3dInitData.Window_Width || !pRenderData->d3dInitData.BufferCount) 
 		return false;
 
+	if (!pRenderData->pHandle || !pRenderData->WindowWidth || !pRenderData->WindowHeight)
+		return false;
+
 	return true;
 }
 
@@ -208,6 +245,61 @@ bool RendererDX11::CheckMainBindData(Renderer_BindingData* pData)
 	if (pData->Material_Draw_Details.size() != pData->MaterialCount) return false;
 
 	return true;
+}
+
+void RendererDX11::Check_File_Exists(RenderData* p_RenderData)
+{
+	FILEMAPS& fMaps = p_RenderData->file_maps;
+
+	std::unordered_map<int, std::wstring>& File_Map_VertexShader = fMaps.File_Map_VertexShader;
+	std::unordered_map<int, std::wstring>& File_Map_PixelShader = fMaps.File_Map_PixelShader;
+	std::unordered_map<int, std::wstring>& File_Map_Textures = fMaps.File_Map_Textures;
+	std::unordered_map<int, std::wstring>& File_Map_Meshes = fMaps.File_Map_Meshes;
+
+	for (auto& [uid, FileName] : File_Map_VertexShader)
+	{
+		if (!UtilityFuncs::Check_File_Exist(FileName))
+		{
+			std::ostringstream oss;
+			oss << "File Not Found : " << UtilityFuncs::unicodeToMultibyte(FileName) << std::endl;
+			throw NORMAL_EXCEPT(oss.str());
+		}
+	}
+
+	for (auto& [uid, FileName] : File_Map_PixelShader)
+	{
+		if (!UtilityFuncs::Check_File_Exist(FileName))
+		{
+			std::ostringstream oss;
+			oss << "File Not Found : " << UtilityFuncs::unicodeToMultibyte(FileName) << std::endl;
+			throw NORMAL_EXCEPT(oss.str());
+		}
+	}
+
+	for (auto& [uid, FileName] : File_Map_Textures)
+	{
+		//Check if RTV or BackBuffer texture
+		std::wstring firstThree = FileName.substr(0, 3);
+		if (firstThree == HARDCODINGS::RTV_NAME_START || firstThree == HARDCODINGS::BackBuffer_NAME_START)
+			continue;
+
+		if (!UtilityFuncs::Check_File_Exist(FileName))
+		{
+			std::ostringstream oss;
+			oss << "File Not Found : " << UtilityFuncs::unicodeToMultibyte(FileName) << std::endl;
+			throw NORMAL_EXCEPT(oss.str());
+		}
+	}
+
+	for (auto& [uid, FileName] : File_Map_Meshes)
+	{
+		if (!UtilityFuncs::Check_File_Exist(FileName))
+		{
+			std::ostringstream oss;
+			oss << "File Not Found : " << UtilityFuncs::unicodeToMultibyte(FileName) << std::endl;
+			throw NORMAL_EXCEPT(oss.str());
+		}
+	}
 }
 
 bool RendererDX11::SetPreBinds(Renderer_PreBindData* pData)

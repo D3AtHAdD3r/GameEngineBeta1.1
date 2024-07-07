@@ -4,7 +4,7 @@
 #include<GraphicEngine/D3D11/D3D11Resources/PixelShaderManager.h>
 #include<GraphicEngine/D3D11/D3D11Resources/VertexBufferManager.h>
 #include<GraphicEngine/D3D11/D3D11Resources/IndexBufferManager.h>
-#include<GraphicEngine/Engine/Headers/EngineStructs.h>
+#include<GraphicEngine\Headers\RendererDx11Headers.h>
 
 D3D11Manager::D3D11Manager(FILEMAPS* file_maps)
 {

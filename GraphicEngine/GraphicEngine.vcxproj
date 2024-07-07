@@ -153,7 +153,6 @@
   <ItemGroup>
     <ClInclude Include="D3D11\D3D11Core\D3D11Core.h" />
     <ClInclude Include="D3D11\D3D11Globals\D3D11Globals.h" />
-    <ClInclude Include="D3D11\D3D11Headers\D3D11Structs.h" />
     <ClInclude Include="D3D11\D3D11Resources\ConstantBuffer.h" />
     <ClInclude Include="D3D11\D3D11Resources\ConstantBufferManager.h" />
     <ClInclude Include="D3D11\D3D11Resources\D3DManager.h" />
@@ -185,14 +184,11 @@
     <ClInclude Include="ECS\Entity\Primitive\PrimitiveManager.h" />
     <ClInclude Include="ECS\Scene\Scene.h" />
     <ClInclude Include="ECS\Scene\SceneManager.h" />
-    <ClInclude Include="Engine\EngineCore\GraphicEngine.h" />
-    <ClInclude Include="Engine\Headers\EngineStructs.h" />
+    <ClInclude Include="Headers\RendererDx11Headers.h" />
     <ClInclude Include="InputHandling\InputListener.h" />
     <ClInclude Include="InputHandling\InputSystem.h" />
-    <ClInclude Include="Interface\IApplication\IApplication.h" />
-    <ClInclude Include="Renderer\Renderer.h" />
+    <ClInclude Include="Interface\IRenderer\IRenderer.h" />
     <ClInclude Include="Renderer\RendererDX11\RendererDX11.h" />
-    <ClInclude Include="Renderer\RendererHeaders\RendererStructs.h" />
     <ClInclude Include="Renderer\RendererHelpers\ECSToRendererData.h" />
     <ClInclude Include="Utilities\ErrorChecking\CustomException.h" />
     <ClInclude Include="Utilities\ErrorChecking\DxgiInfoManager.h" />
@@ -206,9 +202,6 @@
     <ClInclude Include="Utilities\Math\Vector3D.h" />
     <ClInclude Include="Utilities\Math\Vector4D.h" />
     <ClInclude Include="Utilities\UtilitiyFuncs\utilityFunctions.h" />
-    <ClInclude Include="Window\Window.h" />
-    <ClInclude Include="Window\WindowGlobals.h" />
-    <ClInclude Include="Window\WindowListener.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D11\D3D11Core\D3D11Core.cpp" />
@@ -241,17 +234,13 @@
     <ClCompile Include="ECS\Entity\Primitive\PrimitiveManager.cpp" />
     <ClCompile Include="ECS\Scene\Scene.cpp" />
     <ClCompile Include="ECS\Scene\SceneManager.cpp" />
-    <ClCompile Include="Engine\EngineCore\GraphicEngine.cpp" />
     <ClCompile Include="InputHandling\InputSystem.cpp" />
-    <ClCompile Include="Interface\IApplication\IApplication.cpp" />
-    <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="Interface\IRenderer\IRenderer.cpp" />
     <ClCompile Include="Renderer\RendererDX11\RendererDX11.cpp" />
     <ClCompile Include="Renderer\RendererHelpers\ECSToRendererData.cpp" />
     <ClCompile Include="Utilities\ErrorChecking\CustomException.cpp" />
     <ClCompile Include="Utilities\ErrorChecking\DxgiInfoManager.cpp" />
     <ClCompile Include="Utilities\UtilitiyFuncs\utilityFunctions.cpp" />
-    <ClCompile Include="Window\Window.cpp" />
-    <ClCompile Include="Window\WindowGlobals.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Shaders\pixelShader_DL.hlsl">
